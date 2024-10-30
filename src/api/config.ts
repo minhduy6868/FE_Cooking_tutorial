@@ -1,5 +1,5 @@
 export const config = {
-  baseURL: import.meta.env.VITE_API_ENDPOINT,
+  baseURL: 'https://jsonplaceholder.typicode.com',
   path: {
     refreshToken: 'auth/refresh-tokens',
   },

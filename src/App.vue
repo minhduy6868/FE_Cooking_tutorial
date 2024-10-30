@@ -14,8 +14,8 @@ const loadingStore = useLoadingStore()
 
 onMounted(() => {
   showToast({
-    title: 'Welcome to Vite Vue3',
-    description: 'This is a simple toast message',
+    title: 'Welcome to OJk Global',
+    description: 'This is a production from OJk Global',
     variant: 'default',
   })
 })
