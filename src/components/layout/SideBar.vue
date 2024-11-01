@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/menubar';
 import { ref } from 'vue';
 
-const menuVisible = ref(false);
+// Đặt giá trị khởi tạo là true để menu luôn hiển thị
+const menuVisible = ref(true); 
 
 const toggleMenu = () => {
   menuVisible.value = !menuVisible.value;
@@ -28,32 +29,31 @@ const toggleMenu = () => {
 
     <div :class="{'hidden': !menuVisible, 'flex': menuVisible}" class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0">
       <MenubarMenu>
-       <router-link to="/">
-        <MenubarTrigger class="text-l px-4">Home</MenubarTrigger>
-       </router-link>
+        <router-link to="/">
+          <MenubarTrigger class="text-l px-4 py-2">Home</MenubarTrigger>
+        </router-link>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger class="text-l px-4">Menu</MenubarTrigger>
+        <MenubarTrigger class="text-l px-4 py-2">Menu</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>Bữa sáng</MenubarItem>
           <MenubarItem>Món trưa</MenubarItem>
-          <MenubarItem>Món trưa</MenubarItem>
+          <MenubarItem>Món tối</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger class="text-l px-4">Đăng bài</MenubarTrigger>
+        <MenubarTrigger class="text-l px-4 py-2">Đăng bài</MenubarTrigger>
       </MenubarMenu>
       <MenubarMenu>
         <router-link to="/about">
-          <MenubarTrigger class="text-l px-4">Giới thiệu</MenubarTrigger>
+          <MenubarTrigger class="text-l px-4 py-2">Giới thiệu</MenubarTrigger>
         </router-link>
       </MenubarMenu>
     </div>
 
-    <!-- Remove the action button on larger screens -->
     <div class="hidden md:flex items-center mt-2 md:mt-0">
       <router-link to="/quiz">
-        <button class="text-white px-10 py-2 rounded hover:bg-white font-bold whitespace-nowrap">
+        <button class="text-white px-20 py-2 rounded hover:bg-white font-bold whitespace-nowrap">
           Đăng nhập
         </button>
       </router-link>
@@ -63,14 +63,14 @@ const toggleMenu = () => {
 
 <style scoped>
 .bg-orange-500 {
-  background-color: orange; /* Màu cam */
+  background-color: rgba(255, 115, 0, 0.952); /* Màu cam */
 }
 
 .text-white {
   color: white; /* Màu trắng cho chữ */
 }
-button.text-white:hover{
-  color: orange;
+button.text-white:hover {
+  color: rgb(255, 136, 0); /* Đổi màu chữ khi hover */
 }
 
 .custom-menubar {
@@ -80,6 +80,7 @@ button.text-white:hover{
 @media (max-width: 768px) {
   .flex {
     flex-direction: column; /* Đặt chiều dọc cho các phần tử bên trong */
+    align-items: center; /* Căn giữa các phần tử */
   }
 
   .space-x-5 {
@@ -88,6 +89,16 @@ button.text-white:hover{
 
   .hidden {
     display: none; /* Ẩn menu khi không cần thiết */
+  }
+
+  .flex-col {
+    flex-direction: column; /* Sắp xếp dọc cho menu di động */
+    width: 100%; /* Chiều rộng 100% cho menu */
+  }
+
+  MenubarMenu {
+    width: 100%; /* Đảm bảo menu chiếm toàn bộ chiều rộng */
+    text-align: center; /* Căn giữa nội dung */
   }
 }
 
@@ -107,5 +118,47 @@ button.text-white:hover{
   .md\:flex {
     display: flex !important; /* Hiển thị nút đăng nhập trên màn hình lớn */
   }
+
+  .flex {
+    justify-content: space-between; /* Căn giữa các item trong menu */
+  }
+  MenubarTrigger{
+    
+    align-items: center; 
+  }
 }
+
+@media (min-width: 769px) and (max-width: 1055px) {
+  .flex-col {
+    flex-direction: row; /* Sắp xếp ngang cho màn hình lớn */
+  }
+
+  .md\:hidden {
+    display: block !important; /* Hiển thị menu trên màn hình lớn */
+  }
+
+  .md\:mt-0 {
+    margin-top: 0 !important; /* Xóa khoảng cách trên cho màn hình lớn */
+  }
+
+  .md\:flex {
+    display: flex !important; /* Hiển thị nút đăng nhập trên màn hình lớn */
+  }
+
+  .flex {
+    justify-content: space-evenly; /* Căn giữa các item trong menu với khoảng cách đều */
+    align-items: center; /* Căn giữa dọc */
+    width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+  }
+
+  .text-l {
+    font-size: 0.875rem; /* Kích thước chữ cho menu */
+  }
+
+  .px-4 {
+    padding-left: 1rem; /* Thêm khoảng cách bên trái */
+    padding-right: 1rem; /* Thêm khoảng cách bên phải */
+  }
+}
+
 </style>
