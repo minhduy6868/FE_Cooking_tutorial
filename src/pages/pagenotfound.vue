@@ -1,10 +1,10 @@
 <template>
   <div class="bg-white h-screen flex justify-center items-center">
     <div class="text-center">
-      <img 
+      <img
         src="../assets/img/notfound404.gif" 
-        alt="404 Not Found" 
-        class="mx-auto" 
+        alt="404 Not Found"
+        class="mx-auto"
       />
       <div class="tracking-widest mt-4">
         <span class="text-gray-500 text-6xl block"><span>4  0  4</span></span>

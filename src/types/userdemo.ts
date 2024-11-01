@@ -1,32 +1,5 @@
-// userdemo.ts
-
-export interface Geo {
-    lat: string;
-    lng: string;
-  }
-  
-  export interface Address {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: Geo;
-  }
-  
-  export interface Company {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  }
-  
-  export interface UserDemo {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    address: Address;
-    phone: string;
-    website: string;
-    company: Company;
-  }
-  
+export interface UserDemo {
+  id: number; // Không cần thêm dấu hỏi nếu id luôn được tự động tạo
+  username: string;
+  avatar: string;
+}

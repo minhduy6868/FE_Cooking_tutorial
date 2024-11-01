@@ -1,5 +1,6 @@
 <template>
-  <div class="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
+  <div class="infor">
+    <div class="px-4 pt-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
     <div class="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
       <div class="sm:col-span-2">
         <a href="/" aria-label="Go home" title="Company" class="inline-flex items-center">
@@ -63,6 +64,7 @@
       </div>
     </div>
   </div>
+  </div>
   <footer class="bg-orange-500 text-white text-center py-8">
     <p>&copy; Copyright [Your Name]. All rights reserved. Made By Binary Boats⛵</p>
   </footer>
@@ -75,5 +77,8 @@ export default {
 </script>
 
 <style scoped>
+.infor{
+  background-color: rgb(214, 236, 255);
+}
 /* Bạn có thể thêm CSS tùy chỉnh ở đây nếu cần */
 </style>
