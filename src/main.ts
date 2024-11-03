@@ -7,9 +7,6 @@ import router from './routers/router'
 import { Icon } from '@iconify/vue'
 // import Icon from "./components/base/Icon.vue";
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import GuestLayout from '@/layouts/GuestLayout.vue'
-import NoSideBarLayout from '@/layouts/NoSideBarLayout.vue'
-import QuizCreateLayout from './layouts/QuizCreateLayout.vue'
 // import { initAuthStore, initMasterStore } from './stores'
 const app = createApp(App)
 import { plugin as VueTippy } from 'vue-tippy'
@@ -42,9 +39,6 @@ const initApp = async () => {
     },
   )
   app.component('DefaultLayout', DefaultLayout)
-  app.component('GuestLayout', GuestLayout)
-  app.component('NoSideBarLayout', NoSideBarLayout)
-  app.component('QuizCreateLayout', QuizCreateLayout)
   app.use(createPinia())
   // await initAuthStore();
   // await initWebSocketStore();

@@ -4,6 +4,6 @@ export const profileRoute: RouteRecordRaw[] = [
   {
     path: '',
     name: 'profile',
-    component: () => import('@/pages/profiles/index.vue'),
+    component: () => import('@/pages/profile/index.vue'),
   },
 ]

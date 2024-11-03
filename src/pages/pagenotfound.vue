@@ -11,10 +11,12 @@
         <span class="text-gray-500 text-xl">Sorry, we couldn't find what you are looking for!</span>
       </div>
       <div class="mt-6">
-        <a
+        <router-link to="/">
+          <a
           href="#"
           class="text-gray-500 font-mono text-xl bg-gray-200 p-3 rounded-md hover:shadow-md"
         >Go back</a>
+        </router-link>
       </div>
     </div>
   </div>

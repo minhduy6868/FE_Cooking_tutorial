@@ -9,8 +9,8 @@ import { apiExceptionHandler } from '@/utils/exceptionHandler'
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().email().required('Email là bắt buộc'),
+    password: yup.string().required('Mật khẩu là bắt buộc'),
   }),
 })
 
@@ -22,7 +22,7 @@ const onSubmit = handleSubmit(async (values) => {
     const data = await loginApi(values.email, values.password)
     console.log(data)
     localStorage.setItem('access_token', data.tokens.access.token)
-    localStorage.setItem('refresh_token', data.tokens.refresh.token)
+    //localStorage.setItem('refresh_token', data.tokens.refresh.token)
     location.reload()
   } catch (error) {
     notify.error(apiExceptionHandler(error).message)
@@ -37,11 +37,11 @@ const onSubmit = handleSubmit(async (values) => {
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold mt-3">Welcome Back</h1>
+          <h1 class="text-[344054] text-lg font-semibold mt-3">Chào Mừng Quay Trở Lại</h1>
         </div>
         <div>
-          <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
-          <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+          <h2 class="mt-1 text-[#667085]">Hôm nay là một ngày mới. Đây là ngày của bạn. Bạn là người tạo nên điều đó.</h2>
+          <h2 class="mt-1 text-[#667085]">Đăng nhập để bắt đầu quản lý dự án của bạn</h2>
         </div>
         <div class="mt-6">
           <div class="form-data">
@@ -49,7 +49,7 @@ const onSubmit = handleSubmit(async (values) => {
             <Input
               id="email"
               v-model="email"
-              placeholder="Enter email..."
+              placeholder="Nhập email..."
               v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
@@ -61,11 +61,11 @@ const onSubmit = handleSubmit(async (values) => {
             />
           </div>
           <div class="form-data">
-            <Label for="password">Password</Label>
+            <Label for="password">Mật khẩu</Label>
             <Input
               id="password"
               v-model="password"
-              placeholder="Enter password..."
+              placeholder="Nhập mật khẩu..."
               v-bind="passwordAttrs"
               :invalid="errors.password"
               type="password"
@@ -83,13 +83,13 @@ const onSubmit = handleSubmit(async (values) => {
             class="text-[#0921D9] text-xs font-semibold"
             to="/password/forgot"
           >
-            Forgot Password?
+            Quên mật khẩu?
           </RouterLink>
         </div>
-        <Button class="mt-6 w-full h-10  bg-orange-600"> Sign in </Button>
+        <Button class="mt-6 w-full h-10 bg-orange-600"> Đăng Nhập </Button>
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>
-          <p class="text-base">Or</p>
+          <p class="text-base">Hoặc</p>
           <span class="h-px bg-slate-200 w-full"></span>
         </div>
         <Button
@@ -99,17 +99,17 @@ const onSubmit = handleSubmit(async (values) => {
           <img
             class="w-5"
             src="@/assets/img/google-logo.png"
-            alt=""
+            alt="Google Logo"
           />
-          Sign in with Google
+          Đăng nhập với Google
         </Button>
         <div class="flex justify-center mt-6">
-          <p>Don't you have an account?</p>
+          <p>Bạn chưa có tài khoản?</p>
           <RouterLink
             class="ml-[6px] text-[#0921D9] font-semibold"
             to="/register"
           >
-            Sign up
+            Đăng ký
           </RouterLink>
         </div>
       </form>
@@ -118,7 +118,7 @@ const onSubmit = handleSubmit(async (values) => {
       <img
         class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
         src="@/assets/img/auth-bg.png"
-        alt=""
+        alt="Background"
       />
     </div>
   </div>

@@ -52,7 +52,7 @@ const toggleMenu = () => {
     </div>
 
     <div class="hidden md:flex items-center mt-2 md:mt-0">
-      <router-link to="/quiz">
+      <router-link to="/login">
         <button class="text-white px-20 py-2 rounded hover:bg-white font-bold whitespace-nowrap">
           Đăng nhập
         </button>

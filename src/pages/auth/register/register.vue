@@ -10,9 +10,9 @@ import { apiExceptionHandler } from '@/utils/exceptionHandler'
 
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
-    name: yup.string().required('Name is required'),
-    password: yup.string().required('Password is required'),
+    email: yup.string().email().required('Email là bắt buộc'),
+    name: yup.string().required('Tên là bắt buộc'),
+    password: yup.string().required('Mật khẩu là bắt buộc'),
   }),
 })
 
@@ -30,7 +30,7 @@ const onSubmit = handleSubmit(async (values) => {
     })
     console.log(data)
     router.push({ name: 'login' })
-    notify.success('Register success')
+    notify.success('Đăng ký thành công')
   } catch (error) {
     notify.error(apiExceptionHandler(error).message)
   }
@@ -44,18 +44,18 @@ const onSubmit = handleSubmit(async (values) => {
         @submit="onSubmit"
       >
         <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold">Register account</h1>
+          <h1 class="text-[344054] text-lg font-semibold">Đăng ký tài khoản</h1>
         </div>
         <div>
-          <h2 class="mt-1 text-[#667085]">Today is a new day. It's your day. You shape it.</h2>
-          <h2 class="mt-1 text-[#667085]">Sign in to start managing your projects</h2>
+          <h2 class="mt-1 text-[#667085]">Hôm nay là một ngày mới. Đây là ngày của bạn. Bạn là người tạo nên điều đó.</h2>
+          <h2 class="mt-1 text-[#667085]">Đăng nhập để bắt đầu quản lý dự án của bạn</h2>
         </div>
         <div class="mt-6">
           <div class="form-data">
-            <Label for="email">Name</Label>
+            <Label for="name">Tên</Label>
             <Input
               v-model="name"
-              placeholder="Enter name..."
+              placeholder="Nhập tên..."
               v-bind="nameAttrs"
               :invalid="errors.name"
               type="text"
@@ -67,7 +67,7 @@ const onSubmit = handleSubmit(async (values) => {
             <Label for="email">Email</Label>
             <Input
               v-model="email"
-              placeholder="Enter email..."
+              placeholder="Nhập email..."
               v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
@@ -76,10 +76,10 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.email" />
           </div>
           <div class="form-data">
-            <Label for="email">Password</Label>
+            <Label for="password">Mật khẩu</Label>
             <Input
               v-model="password"
-              placeholder="Enter password..."
+              placeholder="Nhập mật khẩu..."
               v-bind="passwordAttrs"
               :invalid="errors.password"
               type="password"
@@ -88,10 +88,10 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.password" />
           </div>
         </div>
-        <Button class="mt-6 w-full h-10 bg-orange-600"> Sign Up </Button>
+        <Button class="mt-6 w-full h-10 bg-orange-600"> Đăng Ký </Button>
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>
-          <p class="text-base">Or</p>
+          <p class="text-base">Hoặc</p>
           <span class="h-px bg-slate-200 w-full"></span>
         </div>
         <Button
@@ -103,15 +103,15 @@ const onSubmit = handleSubmit(async (values) => {
             src="@/assets/img/google-logo.png"
             alt=""
           />
-          Sign in with Google
+          Đăng nhập với Google
         </Button>
         <div class="flex justify-center mt-6">
-          <p>If you have an account?</p>
+          <p>Bạn đã có tài khoản?</p>
           <RouterLink
             class="ml-[6px] text-[#0921D9] font-semibold"
             to="/login"
           >
-            Sign in
+            Đăng nhập
           </RouterLink>
         </div>
       </form>
