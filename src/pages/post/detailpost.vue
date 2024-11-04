@@ -1,14 +1,3 @@
 <template>
-    Hello thắm địt 
+    <p>Hello thắm địt</p>
 </template>
-
-<script>
-export default {
-    name: 'name'
-
-}
-</script>
-
-<style scoped>
-
-</style>

@@ -2,7 +2,7 @@
   <div class="bg-white h-screen flex justify-center items-center">
     <div class="text-center">
       <img
-        src="../assets/img/notfound404.gif" 
+        src="../assets/img/notfound404.gif"
         alt="404 Not Found"
         class="mx-auto"
       />

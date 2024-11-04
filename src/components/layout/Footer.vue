@@ -60,14 +60,14 @@
           </div>
 
           <p class="text-sm text-gray-500">
-            Nếu bạn có bất kì thắc mắc, hoặc phát hiện lỗi của trang web chúng tôi, vui lòng nhấn vào <a href="#" @click.prevent="openReportForm" class="text-deep-purple-accent-400 hover:underline">đây</a>.
+            Nếu bạn có bất kì thắc mắc, hoặc phát hiện lỗi của trang web chúng tôi, vui lòng nhấn vào <a href="#" @click.prevent="openReportForm" class="text-deep-purple-accent-400 hover:underline text-orange-500">đây</a>.
           </p>
         </div>
       </div>
     </div>
 
     <footer class="bg-orange-500 text-white text-center py-8">
-      <p>&copy; Bản quyền OJK Global. Tất cả quyền được bảo lưu. Thiết kế bởi Binary Boats⛵</p>
+      <p>&copy; Bản quyền OJK Global. Tất cả quyền được bảo lưu. ⛵</p>
     </footer>
 
     <!-- Form báo cáo -->

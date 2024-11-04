@@ -19,7 +19,7 @@ const toggleMenu = () => {
 <template>
   <Menubar class="flex flex-col md:flex-row justify-center items-center bg-orange-500 text-white custom-menubar">
     <div class="flex items-center w-full justify-between"> 
-      <img src="/public/assets/images/logo.png" alt="Logo" class="h-10 mx-4" />
+      <img src="/public/assets/images/avatar.jpg" alt="Logo" class="h-10 mx-4" />
       <div class="md:hidden"> <!-- Nút menu cho di động -->
         <button @click="toggleMenu" class="text-white">
           &#9776; <!-- Biểu tượng menu -->
@@ -42,7 +42,9 @@ const toggleMenu = () => {
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger class="text-l px-4 py-2">Đăng bài</MenubarTrigger>
+        <router-link to="/post">
+          <MenubarTrigger class="text-l px-4 py-2">Đăng bài</MenubarTrigger>
+        </router-link>
       </MenubarMenu>
       <MenubarMenu>
         <router-link to="/about">

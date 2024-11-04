@@ -5,7 +5,7 @@ const { progress } = useIndicator()
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: '/c',
     // beforeEnter: [authGuard],
     component: () => import('@/pages/index.vue'),
     children: dashboardRoute,
@@ -54,7 +54,7 @@ const routes: RouteRecordRaw[] = [
    children: aboutRoute,
   },
   {
-    path: '/demoapi', // Đường dẫn mới cho trang About
+    path: '/demoapi', 
    meta: {
     layout: 'DemoLayout',
    }, 
