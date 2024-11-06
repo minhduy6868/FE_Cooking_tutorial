@@ -2,6 +2,7 @@
 import SideBar from '@/components/layout/SideBar.vue'
 import Carousel from '@/components/layout/Carousel.vue'
 import Footer from '@/components/layout/Footer.vue'
+import ChatBox from '@/components/layout/ChatBox.vue'
 import ListCard from '@/components/layout/ListCard.vue'
 </script>
 <template>
@@ -19,7 +20,7 @@ import ListCard from '@/components/layout/ListCard.vue'
   </div>
 
   <Footer></Footer>
-  
+  <ChatBox></ChatBox>
 </template>
 <style lang="scss" scoped>
 .container-div {

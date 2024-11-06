@@ -28,15 +28,14 @@
           id="chat-title"
           class="font-semibold flex items-center"
         >
-          <i class="fas fa-robot mr-2"></i>
-          Chat with AI Assistant
+          <i class="fas fa-robot mr-2"></i> Chat with AI Assistant
         </h2>
         <button
           class="text-white hover:text-gray-200 transition-colors"
           aria-label="Close chat"
           @click="closeChat"
         >
-         <h2>Tắt</h2>
+          <h2>Tắt</h2>
         </button>
       </div>
 
@@ -114,6 +113,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -140,12 +141,20 @@ export default {
     closeChat() {
       this.isChatVisible = false
     },
-    sendMessage() {
+    async sendMessage() {
       const message = this.userMessage.trim()
       if (message) {
         this.addMessage(message, 'user')
         this.userMessage = ''
-        this.simulateResponse()
+        this.simulateResponse() // Show typing indicator
+
+        try {
+          const response = await this.getBotResponse(message)
+          this.addMessage(response, 'ai')
+        } catch (error) {
+          this.addMessage('Sorry, I could not get a response at the moment.', 'ai')
+          console.error('Error fetching from Gemini API:', error)
+        }
       }
     },
     addMessage(text, sender) {
@@ -159,8 +168,45 @@ export default {
       this.isTyping = true
       setTimeout(() => {
         this.isTyping = false
-        this.addMessage('Thank you for your message. I am an AI assistant here to help you.', 'ai')
       }, 2000)
+    },
+    async getBotResponse(userMessage) {
+      const apiUrl =
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
+      const apiKey = 'AIzaSyDlUcwhu795awo9PB49kFbhznnMHDea9oI' // Thay bằng API key của bạn
+
+      try {
+        // Gửi yêu cầu đến API của Gemini
+        const response = await axios.post(
+          `${apiUrl}?key=${apiKey}`,
+          {
+            contents: [
+              {
+                parts: [{ text: userMessage }],
+              },
+            ],
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+
+        // Kiểm tra và lấy nội dung phản hồi từ API Gemini
+        const responseText =
+          response.data.candidates &&
+          response.data.candidates[0] &&
+          response.data.candidates[0].content
+            ? response.data.candidates[0].content.parts[0].text
+            : 'Xin lỗi, tôi không thể trả lời ngay lúc này.'
+
+        // Trả về phản hồi của bot
+        return responseText
+      } catch (error) {
+        console.error('Error fetching response:', error)
+        return 'Có lỗi xảy ra khi kết nối với máy chủ. Vui lòng thử lại sau.'
+      }
     },
   },
 }
