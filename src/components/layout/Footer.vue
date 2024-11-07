@@ -10,7 +10,7 @@
               <rect x="14" y="1" width="7" height="6"></rect>
               <rect x="14" y="11" width="7" height="12"></rect>
             </svg>
-            <span class="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">Công Ty</span>
+            <span class="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">COOK DEV</span>
           </a>
 
           <div class="mt-1 lg:max-w-sm">
@@ -36,16 +36,16 @@
           <p class="text-base font-bold tracking-wide text-gray-900">Liên hệ</p>
           <div class="flex">
             <p class="mr-1 text-gray-800">Điện thoại:</p>
-            <a href="tel:850-123-5021" aria-label="Số điện thoại của chúng tôi" title="Số điện thoại của chúng tôi" class="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800">850-123-5021</a>
+            <a href="tel:850-123-5021" aria-label="Số điện thoại của chúng tôi" title="Số điện thoại của chúng tôi" class="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800">0916 267 402</a>
           </div>
           <div class="flex">
             <p class="mr-1 text-gray-800">Email:</p>
-            <a href="mailto:info@lorem.mail" aria-label="Email của chúng tôi" title="Email của chúng tôi" class="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800">info@lorem.mail</a>
+            <a href="mailto:info@lorem.mail" aria-label="Email của chúng tôi" title="Email của chúng tôi" class="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800">duynm.23it@vku.udn.vn</a>
           </div>
           <div class="flex">
             <p class="mr-1 text-gray-800">Địa chỉ:</p>
             <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer" aria-label="Địa chỉ của chúng tôi" title="Địa chỉ của chúng tôi" class="transition-colors duration-300 text-deep-purple-accent-400 hover:text-deep-purple-800">
-              312 Đường Lovely, NY
+              470, Trần Đại Nghĩa, Hòa Vang, Ngũ Hành Sơn, Đà Nẵng.
             </a>
           </div>
         </div>
@@ -67,7 +67,7 @@
     </div>
 
     <footer class="bg-orange-500 text-white text-center py-8">
-      <p>&copy; Bản quyền OJK Global. Tất cả quyền được bảo lưu. ⛵</p>
+      <p>&copy; Bản quyền COOK DEV. Tất cả quyền được bảo lưu. ⛵</p>
     </footer>
 
     <!-- Form báo cáo -->

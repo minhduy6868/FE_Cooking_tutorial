@@ -65,18 +65,18 @@ const errorEmail = ref()
 const handleForgot = async () => {
   try {
     if (!email.value) {
-      errorEmail.value = 'Email must not be blank'
+      errorEmail.value = 'Email không được để trống'
       return
     }
     await forgotPasswordApi(email.value)
   } catch (error) {
-    notify.error(((error as any).data?.error?.message as string) || 'Send forgot password error')
+    notify.error(((error as any).data?.error?.message as string) || 'Gửi lỗi quên mật khẩu')
   }
 }
 
 const { errors, defineField } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email is required'),
+    email: yup.string().email().required('Email là bắt buộc'),
   }),
 })
 
@@ -90,10 +90,10 @@ const [email, emailAttrs] = defineField('email')
         @submit="handleForgot"
       >
         <div class="flex items-center gap-0.5 mb-4">
-          <h1 class="text-[344054] text-lg font-semibold mt-3">Forgot password</h1>
+          <h1 class="text-[344054] text-lg font-semibold mt-3">Quên mật khẩu</h1>
         </div>
         <div>
-          <h2 class="mt-1 text-[#667085]">Enter your email to reset password</h2>
+          <h2 class="mt-1 text-[#667085]">Nhập Email để đặt lại mật khẩu</h2>
         </div>
         <div class="mt-6">
           <div class="form-data">
@@ -101,7 +101,7 @@ const [email, emailAttrs] = defineField('email')
             <Input
               id="email"
               v-model="email"
-              placeholder="Enter email..."
+              placeholder="Nhập email..."
               v-bind="emailAttrs"
               :invalid="errors.email"
               type="email"
@@ -119,7 +119,7 @@ const [email, emailAttrs] = defineField('email')
             class="text-[#0921D9] text-xs font-semibold"
             to="/login"
           >
-            Come back
+           Trở về
           </RouterLink>
         </div>
       </form>
@@ -127,7 +127,7 @@ const [email, emailAttrs] = defineField('email')
     <div class="flex-1 relative max-md:hidden">
       <img
         class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
-        src="@/assets/img/auth-bg.png"
+        src="@/assets/img/robot.png"
         alt=""
       />
     </div>
