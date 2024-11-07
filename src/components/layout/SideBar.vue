@@ -21,7 +21,7 @@ const toggleMenu = () => {
 
   <Menubar class="flex flex-col md:flex-row justify-center items-center bg-orange-500 text-white custom-menubar">
     <div class="flex items-center w-full justify-between"> 
-      <img src="/public/assets/images/logo.png" alt="Logo" class="h-12" style="margin-left: 100px;" />
+      <img src="/public/assets/images/logo.png" alt="Logo" class="h-10 px-5 logo"  />
 
       <div class="md:hidden"> <!-- Nút menu cho di động -->
         <button @click="toggleMenu" class="text-white">
@@ -139,6 +139,10 @@ button.text-white:hover {
     
     align-items: center; 
   }
+  .logo{
+    margin-left: 100px;
+  }
+
 }
 
 @media (min-width: 769px) and (max-width: 1055px) {
