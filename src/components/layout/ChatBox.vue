@@ -4,13 +4,20 @@
     class="fixed bottom-6 right-6 z-50"
   >
     <!-- Chat Icon Button -->
-    <button
-      v-if="!isChatVisible"
-      class="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-300 flex items-center justify-center w-14 h-14"
-      @click="toggleChat"
-    >
-      <i class="fas fa-comments text-xl"></i>
-    </button>
+        <button
+          v-if="!isChatVisible"
+              class="group text-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center w-14 h-14 relative"
+               @click="toggleChat"
+        >
+          <img src="@/assets/img/6.png" alt="Chat Icon" class="chat" />
+  
+          <!-- Tooltip -->
+        <span class="tooltip absolute right-full mr-3 px-4 py-2 text-sm text-white bg-black bg-opacity-80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+             AI hỗ trợ
+         </span>
+        </button>
+
+
 
     <!-- Chat Window -->
     <div
@@ -56,13 +63,9 @@
           :class="msg.sender === 'user' ? 'justify-end' : ''"
           class="flex items-start"
         >
-          <div
-            :class="
-              msg.sender === 'user'
-                ? 'bg-blue-600 text-white'
-                : 'bg-blue-100 text-gray-800' + ' rounded-lg p-3 max-w-[80%]'
-            "
-          >
+        <div :class="msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-gray-800'"
+     class="rounded-lg p-3 max-w-[80%]">
+
             <p>{{ msg.text }}</p>
           </div>
         </div>
@@ -215,6 +218,19 @@ export default {
 <style scoped>
 #chat-window {
   width: 24rem;
+}
+.tooltip {
+  font-size: 1rem; /* Kích thước chữ lớn hơn */
+  filter: blur(0px); /* Đảm bảo chữ rõ ràng */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Đổ bóng cho tooltip */
+  transform: translateY(10px); /* Hiệu ứng vị trí */
+  transition: all 0.3s ease; /* Hiệu ứng mượt khi hover */
+}
+
+/* Hiệu ứng cho tooltip khi hover vào button */
+.group:hover .tooltip {
+  opacity: 1;
+  transform: translateY(0); /* Tooltip di chuyển về vị trí bình thường */
 }
 
 @media (max-width: 640px) {
