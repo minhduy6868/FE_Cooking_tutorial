@@ -17,9 +17,12 @@ const toggleMenu = () => {
 </script>
 
 <template>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+
   <Menubar class="flex flex-col md:flex-row justify-center items-center bg-orange-500 text-white custom-menubar">
     <div class="flex items-center w-full justify-between"> 
-      <img src="/public/assets/images/avatar.jpg" alt="Logo" class="h-10 mx-4" />
+      <img src="/public/assets/images/logo.png" alt="Logo" class="h-12" style="margin-left: 100px;" />
+
       <div class="md:hidden"> <!-- Nút menu cho di động -->
         <button @click="toggleMenu" class="text-white">
           &#9776; <!-- Biểu tượng menu -->
@@ -30,11 +33,11 @@ const toggleMenu = () => {
     <div :class="{'hidden': !menuVisible, 'flex': menuVisible}" class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0">
       <MenubarMenu>
         <router-link to="/">
-          <MenubarTrigger class="text-l px-4 py-2">Home</MenubarTrigger>
+          <MenubarTrigger class="text px-4 py-2" style="font-weight: 600;">Home</MenubarTrigger>
         </router-link>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger class="text-l px-4 py-2">Menu</MenubarTrigger>
+        <MenubarTrigger class="text px-4 py-2" style="font-weight: 600;">Menu</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>Bữa sáng</MenubarItem>
           <MenubarItem>Món trưa</MenubarItem>
@@ -43,19 +46,19 @@ const toggleMenu = () => {
       </MenubarMenu>
       <MenubarMenu>
         <router-link to="/post">
-          <MenubarTrigger class="text-l px-4 py-2">Đăng bài</MenubarTrigger>
+          <MenubarTrigger class="text px-4 py-2" style="font-weight: 600;">Đăng bài</MenubarTrigger>
         </router-link>
       </MenubarMenu>
       <MenubarMenu>
         <router-link to="/about">
-          <MenubarTrigger class="text-l px-4 py-2">Giới thiệu</MenubarTrigger>
+          <MenubarTrigger class="text px-4 py-2" style="font-weight: 600;">Giới thiệu</MenubarTrigger>
         </router-link>
       </MenubarMenu>
     </div>
 
     <div class="hidden md:flex items-center mt-2 md:mt-0">
       <router-link to="/login">
-        <button class="text-white px-20 py-2 rounded hover:bg-white font-bold whitespace-nowrap">
+        <button class="text-white px-20  text py-2 rounded hover:bg-white font-bold whitespace-nowrap" style="font-family: 'Roboto', sans-serif;">
           Đăng nhập
         </button>
       </router-link>
@@ -64,6 +67,14 @@ const toggleMenu = () => {
 </template>
 
 <style scoped>
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 900;
+}
+.text{
+  font-size: 16px;
+
+}
 .bg-orange-500 {
   background-color: rgba(255, 115, 0, 0.952); /* Màu cam */
 }
@@ -153,7 +164,7 @@ button.text-white:hover {
     width: 100%; /* Đảm bảo chiều rộng đầy đủ */
   }
 
-  .text-l {
+  .text-xl {
     font-size: 0.875rem; /* Kích thước chữ cho menu */
   }
 
