@@ -21,11 +21,11 @@ const onSubmit = handleSubmit(async (values) => {
   try {
     const data = await loginApi(values.email, values.password)
     console.log(data)
-    localStorage.setItem('access_token', data.tokens.access.token)
+    localStorage.setItem('access_token', data.data.token)
     //localStorage.setItem('refresh_token', data.tokens.refresh.token)
     location.reload()
   } catch (error) {
-    notify.error(apiExceptionHandler(error).message)
+    console.log(error)
   }
 })
 </script>

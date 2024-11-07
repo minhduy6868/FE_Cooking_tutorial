@@ -1,5 +1,5 @@
 export const config = {
-  baseURL: 'https://jsonplaceholder.typicode.com',
+  baseURL: 'http://localhost:8080',
   path: {
     refreshToken: 'auth/refresh-tokens',
   },
