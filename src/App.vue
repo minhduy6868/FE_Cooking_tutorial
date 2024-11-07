@@ -3,6 +3,7 @@ import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmDialog.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
+import ChatBox from '@/components/layout/ChatBox.vue'
 import { useConfirmDialog } from './stores/modal'
 const route = useRoute()
 
@@ -32,6 +33,8 @@ const openConfirm = async () => {
 
 <template>
   <ConfirmModal />
+  <ChatBox></ChatBox>
+
 
   <!-- <button @click="openConfirm">Open Modal</button> -->
   <Toaster />
