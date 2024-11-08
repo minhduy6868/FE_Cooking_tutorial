@@ -1,58 +1,77 @@
 <script setup lang="ts">
+import { computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmDialog.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
-import ChatBox from '@/components/layout/ChatBox.vue'
 import { useConfirmDialog } from './stores/modal'
+
+// Lấy thông tin từ route
 const route = useRoute()
 
+// Tính toán layout từ route meta
 const layout = computed(() => {
-  return route.meta.layout ?? 'DefaultLayout'
+  return route.meta.layout || 'Defaulayout'  // fallback nếu không có layout
 })
 
+// Store cho loading
 const loadingStore = useLoadingStore()
 
+// Toast chào mừng
 onMounted(() => {
   showToast({
     title: 'Welcome to OJk Global',
     description: 'This is a production from OJk Global',
     variant: 'default',
+    duration: 5000,  // Tự động đóng toast sau 5 giây
   })
 })
 
+// Confirm dialog
 const confirmDialog = useConfirmDialog()
 const openConfirm = async () => {
   const result = await confirmDialog.open({
     title: 'Are you sure?',
     question: 'Do you really want to delete this item?',
   })
-  console.log('result', result)
+  if (result) {
+    console.log('Item deleted')
+  } else {
+    console.log('Action canceled')
+  }
 }
 </script>
 
 <template>
   <ConfirmModal />
-  <ChatBox></ChatBox>
 
-
-  <!-- <button @click="openConfirm">Open Modal</button> -->
   <Toaster />
+  
+  <!-- Hiển thị Loading Spinner nếu đang tải -->
   <div
     v-if="loadingStore.getLoading"
-    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] bg-[#4c4c4c61]"
+    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] loading-overlay"
   >
     <Icon
       icon="svg-spinners:90-ring-with-bg"
       class="w-10 h-10"
     />
   </div>
+
+  <!-- Dynamic Layout -->
   <component :is="layout">
     <RouterView />
   </component>
 </template>
 
 <style scoped>
+/* Style cho loading overlay */
+.loading-overlay {
+  background-color: rgba(76, 76, 76, 0.38); /* Background bán trong suốt */
+}
+
+/* Logo hover effect */
 .logo {
   height: 6em;
   padding: 1.5em;
