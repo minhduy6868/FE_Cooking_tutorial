@@ -10,7 +10,7 @@ export const loginApi = async (
   }>
 > => {
   return $api(
-    '/auth/login',
+    '/login',
     {
       method: 'POST',
       body: {
