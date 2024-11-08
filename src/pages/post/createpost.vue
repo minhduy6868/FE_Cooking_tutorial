@@ -1,5 +1,4 @@
 <template>
-  <SideBar></SideBar>
   <div class="min-h-screen p-6 bg-orange-50 flex items-center justify-center">
     <div class="container max-w-4xl mx-auto">
       <div class="bg-white rounded-lg shadow-lg p-5 md:p-8 mb-6 border-2 border-orange-200">
@@ -191,7 +190,6 @@
       </div>
     </div>
   </div>
-  <Footer></Footer>
 </template>
 
 <script setup lang="ts">

@@ -1,38 +1,58 @@
 import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router'
-import { authRoute, dashboardRoute, profileRoute, aboutRoute, adminRoute, notFoundRoute, demoRoute, postRoute} from './modules'
+import { authRoute, dashboardRoute, profileRoute, aboutRoute, adminRoute, notFoundRoute, demoRoute, postRoute } from './modules'
 import { authGuard } from './auth-guard'
+import MainLayout from '@/layouts/DefaultLayout.vue'  // Đảm bảo rằng bạn đã import MainLayout
+
 const { progress } = useIndicator()
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/c',
-    // beforeEnter: [authGuard],
-    component: () => import('@/pages/index.vue'),
-    children: dashboardRoute,
+    path: '/',
+    component: MainLayout,  
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/home/home.vue'),
+      },
+      {
+        path: '/about',
+        name: 'about',
+        component: () => import('@/pages/about/about.vue'),
+      },
+      {
+        path: '/post',
+        name: 'post',
+        component: () => import('@/pages/post/createpost.vue'),
+      },
+      {
+        path: '/profile',
+        name: 'post',
+        component: () => import('@/pages/profile/index.vue'),
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('@/pages/profile/index.vue'),
+      },
+    ],
   },
+
+  // Các route khác sử dụng layout khác như GuestLayout, AdminLayout, v.v.
   {
     path: '/auth',
     meta: {
-      layout: 'GuestLayout',
+      layout: 'GuestLayout',  // Chỉ định layout là GuestLayout
       public: true,
     },
     beforeEnter: [authGuard],
     children: authRoute,
   },
   {
-    path: '/admin', 
+    path: '/admin',
     meta: {
       layout: 'AdminLayout',
-    }, 
-    children: adminRoute,
-  },
-  {
-    path: '/profile',
-    meta: {
-      layout: 'ProfileLayout',
     },
-    // beforeEnter: [authGuard],
-    children: profileRoute,
+    children: adminRoute,
   },
   {
     path: '/test',
@@ -40,35 +60,32 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/pagenotfound',
-    // beforeEnter: [authGuard],
     meta: {
-      layout: 'NotFoundLayout',
+      layout: 'NotFoundLayout',  // Layout NotFound
     },
     children: notFoundRoute,
   },
   {
-    path: '/about', // Đường dẫn mới cho trang About
-   meta: {
-    layout: 'AboutLayout',
-   }, 
-   children: aboutRoute,
+    path: '/demoapi',
+    meta: {
+      layout: 'DemoLayout',  // Layout Demo
+    },
+    children: demoRoute,
   },
   {
-    path: '/demoapi', 
-   meta: {
-    layout: 'DemoLayout',
-   }, 
-   children: demoRoute,
-  },
-  {
-    path: '/post', 
-   meta: {
-    layout: 'PostLayout',
-   }, 
-   children: postRoute,
+    path: '/post/view',  // Thay đổi path để tránh trùng với '/post'
+    meta: {
+      layout: 'PostLayout',  // Layout Post
+    },
+    children: postRoute,
   },
 
- 
+  // Route catch-all (bắt tất cả các đường dẫn không hợp lệ)
+  {
+    path: '/:catchAll(.*)',  // Bắt tất cả các route không khớp
+    name: 'notfound',        // Tên route
+    component: () => import('@/pages/Pagenotfound.vue'),  // Trang lỗi
+  }
 ]
 
 const router = createRouter({
@@ -76,6 +93,7 @@ const router = createRouter({
   routes,
 })
 
+// Set up loading progress bar
 router.beforeEach(() => {
   progress.value = 0.3
 })
