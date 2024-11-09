@@ -20,7 +20,7 @@ const [password, passwordAttrs] = defineField('password')
 const onSubmit = handleSubmit(async (values) => {
   try {
     const data = await loginApi(values.email, values.password)
-    console.log(data)
+    console.log(data, 'check')
     localStorage.setItem('access_token', data.data.token)
     //localStorage.setItem('refresh_token', data.tokens.refresh.token)
     location.reload()

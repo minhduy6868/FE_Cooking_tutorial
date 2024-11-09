@@ -3,23 +3,36 @@ import type { BaseResponse } from '@/types/api'
 export const loginApi = async (
   email: string,
   password: string,
-): Promise<
-  BaseResponse<{
-    access_token: string
-    refresh_token: string
-  }>
-> => {
-  return $api(
-    '/login',
-    {
-      method: 'POST',
-      body: {
-        email,
-        password,
+): Promise<BaseResponse<{ token: string; authenticated: boolean }>> => {
+  try {
+    // Gửi yêu cầu đăng nhập đến API
+    const response = await $api(
+      '/login',
+      {
+        method: 'POST',
+        body: {
+          email,
+          password,
+        },
       },
-    },
-    false,
-  )
+      false,
+    )
+
+    // Kiểm tra dữ liệu trả về từ API
+    if (response.status === 200 && response.data && response.data.token) {
+      // Lưu token vào localStorage
+      localStorage.setItem('access_token', response.data.token)
+
+      // Trả về thông tin thành công
+      return response
+    } else {
+      // Nếu không có token trong response, ném lỗi
+      throw new Error('Invalid response data')
+    }
+  } catch (error) {
+    console.error('Login API error:', error)
+    throw error // Ném lỗi để caller có thể xử lý
+  }
 }
 
 interface RegisterBody {
