@@ -4,7 +4,7 @@ export const adminRoute: RouteRecordRaw[] = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import('@/pages/admin/admin.vue'),
+    component: () => import('@/pages/admin/inforadmin.vue'),
   },
   {
     path: '',
