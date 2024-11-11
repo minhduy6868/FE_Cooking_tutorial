@@ -56,7 +56,7 @@ const routes: RouteRecordRaw[] = [
     component: AdminLayout, // Sử dụng AdminLayout cho các route dưới đây
     children: [
       {
-        path: '/admin/dashboard',
+        path: '',
         component: () => import('@/pages/admin/dashboard.vue'),
       },
       {

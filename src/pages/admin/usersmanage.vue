@@ -1,227 +1,129 @@
 <template>
-  <table class="min-w-full divide-y divide-gray-200 overflow-x-auto">
-    <thead class="bg-gray-50">
-      <tr>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Name
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Title
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Status
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Role
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Email
-        </th>
-        <th
-          scope="col"
-          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Actions
-        </th>
-      </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-      <tr>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="flex items-center">
-            <div class="flex-shrink-0 h-10 w-10">
-              <img
-                class="h-10 w-10 rounded-full"
-                src="https://i.pravatar.cc/150?img=1"
-                alt=""
-              />
-            </div>
-            <div class="ml-4">
-              <div class="text-sm font-medium text-gray-900">Jane Cooper</div>
-              <div class="text-sm text-gray-500">jane.cooper@example.com</div>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-          <div class="text-sm text-gray-500">Optimization</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <span
-            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-          >
-            Active
-          </span>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Admin</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">jane.cooper@example.com</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-          <a
-            href="#"
-            class="text-indigo-600 hover:text-indigo-900"
-            >Edit</a
-          >
-          <a
-            href="#"
-            class="ml-2 text-red-600 hover:text-red-900"
-            >Delete</a
-          >
-        </td>
-      </tr>
+  <div>
+    <h2>Danh sách người dùng</h2>
 
-      <tr>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="flex items-center">
-            <div class="flex-shrink-0 h-10 w-10">
-              <img
-                class="h-10 w-10 rounded-full"
-                src="https://i.pravatar.cc/150?img=1"
-                alt=""
-              />
-            </div>
-            <div class="ml-4">
-              <div class="text-sm font-medium text-gray-900">Jane Cooper</div>
-              <div class="text-sm text-gray-500">jane.cooper@example.com</div>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-          <div class="text-sm text-gray-500">Optimization</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <span
-            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-          >
-            Active
-          </span>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Admin</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">jane.cooper@example.com</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-          <a
-            href="#"
-            class="text-indigo-600 hover:text-indigo-900"
-            >Edit</a
-          >
-          <a
-            href="#"
-            class="ml-2 text-red-600 hover:text-red-900"
-            >Delete</a
-          >
-        </td>
-      </tr>
+    <!-- Trạng thái Loading và Error -->
+    <div v-if="loading">Loading...</div>
+    <div
+      v-if="error"
+      class="error"
+    >
+      {{ error }}
+    </div>
 
-      <tr>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="flex items-center">
-            <div class="flex-shrink-0 h-10 w-10">
-              <img
-                class="h-10 w-10 rounded-full"
-                src="https://i.pravatar.cc/150?img=1"
-                alt=""
-              />
-            </div>
-            <div class="ml-4">
-              <div class="text-sm font-medium text-gray-900">Jane Cooper</div>
-              <div class="text-sm text-gray-500">jane.cooper@example.com</div>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-          <div class="text-sm text-gray-500">Optimization</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <span
-            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+    <!-- Danh sách người dùng -->
+    <table
+      v-if="!loading && !error"
+      class="min-w-full divide-y divide-gray-200 overflow-x-auto"
+    >
+      <thead class="bg-gray-50">
+        <tr>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-            Active
-          </span>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Admin</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">jane.cooper@example.com</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-          <a
-            href="#"
-            class="text-indigo-600 hover:text-indigo-900"
-            >Edit</a
+            Avatar
+          </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-          <a
-            href="#"
-            class="ml-2 text-red-600 hover:text-red-900"
-            >Delete</a
+            Full Name
+          </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-        </td>
-      </tr>
-
-      <tr>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="flex items-center">
-            <div class="flex-shrink-0 h-10 w-10">
-              <img
-                class="h-10 w-10 rounded-full"
-                src="https://i.pravatar.cc/150?img=1"
-                alt=""
-              />
-            </div>
-            <div class="ml-4">
-              <div class="text-sm font-medium text-gray-900">Jane Cooper</div>
-              <div class="text-sm text-gray-500">jane.cooper@example.com</div>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-          <div class="text-sm text-gray-500">Optimization</div>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap">
-          <span
-            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+            Email
+          </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
           >
-            Active
-          </span>
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Admin</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">jane.cooper@example.com</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-          <a
-            href="#"
-            class="text-indigo-600 hover:text-indigo-900"
-            >Edit</a
-          >
-          <a
-            href="#"
-            class="ml-2 text-red-600 hover:text-red-900"
-            >Delete</a
-          >
-        </td>
-      </tr>
-
-      <!-- More rows... -->
-    </tbody>
-  </table>
+            Phone Number
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr
+          v-for="user in users"
+          :key="user.id"
+        >
+          <td class="px-6 py-4 whitespace-nowrap">
+            <img
+              :src="user.avatar"
+              alt="User Avatar"
+              class="h-10 w-10 rounded-full"
+            />
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {{ user.fullName }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.email }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.phoneNumber }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
-<script>
-export default {
-  name: 'Name',
-}
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
+import { getAllUser } from '@/services/authen' // Đảm bảo import từ service đúng
+import type { User } from '@/types/user'
+
+export default defineComponent({
+  name: 'UsersList',
+  setup() {
+    const users = ref<User[]>([])
+    const loading = ref<boolean>(true)
+    const error = ref<string | null>(null)
+
+    // Hàm gọi API lấy danh sách người dùng
+    const fetchUsers = async () => {
+      try {
+        const response = await getAllUser() // Gọi từ service
+        if (response.status === 200) {
+          users.value = response.data
+        } else {
+          error.value = response.message
+        }
+      } catch (err) {
+        error.value = 'Đã có lỗi xảy ra, vui lòng thử lại.'
+      } finally {
+        loading.value = false
+      }
+    }
+
+    // Lấy dữ liệu khi component mount
+    onMounted(() => {
+      fetchUsers()
+    })
+
+    return {
+      users,
+      loading,
+      error,
+    }
+  },
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+</style>

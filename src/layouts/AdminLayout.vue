@@ -6,7 +6,7 @@ import SideBar from '@/components/layout/SideBarAdmin.vue'
     <!-- <TopBar /> -->
     <div class="w-full flex">
       <SideBar />
-      <div class="flex-1 relative overflow-y-auto">
+      <div class="flex-1 relative overflow-y-auto m-3">
         <router-view></router-view> 
       </div>
     </div>
