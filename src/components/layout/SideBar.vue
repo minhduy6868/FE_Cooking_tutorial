@@ -46,7 +46,7 @@ const toggleMenu = () => {
 
     <div
       :class="{ hidden: !menuVisible, flex: menuVisible }"
-      class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0"
+      class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0 bg"
     >
       <MenubarMenu>
         <router-link to="/">
@@ -57,18 +57,7 @@ const toggleMenu = () => {
           >
         </router-link>
       </MenubarMenu>
-      <MenubarMenu>
-        <MenubarTrigger
-          class="text px-4 py-2"
-          style="font-weight: 600"
-          >Menu</MenubarTrigger
-        >
-        <MenubarContent>
-         <router-link to="/profile"> <MenubarItem>Bữa sáng</MenubarItem></router-link>
-          <MenubarItem>Món trưa</MenubarItem>
-          <MenubarItem>Món tối</MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
+
       <MenubarMenu>
         <router-link to="/post">
           <MenubarTrigger
