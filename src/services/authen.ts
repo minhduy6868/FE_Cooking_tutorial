@@ -4,25 +4,23 @@ import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
 import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
 // Đảm bảo đường dẫn đúng
 
-// Gửi yêu cầu đăng nhập đến API
 export const loginApi = async (email: string, password: string): Promise<Login> => {
   try {
-    // Gửi yêu cầu POST đến API để đăng nhập
-    const response = await axios.post<BaseResponse<Login>>('http://localhost:8080/login', {
-      email,
-      password,
-    })
+    const response = await axios.post<BaseResponse<Login>>(
+      'http://localhost:8080/login',
+      { email, password },
+      {
+        timeout: 5000, // 5 giây timeout
+      },
+    )
 
-    // Kiểm tra nếu status code là 200 (thành công)
-    if (response.status === 200 && response.data) {
+    if (response.status === 200 && response.data.data.authenticated) {
       return response.data.data // Trả về dữ liệu Login từ API
     } else {
       throw new Error('Đăng nhập không thành công.')
     }
   } catch (error: any) {
-    // Kiểm tra lỗi từ API (khi server trả về mã trạng thái không phải 2xx)
     if (error.response) {
-      // Nếu lỗi trả về từ server
       const status = error.response.status
       const errorMessage = error.response.data.message || 'Có lỗi xảy ra từ API'
 
@@ -45,22 +43,19 @@ export const loginApi = async (email: string, password: string): Promise<Login> 
         default:
           alert(`Đã xảy ra lỗi: ${errorMessage}`)
       }
-    }
-    // Nếu lỗi không phải từ API, kiểm tra lỗi yêu cầu
-    else if (error.request) {
+    } else if (error.code === 'ECONNABORTED') {
+      alert('Yêu cầu đã bị hủy do thời gian chờ lâu.')
+    } else if (error.request) {
       console.error('Không nhận được phản hồi từ server:', error.request)
       alert('Không nhận được phản hồi từ server. Vui lòng thử lại sau.')
-    }
-    // Nếu có lỗi trong quá trình thiết lập yêu cầu
-    else {
+    } else {
       console.error('Lỗi trong quá trình gửi yêu cầu:', error.message)
       alert('Lỗi trong quá trình gửi yêu cầu. Vui lòng thử lại.')
     }
 
-    throw error // Đảm bảo lỗi được ném ra ngoài để xử lý ở nơi gọi
+    throw error
   }
 }
-
 
 // Hàm service getAllUser
 export const getAllUser = async (): Promise<BaseResponse<User[]>> => {
@@ -93,8 +88,11 @@ export const getAllUser = async (): Promise<BaseResponse<User[]>> => {
   }
 }
 
-
-export const registerApi = async (user: { fullName: string, email: string, password: string }): Promise<BaseResponse<User>> => {
+export const registerApi = async (user: {
+  fullName: string
+  email: string
+  password: string
+}): Promise<BaseResponse<User>> => {
   try {
     // Gửi yêu cầu POST đến API đăng ký người dùng
     const response = await axios.post<BaseResponse<User>>('http://localhost:8080/user/DKUser', user)

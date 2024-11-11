@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
-  // Các route với layout khác
+// Các route với layout khác
   {
     path: '/auth',
     meta: {
@@ -48,8 +48,18 @@ const routes: RouteRecordRaw[] = [
     },
     beforeEnter: [authGuard],
     children: authRoute,
+  }, 
+
+  {
+    path: '/loginadmin',
+    name: 'loginadmin',
+    component: () => import('@/pages/admin/loginadmin.vue'),
+    meta: {
+      layout: 'GuestLayout',
+      public: true,
+    },
   },
-  
+
   // Đảm bảo AdminLayout được áp dụng cho các route trong admin
   {
     path: '/admin',
@@ -69,9 +79,9 @@ const routes: RouteRecordRaw[] = [
         name: 'usersManage',
         component: () => import('@/pages/admin/usersmanage.vue'),
       },
-    ]
+    ],
   },
-  
+
   {
     path: '/test',
     component: () => import('@/pages/test.vue'),

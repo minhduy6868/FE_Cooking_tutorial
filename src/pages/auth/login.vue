@@ -32,22 +32,26 @@ const onSubmit = handleSubmit(async (values) => {
     const data = await loginApi(values.email, values.password)
 
     // Kiểm tra dữ liệu trả về từ API
-    if (data.status === 200 && data.data.authenticated) {
-      console.log(data, 'check')
-      localStorage.setItem('access_token', data.data.access_token)
+    if (data?.authenticated) {
+      console.log('Đăng nhập thành công:', data)
 
-      // Sau khi đăng nhập thành công, chuyển hướng tới trang chủ
-      router.push('/') // Chuyển hướng đến trang chính (Home)
+      // Lưu access token vào localStorage
+      localStorage.setItem('access_token', data.access_token)
+
+      // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
+      router.push('/')
     } else {
       // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
-      loginError = data.message || 'Đăng nhập thất bại'
+      loginError = 'Đăng nhập thất bại'
       console.error(loginError)
+      alert(loginError)  // Hiển thị lỗi cho người dùng
     }
   } catch (error) {
-    // Xử lý lỗi API
+    // Xử lý lỗi từ API
     apiExceptionHandler(error)
     console.error('Đã có lỗi xảy ra:', error)
     loginError = 'Đã xảy ra lỗi. Vui lòng thử lại!'
+    alert(loginError)  // Hiển thị lỗi cho người dùng
   }
 })
 </script>

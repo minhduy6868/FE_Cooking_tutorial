@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
     <div class="relative py-3 sm:max-w-xl sm:mx-auto">
       <div
-        class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
+        class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-700 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
       ></div>
       <div class="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
         <div class="max-w-md mx-auto">
@@ -11,6 +11,7 @@
           </div>
           <div class="divide-y divide-gray-200">
             <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+              <!-- Email Input -->
               <div class="relative">
                 <input
                   id="email"
@@ -26,6 +27,8 @@
                   >Email</label
                 >
               </div>
+
+              <!-- Password Input -->
               <div class="relative">
                 <input
                   id="password"
@@ -41,13 +44,23 @@
                   >Mật khẩu</label
                 >
               </div>
+
+              <!-- Submit Button -->
               <div class="relative">
                 <button
-                  class="bg-cyan-500 text-white rounded-md px-2 py-1"
+                  class="bg-orange-400 hover:bg-gray-200 hover:text-orange-600 hover:border-l-green-950 text-white rounded-md px-2 py-1"
                   @click="handleSubmit"
                 >
                   Đăng nhập
                 </button>
+              </div>
+
+              <!-- Error Message -->
+              <div
+                v-if="errorMessage"
+                class="mt-4 text-red-500 text-sm"
+              >
+                {{ errorMessage }}
               </div>
             </div>
           </div>
@@ -59,15 +72,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
+const errorMessage = ref<string | null>(null)
+const router = useRouter()
 
 const handleSubmit = () => {
-  // Handle form submission logic here
-  console.log('Email:', email.value)
-  console.log('Password:', password.value)
-  // You can add further logic like validation or API calls
+  // Kiểm tra thông tin đăng nhập
+  if (email.value === 'admin@gmail.com' && password.value === 'admin') {
+    // Lưu token hoặc chuyển hướng
+    //localStorage.setItem('access_token', 'fake-token') // Lưu token vào localStorage (hoặc làm các thao tác khác)
+    router.push('/admin') // Chuyển hướng đến trang Admin
+  } else {
+    // Nếu thông tin sai, hiển thị thông báo lỗi
+    errorMessage.value = 'Thông tin đăng nhập không đúng!'
+  }
 }
 </script>
 
