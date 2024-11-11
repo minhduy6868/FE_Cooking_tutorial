@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import {
   Menubar,
-  MenubarContent,
-  MenubarItem,
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/ui/menubar'
@@ -57,18 +55,7 @@ const toggleMenu = () => {
           >
         </router-link>
       </MenubarMenu>
-      <MenubarMenu>
-        <MenubarTrigger
-          class="text px-4 py-2"
-          style="font-weight: 600"
-          >Menu</MenubarTrigger
-        >
-        <MenubarContent>
-          <MenubarItem>Bữa sáng</MenubarItem>
-          <MenubarItem>Món trưa</MenubarItem>
-          <MenubarItem>Món tối</MenubarItem>
-        </MenubarContent>
-      </MenubarMenu>
+
       <MenubarMenu>
         <router-link to="/post">
           <MenubarTrigger
@@ -89,16 +76,17 @@ const toggleMenu = () => {
       </MenubarMenu>
     </div>
 
-    <div class="hidden md:flex items-center mt-2 md:mt-0">
-      <router-link to="/login">
-        <button
-          class="text-white px-20 text py-2 rounded hover:bg-white font-bold whitespace-nowrap"
-          style="font-family: 'Roboto', sans-serif"
-        >
-          Đăng nhập
-        </button>
-      </router-link>
-    </div>
+    <div class="flex items-center mt-2 md:mt-0">
+  <router-link to="/login">
+    <button
+      class="text-white px-20 text btn1 py-2 rounded hover:bg-white  login-button font-bold whitespace-nowrap"
+      style="font-family: 'Roboto', sans-serif"
+    >
+      Đăng nhập
+    </button>
+  </router-link>
+</div>
+
   </Menubar>
 </template>
 
