@@ -1,202 +1,149 @@
-<script setup lang="ts">
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarTrigger,
-} from '@/components/ui/menubar'
+<template>
+  <nav class="bg-orange-400 border-gray-200 py-2.5 dark:bg-gray-900">
+    <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
+      <a href="#" class="flex items-center">
+        <img
+          src="/public/assets/images/logo.png"
+          class="h-6 mr-3 sm:h-9"
+          alt="Landwind Logo"
+        />
+      </a>
+
+      <div class="flex items-center lg:order-2">
+        <div class="hidden mt-2 mr-4 sm:inline-block">
+          <span></span>
+        </div>
+
+        <router-link to="/login">
+          <a
+          href=""
+          class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+        >
+          Đăng nhập
+        </a>
+        </router-link>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          type="button"
+          class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          :aria-expanded="isMenuOpen.toString()"
+          @click="toggleMenu"
+        >
+          <span class="sr-only">Open main menu</span>
+
+          <!-- Hamburger Icon (Visible when menu is closed) -->
+          <svg
+            v-if="!isMenuOpen"
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+
+          <!-- Close Icon (Visible when menu is open) -->
+          <svg
+            v-if="isMenuOpen"
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menu Items -->
+      <div
+        :class="{ block: isMenuOpen, hidden: !isMenuOpen }"
+        class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1"
+      >
+        <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+          <li>
+<router-link to="/">
+  <a
+              href="#"
+              class="block py-2 pl-3 pr-4 text-white bg-orange-700 rounded lg:bg-transparent lg:text-white lg:p-0 dark:text-white hover:bg-orange-500"
+              aria-current="page"
+              >Trang chủ</a>
+</router-link>
+            
+          </li>
+          <li>
+            <router-link to="/post">
+              <a
+              href="#"
+              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+              >Công thức món ăn</a
+            >
+            </router-link>
+          </li>
+          <li>
+          <router-link to="/post">
+            <a
+              href="#"
+              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+              >Đăng bài</a
+            >
+          </router-link>
+          </li>
+          <li>
+           <router-link to="/profile">
+            <a
+              href="#"
+              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+              >Trang cá nhân</a
+            >
+           </router-link>
+          </li>
+          <li>
+            <router-link to="/about">
+              <a
+              href="#"
+              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+              >Giới thiệu</a
+            >
+            </router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</template>
+
+<script lang="ts">
 import { ref } from 'vue'
 
-// Đặt giá trị khởi tạo là true để menu luôn hiển thị
-const menuVisible = ref(true)
+export default {
+  name: 'Navbar',
+  setup() {
+    // Reactive state to toggle mobile menu visibility
+    const isMenuOpen = ref(false)
 
-const toggleMenu = () => {
-  menuVisible.value = !menuVisible.value
+    // Toggle the mobile menu state
+    const toggleMenu = () => {
+      isMenuOpen.value = !isMenuOpen.value
+    }
+
+    return {
+      isMenuOpen,
+      toggleMenu,
+    }
+  },
 }
 </script>
 
-<template>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap"
-    rel="stylesheet"
-  />
-
-  <Menubar
-    class="flex flex-col md:flex-row justify-center items-center bg-orange-500 text-white custom-menubar"
-  >
-    <div class="flex items-center w-full justify-between">
-      <img
-        src="/public/assets/images/logo.png"
-        alt="Logo"
-        class="h-10 px-5 logo"
-      />
-
-      <div class="md:hidden">
-        <!-- Nút menu cho di động -->
-        <button
-          class="text-white"
-          @click="toggleMenu"
-        >
-          &#9776;
-          <!-- Biểu tượng menu -->
-        </button>
-      </div>
-    </div>
-
-    <div
-      :class="{ hidden: !menuVisible, flex: menuVisible }"
-      class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0 bg"
-    >
-      <MenubarMenu>
-        <router-link to="/">
-          <MenubarTrigger
-            class="text px-4 py-2"
-            style="font-weight: 600"
-            >Home</MenubarTrigger
-          >
-        </router-link>
-      </MenubarMenu>
-
-      <MenubarMenu>
-        <router-link to="/post">
-          <MenubarTrigger
-            class="text px-4 py-2"
-            style="font-weight: 600"
-            >Đăng bài</MenubarTrigger
-          >
-        </router-link>
-      </MenubarMenu>
-      <MenubarMenu>
-        <router-link to="/about">
-          <MenubarTrigger
-            class="text px-4 py-2"
-            style="font-weight: 600"
-            >Giới thiệu</MenubarTrigger
-          >
-        </router-link>
-      </MenubarMenu>
-    </div>
-
-    <div class="hidden md:flex items-center mt-2 md:mt-0">
-      <router-link to="/login">
-        <button
-          class="text-white px-20 text py-2 rounded hover:bg-white font-bold whitespace-nowrap"
-          style="font-family: 'Roboto', sans-serif"
-        >
-          Đăng nhập
-        </button>
-      </router-link>
-    </div>
-  </Menubar>
-</template>
-
 <style scoped>
-body {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 900;
-}
-.text {
-  font-size: 16px;
-}
-.bg-orange-500 {
-  background-color: rgba(255, 115, 0, 0.952); /* Màu cam */
-}
-
-.text-white {
-  color: white; /* Màu trắng cho chữ */
-}
-button.text-white:hover {
-  color: rgb(255, 136, 0); /* Đổi màu chữ khi hover */
-}
-
-.custom-menubar {
-  height: auto; /* Chiều cao tự động */
-}
-
-@media (max-width: 768px) {
-  .flex {
-    flex-direction: column; /* Đặt chiều dọc cho các phần tử bên trong */
-    align-items: center; /* Căn giữa các phần tử */
-  }
-
-  .space-x-5 {
-    margin-bottom: 10px; /* Khoảng cách giữa các item khi ở chế độ di động */
-  }
-
-  .hidden {
-    display: none; /* Ẩn menu khi không cần thiết */
-  }
-
-  .flex-col {
-    flex-direction: column; /* Sắp xếp dọc cho menu di động */
-    width: 100%; /* Chiều rộng 100% cho menu */
-  }
-
-  MenubarMenu {
-    width: 100%; /* Đảm bảo menu chiếm toàn bộ chiều rộng */
-    text-align: center; /* Căn giữa nội dung */
-  }
-}
-
-@media (min-width: 769px) {
-  .flex-col {
-    flex-direction: row; /* Sắp xếp ngang cho màn hình lớn */
-  }
-
-  .md\:hidden {
-    display: block !important; /* Hiển thị menu trên màn hình lớn */
-  }
-
-  .md\:mt-0 {
-    margin-top: 0 !important; /* Xóa khoảng cách trên cho màn hình lớn */
-  }
-
-  .md\:flex {
-    display: flex !important; /* Hiển thị nút đăng nhập trên màn hình lớn */
-  }
-
-  .flex {
-    justify-content: space-between; /* Căn giữa các item trong menu */
-  }
-  MenubarTrigger {
-    align-items: center;
-  }
-  .logo {
-    margin-left: 100px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1055px) {
-  .flex-col {
-    flex-direction: row; /* Sắp xếp ngang cho màn hình lớn */
-  }
-
-  .md\:hidden {
-    display: block !important; /* Hiển thị menu trên màn hình lớn */
-  }
-
-  .md\:mt-0 {
-    margin-top: 0 !important; /* Xóa khoảng cách trên cho màn hình lớn */
-  }
-
-  .md\:flex {
-    display: flex !important; /* Hiển thị nút đăng nhập trên màn hình lớn */
-  }
-
-  .flex {
-    justify-content: space-evenly; /* Căn giữa các item trong menu với khoảng cách đều */
-    align-items: center; /* Căn giữa dọc */
-    width: 100%; /* Đảm bảo chiều rộng đầy đủ */
-  }
-
-  .text-xl {
-    font-size: 0.875rem; /* Kích thước chữ cho menu */
-  }
-
-  .px-4 {
-    padding-left: 1rem; /* Thêm khoảng cách bên trái */
-    padding-right: 1rem; /* Thêm khoảng cách bên phải */
-  }
-}
+/* Optional: add custom styles if needed */
 </style>
