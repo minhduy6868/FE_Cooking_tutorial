@@ -35,6 +35,7 @@
     "pinia": "^2.1.7",
     "radix-vue": "^1.9.5",
     "shadcn-vue": "^0.11.0",
+    "sweetalert2": "^11.6.13",
     "swrv": "^1.0.4",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",

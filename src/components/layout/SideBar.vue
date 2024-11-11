@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {
   Menubar,
+  MenubarContent,
+  MenubarItem,
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/ui/menubar'
@@ -44,7 +46,7 @@ const toggleMenu = () => {
 
     <div
       :class="{ hidden: !menuVisible, flex: menuVisible }"
-      class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0"
+      class="flex-col md:flex-row w-full md:space-x-5 mt-2 md:mt-0 bg"
     >
       <MenubarMenu>
         <router-link to="/">
@@ -76,17 +78,16 @@ const toggleMenu = () => {
       </MenubarMenu>
     </div>
 
-    <div class="flex items-center mt-2 md:mt-0">
-  <router-link to="/login">
-    <button
-      class="text-white px-20 text btn1 py-2 rounded hover:bg-white  login-button font-bold whitespace-nowrap"
-      style="font-family: 'Roboto', sans-serif"
-    >
-      Đăng nhập
-    </button>
-  </router-link>
-</div>
-
+    <div class="hidden md:flex items-center mt-2 md:mt-0">
+      <router-link to="/login">
+        <button
+          class="text-white px-20 text py-2 rounded hover:bg-white font-bold whitespace-nowrap"
+          style="font-family: 'Roboto', sans-serif"
+        >
+          Đăng nhập
+        </button>
+      </router-link>
+    </div>
   </Menubar>
 </template>
 
