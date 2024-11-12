@@ -1,28 +1,85 @@
-import type { BaseResponse } from '@/types/api'
-import type { IUser } from '@/types/user'
+// src/services/userService.ts
+import api from '@/api/api_client' // Import axios instance đã cấu hình
+import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
+import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
 
-interface UserProfile {
-  first_name: string
-  last_name: string
-}
-export const getInfoApi = async (): Promise<BaseResponse<IUser>> => {
-  return $api('/users/my-info', {
-    method: 'GET',
-  })
-}
-
-export const getUserApi = async (id: string): Promise<BaseResponse<IUser[]>> => {
-  return $api(`/users/profiles`, {
-    method: 'GET',
-    query: {
-      ids: id,
-    },
-  })
+// Lấy thông tin người dùng
+export const getUserInfo = async (): Promise<BaseResponse<User>> => {
+  try {
+    const response = await api.get<BaseResponse<User>>('/user/myInfo')
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Không thể lấy thông tin người dùng')
+    }
+  } catch (error: any) {
+    handleApiError(error)
+    throw error
+  }
 }
 
-export const createProfileApi = async (payload: UserProfile): Promise<BaseResponse<IUser>> => {
-  return $api('/users/info', {
-    method: 'POST',
-    body: payload,
-  })
+// Cập nhật thông tin người dùng
+export const updateUser = async (userUpdateData: Partial<User>): Promise<BaseResponse<User>> => {
+  try {
+    const response = await api.put<BaseResponse<User>>('/user/updateUser', userUpdateData)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Không thể cập nhật thông tin người dùng')
+    }
+  } catch (error: any) {
+    handleApiError(error)
+    throw error
+  }
+}
+
+// Lấy danh sách tất cả người dùng
+export const getAllUsers = async (): Promise<BaseResponse<User[]>> => {
+  try {
+    const response = await api.get<BaseResponse<User[]>>('/user/getAllUser')
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Không thể lấy danh sách người dùng')
+    }
+  } catch (error: any) {
+    handleApiError(error)
+    throw error
+  }
+}
+
+// Xử lý lỗi API
+const handleApiError = (error: any) => {
+  if (error.response) {
+    const status = error.response.status
+    const errorMessage = error.response.data.message || 'Có lỗi xảy ra từ API'
+
+    console.error('Lỗi từ API:', error.response.data)
+    console.error('Mã lỗi HTTP:', status)
+
+    switch (status) {
+      case 400:
+        alert(`Yêu cầu không hợp lệ: ${errorMessage}`)
+        break
+      case 401:
+        alert(`Lỗi xác thực: ${errorMessage}`)
+        break
+      case 404:
+        alert(`API không tìm thấy: ${errorMessage}`)
+        break
+      case 500:
+        alert(`Lỗi máy chủ: ${errorMessage}. Vui lòng thử lại sau.`)
+        break
+      default:
+        alert(`Đã xảy ra lỗi: ${errorMessage}`)
+    }
+  } else if (error.code === 'ECONNABORTED') {
+    alert('Yêu cầu đã bị hủy do thời gian chờ lâu.')
+  } else if (error.request) {
+    console.error('Không nhận được phản hồi từ server:', error.request)
+    alert('Không nhận được phản hồi từ server. Vui lòng thử lại sau.')
+  } else {
+    console.error('Lỗi trong quá trình gửi yêu cầu:', error.message)
+    alert('Lỗi trong quá trình gửi yêu cầu. Vui lòng thử lại.')
+  }
 }

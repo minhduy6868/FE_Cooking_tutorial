@@ -1,8 +1,54 @@
 <script setup lang="ts">
-import SideBar from '@/components/layout/SideBar.vue'
-import Carousel from '@/components/layout/Carousel.vue'
-import Footer from '@/components/layout/Footer.vue'
-import Card from '@/components/ui/card/CardCooking.vue'
+import { ref, onMounted } from 'vue'
+import { getUserInfo, updateUser } from '@/services/user'
+import { getLinkImage } from '@/services/photo'
+import type { User } from '@/types/user'
+import type { BaseResponse } from '@/types/baseapi'
+
+const userInfo = ref<User | null>(null)
+const isEditing = ref(false) // Biến theo dõi trạng thái chỉnh sửa
+const updatedInfo = ref({
+  fullName: '',
+  description: '',
+  phoneNumber: '',
+  address: ''
+})
+
+// Lấy thông tin người dùng khi component được mount
+onMounted(async () => {
+  try {
+    const userData = await getUserInfo()
+    userInfo.value = userData.data
+    // Khởi tạo giá trị cho các trường chỉnh sửa
+    if (userInfo.value) {
+      updatedInfo.value.fullName = userInfo.value.fullName || ''
+      updatedInfo.value.description = userInfo.value.description || ''
+      updatedInfo.value.phoneNumber = userInfo.value.phoneNumber || ''
+      updatedInfo.value.address = userInfo.value.address || ''
+    }
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu:', error)
+  }
+})
+
+// Hàm cập nhật thông tin người dùng
+const updateUserInfo = async () => {
+  try {
+    if (userInfo.value) {
+      const response = await updateUser({
+        fullName: updatedInfo.value.fullName,
+        description: updatedInfo.value.description,
+        phoneNumber: updatedInfo.value.phoneNumber,
+        address: updatedInfo.value.address
+      })
+      userInfo.value = { ...userInfo.value, ...response.data } // Cập nhật lại thông tin người dùng
+      isEditing.value = false // Đóng form chỉnh sửa
+      console.log('Thông tin đã được cập nhật!')
+    }
+  } catch (error) {
+    console.error('Lỗi khi cập nhật thông tin:', error)
+  }
+}
 </script>
 
 <template>
@@ -11,17 +57,18 @@ import Card from '@/components/ui/card/CardCooking.vue'
       <!-- Cover Image -->
       <div class="relative w-full">
         <img
-          src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080"
+          :src="userInfo?.profile || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080'"
           alt="User Cover"
           class="w-full xl:h-[20rem] lg:h-[18rem] md:h-[16rem] sm:h-[14rem] xs:h-[11rem] object-cover"
         />
 
         <!-- Profile Image and Name -->
-        <div
-          class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
-        >
+        <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
           <div
-            class="w-[141px] h-[141px] rounded-full bg-[url('https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw3fHxwZW9wbGV8ZW58MHwwfHx8MTcxMTExMTM4N3ww&ixlib=rb-4.0.3&q=80&w=1080')] bg-cover bg-center bg-no-repeat flex justify-center items-end relative"
+            class="w-[141px] h-[141px] rounded-full bg-cover bg-center bg-no-repeat flex justify-center items-end relative"
+            :style="{
+              backgroundImage: `url(${userInfo?.avatar || 'https://img.lovepik.com/free-png/20211130/lovepik-cartoon-avatar-png-image_401205251_wh1200.png'})`,
+            }"
           >
             <input
               id="upload_profile"
@@ -29,13 +76,13 @@ import Card from '@/components/ui/card/CardCooking.vue'
               name="profile"
               hidden
               required
+              @change="handleAvatarChange"
             />
             <label
               for="upload_profile"
               class="bg-white rounded-full w-6 h-6 text-center absolute bottom-0 right-0 transform translate-x-1/4 translate-y-1/4 flex items-center justify-center cursor-pointer"
             >
               <svg
-                data-slot="icon"
                 class="w-5 h-5 text-blue-700"
                 fill="none"
                 stroke-width="1.5"
@@ -60,22 +107,76 @@ import Card from '@/components/ui/card/CardCooking.vue'
           <h1
             class="mx-5 my-4 text-gray-800 dark:text-white lg:text-4xl md:text-3xl sm:text-3xl xs:text-xl font-serif text-center"
           >
-            Samuel Abera
+            {{ userInfo?.fullName || 'Chưa xác định' }}
           </h1>
         </div>
       </div>
 
       <!-- Description and Details -->
-      <div
-        class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-6 items-center my-6 mt-24"
-      >
+      <div class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-6 items-center my-6 mt-24">
         <p class="text-center w-fit text-gray-700 dark:text-gray-400 text-md">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam debitis labore
-          consectetur voluptatibus mollitia dolorem veniam omnis ut quibusdam minima sapiente
-          repellendus asperiores explicabo, eligendi odit, dolore similique fugiat dolor, doloremque
-          eveniet.
+          {{ userInfo?.description || 'Lorem ipsum dolor sit amet consectetur adipisicing elit.' }}
         </p>
+        
+        <!-- Button to trigger edit form -->
+        <button 
+          @click="isEditing = !isEditing" 
+          class="bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          {{ isEditing ? 'Cancel Edit' : 'Chỉnh sửa thông tin' }}
+        </button>
 
+        <!-- Edit Form -->
+        <div v-if="isEditing" class="w-full mt-4">
+          <form @submit.prevent="updateUserInfo">
+            <div class="mb-4">
+              <label for="fullName" class="block text-sm font-medium text-gray-700">Họ và tên</label>
+              <input
+                type="text"
+                id="fullName"
+                v-model="updatedInfo.fullName"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                placeholder="Họ và tên"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
+              <textarea
+                id="description"
+                v-model="updatedInfo.description"
+                rows="4"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                placeholder="Mô tả về bạn"
+              ></textarea>
+            </div>
+            <div class="mb-4">
+              <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+              <input
+                type="text"
+                id="phoneNumber"
+                v-model="updatedInfo.phoneNumber"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                placeholder="Số điện thoại"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+              <input
+                type="text"
+                id="address"
+                v-model="updatedInfo.address"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                placeholder="Địa chỉ"
+              />
+            </div>
+            <button 
+              type="submit"
+              class="w-full bg-blue-600 text-white py-2 px-4 rounded-md"
+            >
+              Cập nhật thông tin
+            </button>
+          </form>
+        </div>
         <div class="w-full my-auto py-6 flex flex-col gap-4">
           <div class="w-full flex sm:flex-row xs:flex-col gap-4">
             <div class="w-full">
@@ -83,12 +184,14 @@ import Card from '@/components/ui/card/CardCooking.vue'
                 class="text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700"
               >
                 <div class="flex flex-col pb-3">
-                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Full Name</dt>
-                  <dd class="text-lg font-semibold">Samuel Abera</dd>
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Họ và tên</dt>
+                  <dd class="text-lg font-semibold">{{ userInfo?.fullName || 'Unknown' }}</dd>
                 </div>
                 <div class="flex flex-col py-3">
-                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Date Of Birth</dt>
-                  <dd class="text-lg font-semibold">21/02/1997</dd>
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Số điện thoại</dt>
+                  <dd class="text-lg font-semibold">
+                    {{ userInfo?.phoneNumber || 'Not Provided' }}
+                  </dd>
                 </div>
               </dl>
             </div>
@@ -98,15 +201,12 @@ import Card from '@/components/ui/card/CardCooking.vue'
               >
                 <div class="flex flex-col pb-3">
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Email</dt>
-                  <dd class="text-lg font-semibold">samuelabera87@gmail.com</dd>
+                  <dd class="text-lg font-semibold">{{ userInfo?.email || 'Not Provided' }}</dd>
                 </div>
+               
                 <div class="flex flex-col py-3">
-                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Phone Number</dt>
-                  <dd class="text-lg font-semibold">+251913****30</dd>
-                </div>
-                <div class="flex flex-col py-3">
-                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Location</dt>
-                  <dd class="text-lg font-semibold">Ethiopia, Addis Ababa</dd>
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Địa chỉ</dt>
+                  <dd class="text-lg font-semibold">{{ userInfo?.address || 'Not Provided' }}</dd>
                 </div>
               </dl>
             </div>
@@ -114,294 +214,21 @@ import Card from '@/components/ui/card/CardCooking.vue'
         </div>
       </div>
     </div>
+
+  <!-- Recipe Cards -->
+  <h2
+    class="ml-4 mr-4 mx-auto bg-gradient-to-r from-orange-400 to-yellow-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+  >
+    Danh sách món ăn
+  </h2>
+  <div class="container px-6 py-6 mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <Card
+        v-for="user in users"
+        :key="user.id"
+        :user="user"
+      />
+      </div>
+    </div>
   </section>
-
-  <!-- List Post -->
-  <div class="max-w-screen-xl mx-auto p-3 sm:p-10 md:p-16">
-    <div class="max-w-screen-xl mx-auto sm:p-3 md:p-3 bg-orange-500 text-white">
-      <h2 class="text-2xl font-bold text-center">Danh sách các món đã đăng</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10"></div>
-    </div>
-
-    <hr class="mb-6 border-gray-300" />
-    <div class="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-10">
-      <Card
-        title="Why to eat salad?"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        image="https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-        link="#"
-        category="Cooking"
-        time="16 hours ago"
-      ></Card>
-
-      <Card
-        title="Why to eat salad?"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        image="https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-        link="#"
-        category="Cooking"
-        time="16 hours ago"
-      ></Card>
-
-      <Card
-        title="Why to eat salad?"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        image="https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-        link="#"
-        category="Cooking"
-        time="16 hours ago"
-      ></Card>
-
-      <!-- CARD 1 -->
-      <div class="rounded overflow-hidden shadow-lg flex flex-col">
-        <a href="#"></a>
-        <div class="relative">
-          <a href="#">
-            <img
-              class="w-full"
-              src="https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-              alt="Sunset in the mountains"
-            />
-            <div
-              class="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"
-            ></div>
-          </a>
-          <a href="#!">
-            <div
-              class="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out"
-            >
-              Cooking
-            </div>
-          </a>
-        </div>
-        <div class="px-6 py-4 mb-auto">
-          <a
-            href="#"
-            class="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2"
-            >Simplest Salad Recipe ever</a
-          >
-          <p class="text-gray-500 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-          </p>
-        </div>
-        <div class="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
-          <span
-            href="#"
-            class="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center"
-          >
-            <svg
-              id="Layer_1"
-              height="13px"
-              width="13px"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 512 512"
-              style="enable-background: new 0 0 512 512"
-              xml:space="preserve"
-            >
-              <g>
-                <g>
-                  <path
-                    d="M256,0C114.837,0,0,114.837,0,256s114.837,256,256,256s256-114.837,256-256S397.163,0,256,0z M277.333,256 c0,11.797-9.536,21.333-21.333,21.333h-85.333c-11.797,0-21.333-9.536-21.333-21.333s9.536-21.333,21.333-21.333h64v-128 c0-11.797,9.536-21.333,21.333-21.333s21.333,9.536,21.333,21.333V256z"
-                  ></path>
-                </g>
-              </g>
-            </svg>
-            <span class="ml-1">6 mins ago</span>
-          </span>
-
-          <span
-            href="#"
-            class="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center"
-          >
-            <svg
-              class="h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
-            <span class="ml-1">39 Comments</span>
-          </span>
-        </div>
-      </div>
-
-      <!-- CARD 2 -->
-      <div class="rounded overflow-hidden shadow-lg flex flex-col">
-        <a href="#"></a>
-        <div class="relative">
-          <a href="#">
-            <img
-              class="w-full"
-              src="https://images.pexels.com/photos/1600727/pexels-photo-1600727.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-              alt="Sunset in the mountains"
-            />
-            <div
-              class="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"
-            ></div> </a
-          ><a href="#!">
-            <div
-              class="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out"
-            >
-              Cooking
-            </div>
-          </a>
-        </div>
-        <div class="px-6 py-4 mb-auto">
-          <a
-            href="#"
-            class="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2"
-            >Best FastFood Ideas (Yummy)</a
-          >
-          <p class="text-gray-500 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-          </p>
-        </div>
-        <div class="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
-          <span
-            href="#"
-            class="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center"
-          >
-            <svg
-              id="Layer_1"
-              height="13px"
-              width="13px"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 512 512"
-              style="enable-background: new 0 0 512 512"
-              xml:space="preserve"
-            >
-              <g>
-                <g>
-                  <path
-                    d="M256,0C114.837,0,0,114.837,0,256s114.837,256,256,256s256-114.837,256-256S397.163,0,256,0z M277.333,256 c0,11.797-9.536,21.333-21.333,21.333h-85.333c-11.797,0-21.333-9.536-21.333-21.333s9.536-21.333,21.333-21.333h64v-128 c0-11.797,9.536-21.333,21.333-21.333s21.333,9.536,21.333,21.333V256z"
-                  ></path>
-                </g>
-              </g>
-            </svg>
-            <span class="ml-1"> 10 days ago</span>
-          </span>
-
-          <span
-            href="#"
-            class="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center"
-          >
-            <svg
-              class="h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
-            <span class="ml-1">0 Comments</span>
-          </span>
-        </div>
-      </div>
-
-      <!-- CARD 3 -->
-      <div class="rounded overflow-hidden shadow-lg flex flex-col">
-        <a href="#"></a>
-        <div class="relative">
-          <a href="#">
-            <img
-              class="w-full"
-              src="https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;w=500"
-              alt="Sunset in the mountains"
-            />
-            <div
-              class="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"
-            ></div> </a
-          ><a href="#!">
-            <div
-              class="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:bg-white hover:text-indigo-600 transition duration-500 ease-in-out"
-            >
-              Cooking
-            </div>
-          </a>
-        </div>
-        <div class="px-6 py-4 mb-auto">
-          <a
-            href="#"
-            class="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2"
-            >Why to eat salad?</a
-          >
-          <p class="text-gray-500 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-          </p>
-        </div>
-        <div class="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
-          <span
-            href="#"
-            class="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center"
-          >
-            <svg
-              id="Layer_1"
-              height="13px"
-              width="13px"
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 512 512"
-              style="enable-background: new 0 0 512 512"
-              xml:space="preserve"
-            >
-              <g>
-                <g>
-                  <path
-                    d="M256,0C114.837,0,0,114.837,0,256s114.837,256,256,256s256-114.837,256-256S397.163,0,256,0z M277.333,256 c0,11.797-9.536,21.333-21.333,21.333h-85.333c-11.797,0-21.333-9.536-21.333-21.333s9.536-21.333,21.333-21.333h64v-128 c0-11.797,9.536-21.333,21.333-21.333s21.333,9.536,21.333,21.333V256z"
-                  ></path>
-                </g>
-              </g>
-            </svg>
-            <span class="ml-1">16 hours ago</span>
-          </span>
-
-          <span
-            href="#"
-            class="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center"
-          >
-            <svg
-              class="h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
-            <span class="ml-1">9 Comments</span>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
-
-<style scoped>
-/* Add any specific styles you need here */
-</style>

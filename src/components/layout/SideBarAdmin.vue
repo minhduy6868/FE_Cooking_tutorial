@@ -26,10 +26,9 @@ const logout = async () => {
     },
   })
 
-
+  // Nếu người dùng xác nhận, thực hiện đăng xuất
   if (isConfirmed) {
-    // Nếu người dùng xác nhận, xóa token và chuyển hướng
-    localStorage.removeItem('authToken') // Xóa token
+    localStorage.removeItem('access_token') // Xóa token khỏi localStorage
     router.push('/') // Chuyển hướng về trang chủ
   }
 }
@@ -50,7 +49,7 @@ const logout = async () => {
   </div>
 </template>
 
-<style>
+<style scoped>
 .router-link-exact-active {
   background-color: #f7f7f7;
   color: #344054;

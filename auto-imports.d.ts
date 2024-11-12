@@ -9,6 +9,7 @@ declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const StatusCode: typeof import('./src/api/statusCode')['StatusCode']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
+  const apiClient: typeof import('./src/api/api_client')['default']
   const computed: typeof import('vue')['computed']
   const config: typeof import('./src/api/config')['config']
   const createApp: typeof import('vue')['createApp']

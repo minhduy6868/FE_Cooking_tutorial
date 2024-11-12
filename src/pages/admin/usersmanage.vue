@@ -38,6 +38,11 @@
           >
             Phone Number
           </th>
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            Action
+          </th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -57,6 +62,15 @@
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.email }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.phoneNumber }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <!-- Thêm nút xóa -->
+            <button
+              class="text-red-600 hover:text-red-800"
+              @click="handleDelete(user.id)"
+            >
+              Delete
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -65,7 +79,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import { getAllUser } from '@/services/authen' // Đảm bảo import từ service đúng
+import { getAllUser, deleteUser } from '@/services/admin' // Import các hàm API
 import type { User } from '@/types/user'
 
 export default defineComponent({
@@ -78,8 +92,8 @@ export default defineComponent({
     // Hàm gọi API lấy danh sách người dùng
     const fetchUsers = async () => {
       try {
-        const response = await getAllUser() // Gọi từ service
-        if (response.status === 200) {
+        const response = await getAllUser() // Gọi API để lấy danh sách người dùng
+        if (response.data) {
           users.value = response.data
         } else {
           error.value = response.message
@@ -88,6 +102,24 @@ export default defineComponent({
         error.value = 'Đã có lỗi xảy ra, vui lòng thử lại.'
       } finally {
         loading.value = false
+      }
+    }
+
+    // Hàm gọi API xóa người dùng
+    const handleDelete = async (userId: string) => {
+      if (confirm('Bạn có chắc chắn muốn xóa người dùng này?')) {
+        try {
+          const response = await deleteUser(userId) // Gọi API xóa người dùng
+          if (response.data) {
+            // Cập nhật lại danh sách người dùng sau khi xóa
+            users.value = users.value.filter((user) => user.id !== userId)
+            alert('Người dùng đã được xóa thành công.')
+          } else {
+            alert(response.message || 'Không thể xóa người dùng.')
+          }
+        } catch (err) {
+          alert('Có lỗi xảy ra khi xóa người dùng.')
+        }
       }
     }
 
@@ -100,6 +132,7 @@ export default defineComponent({
       users,
       loading,
       error,
+      handleDelete, // Trả về hàm xóa người dùng
     }
   },
 })
@@ -111,19 +144,14 @@ export default defineComponent({
   font-weight: bold;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+button {
+  background-color: transparent;
+  border: none;
+  color: #e53e3e;
+  cursor: pointer;
 }
 
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-th {
-  background-color: #f2f2f2;
+button:hover {
+  text-decoration: underline;
 }
 </style>

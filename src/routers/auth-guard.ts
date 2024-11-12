@@ -1,21 +1,17 @@
-import { useAuthStore } from '@/stores/auth'
-import type { NavigationGuardWithThis } from 'vue-router'
+// src/router/auth-guard.ts
+import { useRouter } from 'vue-router'
 
-export const authGuard: NavigationGuardWithThis<any> = async (to, from, next) => {
-  document.title = String(to.meta.title) || 'Home'
-  const authStore = useAuthStore()
-  console.log('authGuard', authStore.getIsLoggedIn, to)
+export const authGuard = (to: any, from: any, next: any) => {
+  const router = useRouter()
 
-  const isLoggedIn = authStore.getIsLoggedIn
-  const isPublicRoute = to.meta?.public
+  // Kiểm tra token hoặc trạng thái đăng nhập từ localStorage/sessionStorage
+  const token = localStorage.getItem('access_token') // Hoặc sử dụng sessionStorage
 
-  if (isLoggedIn) {
-    isPublicRoute ? next('/') : next()
+  if (token) {
+    // Nếu có token, cho phép truy cập vào route
+    next()
   } else {
-    isPublicRoute ? next() : next({ name: 'login' })
+    // Nếu không có token, chuyển hướng đến trang loginadmin
+    next({ name: 'loginadmin' })
   }
-}
-
-export const workspaceGuard: NavigationGuardWithThis<any> = async (to, from, next) => {
-  next('/')
 }

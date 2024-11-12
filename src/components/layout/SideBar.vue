@@ -14,14 +14,14 @@
           <span></span>
         </div>
 
-        <router-link to="/login">
-          <a
-          href=""
-          class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
-        >
+        <!-- Điều kiện hiển thị nút Đăng nhập/Đăng xuất -->
+        <button v-if="!isAuthenticated" @click="goToLogin" class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
           Đăng nhập
-        </a>
-        </router-link>
+        </button>
+
+        <button v-if="isAuthenticated" @click="logout" class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
+          Đăng xuất
+        </button>
 
         <!-- Mobile Menu Toggle Button -->
         <button
@@ -71,49 +71,44 @@
       >
         <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
           <li>
-<router-link to="/">
-  <a
-              href="#"
-              class="block py-2 pl-3 pr-4 text-white bg-orange-700 rounded lg:bg-transparent lg:text-white lg:p-0 dark:text-white hover:bg-orange-500"
-              aria-current="page"
-              >Trang chủ</a>
-</router-link>
-            
+            <router-link to="/">
+              <a
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white bg-orange-700 rounded lg:bg-transparent lg:text-white lg:p-0 dark:text-white hover:bg-orange-500"
+                aria-current="page"
+                >Trang chủ</a>
+            </router-link>
           </li>
           <li>
             <router-link to="/post">
               <a
-              href="#"
-              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-              >Công thức món ăn</a
-            >
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Công thức món ăn</a>
+              </router-link>
+          </li>
+          <li v-if="isAuthenticated">
+            <router-link to="/post">
+              <a
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Đăng bài</a>
             </router-link>
           </li>
-          <li>
-          <router-link to="/post">
-            <a
-              href="#"
-              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-              >Đăng bài</a
-            >
-          </router-link>
-          </li>
-          <li>
-           <router-link to="/profile">
-            <a
-              href="#"
-              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-              >Trang cá nhân</a
-            >
-           </router-link>
+          <li v-if="isAuthenticated" >
+            <router-link to="/profile">
+              <a
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Trang cá nhân</a>
+            </router-link>
           </li>
           <li>
             <router-link to="/about">
               <a
-              href="#"
-              class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-              >Giới thiệu</a
-            >
+                href="#"
+                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >Giới thiệu</a>
             </router-link>
           </li>
         </ul>
@@ -123,22 +118,50 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'Navbar',
   setup() {
+    const router = useRouter()
+    
     // Reactive state to toggle mobile menu visibility
     const isMenuOpen = ref(false)
+
+    // Check if user is authenticated (token exists)
+    const isAuthenticated = ref(false)
 
     // Toggle the mobile menu state
     const toggleMenu = () => {
       isMenuOpen.value = !isMenuOpen.value
     }
 
+    // Check if token exists when component is mounted
+    onMounted(() => {
+      const token = localStorage.getItem('access_token')
+      isAuthenticated.value = !!token
+    })
+
+    // Handle logout
+    const logout = () => {
+      // Remove token from localStorage
+      localStorage.removeItem('access_token')
+      // Redirect to login page
+      router.push('/login')
+    }
+
+    // Handle login redirect
+    const goToLogin = () => {
+      router.push('/login')
+    }
+
     return {
       isMenuOpen,
       toggleMenu,
+      isAuthenticated,
+      logout,
+      goToLogin,
     }
   },
 }

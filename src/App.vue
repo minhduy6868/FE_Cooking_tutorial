@@ -18,6 +18,15 @@ const layout = computed(() => {
 // Store cho loading
 const loadingStore = useLoadingStore()
 
+const accessToken = localStorage.getItem('access_token')
+
+if (accessToken) {
+  console.log('Token đã được lưu:', accessToken)
+} else {
+  console.log('Chưa có token trong localStorage')
+}
+
+
 // Toast chào mừng
 onMounted(() => {
   showToast({
