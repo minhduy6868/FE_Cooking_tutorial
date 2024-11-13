@@ -48,6 +48,23 @@ export const getAllUsers = async (): Promise<BaseResponse<User[]>> => {
   }
 }
 
+export const deleteAccount = async (): Promise<BaseResponse> => {
+  try {
+    const response = await api.delete<BaseResponse>('/user/deleteAccount')
+
+    // Kiểm tra mã trạng thái trả về từ API
+    if (response.status === 200) {
+      localStorage.removeItem('access_token')
+      return response.data // Trả về dữ liệu nếu xóa thành công
+    } else {
+      throw new Error(response.data.message || 'Không thể xóa tài khoản')
+    }
+  } catch (error: any) {
+    handleApiError(error) // Xử lý lỗi từ API
+    throw error
+  }
+}
+
 // Xử lý lỗi API
 const handleApiError = (error: any) => {
   if (error.response) {

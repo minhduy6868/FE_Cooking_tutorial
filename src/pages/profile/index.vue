@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getUserInfo, updateUser } from '@/services/user'
+import { getUserInfo, updateUser, deleteAccount } from '@/services/user'
 import { getLinkImage } from '@/services/photo'
 import type { User } from '@/types/user'
 import type { BaseResponse } from '@/types/baseapi'
+import router from '@/routers/router'
+import { showToast } from '@/utils/toast'
+import Swal from 'sweetalert2'
 
 const userInfo = ref<User | null>(null)
 const isEditing = ref(false) // Biến theo dõi trạng thái chỉnh sửa
@@ -11,7 +14,7 @@ const updatedInfo = ref({
   fullName: '',
   description: '',
   phoneNumber: '',
-  address: ''
+  address: '',
 })
 
 // Lấy thông tin người dùng khi component được mount
@@ -31,6 +34,53 @@ onMounted(async () => {
   }
 })
 
+const deleteUser = async () => {
+  // Thêm bước xác nhận trước khi xóa
+  const result = await Swal.fire({
+    title: 'Bạn có chắc không?',
+    text: 'Bạn xóa tài khoản thì không thể hoàn tác được đâu.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Có, Xóa',
+    cancelButtonText: 'Hủy',
+    reverseButtons: true,
+    customClass: {
+      popup: 'bg-white shadow-lg rounded-xl',
+      title: 'text-xl font-semibold text-gray-800',
+      content: 'text-gray-600 text-sm',
+      confirmButton: 'bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600',
+      cancelButton: 'bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400',
+    },
+  })
+
+  // Nếu người dùng không xác nhận, không làm gì
+  if (!result.isConfirmed) return
+
+  try {
+    // Gọi API xóa tài khoản
+    await deleteAccount()
+
+    // Thông báo xóa tài khoản thành công
+    showToast({
+      title: 'Xóa tài khoản thành công',
+      description: 'Bạn đã xóa tài khoản, vui lòng đăng nhập lại để tiếp tục',
+      variant: 'default',
+      duration: 5000, // Tự động đóng toast sau 5 giây
+    })
+
+    // Chuyển hướng người dùng đến trang đăng nhập sau khi xóa tài khoản
+    router.push('/login')
+  } catch (error) {
+    // Xử lý lỗi nếu có
+    console.error('Lỗi khi xóa tài khoản:', error)
+    Swal.fire({
+      icon: 'error',
+      title: 'Có lỗi xảy ra!',
+      text: 'Vui lòng thử lại sau.',
+    })
+  }
+}
+
 // Hàm cập nhật thông tin người dùng
 const updateUserInfo = async () => {
   try {
@@ -39,7 +89,7 @@ const updateUserInfo = async () => {
         fullName: updatedInfo.value.fullName,
         description: updatedInfo.value.description,
         phoneNumber: updatedInfo.value.phoneNumber,
-        address: updatedInfo.value.address
+        address: updatedInfo.value.address,
       })
       userInfo.value = { ...userInfo.value, ...response.data } // Cập nhật lại thông tin người dùng
       isEditing.value = false // Đóng form chỉnh sửa
@@ -57,13 +107,18 @@ const updateUserInfo = async () => {
       <!-- Cover Image -->
       <div class="relative w-full">
         <img
-          :src="userInfo?.profile || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080'"
+          :src="
+            userInfo?.profile ||
+            'https://images.unsplash.com/photo-1451187580459-43490279c0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHw5fHxjb3ZlcnxlbnwwfDB8fHwxNzEwNzQxNzY0fDA&ixlib=rb-4.0.3&q=80&w=1080'
+          "
           alt="User Cover"
           class="w-full xl:h-[20rem] lg:h-[18rem] md:h-[16rem] sm:h-[14rem] xs:h-[11rem] object-cover"
         />
 
         <!-- Profile Image and Name -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+        <div
+          class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+        >
           <div
             class="w-[141px] h-[141px] rounded-full bg-cover bg-center bg-no-repeat flex justify-center items-end relative"
             :style="{
@@ -113,34 +168,55 @@ const updateUserInfo = async () => {
       </div>
 
       <!-- Description and Details -->
-      <div class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-6 items-center my-6 mt-24">
+      <div
+        class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-6 items-center my-6 mt-24"
+      >
         <p class="text-center w-fit text-gray-700 dark:text-gray-400 text-md">
           {{ userInfo?.description || 'Lorem ipsum dolor sit amet consectetur adipisicing elit.' }}
         </p>
-        
-        <!-- Button to trigger edit form -->
-        <button 
-          @click="isEditing = !isEditing" 
-          class="bg-blue-500 text-white py-2 px-4 rounded"
-        >
-          {{ isEditing ? 'Cancel Edit' : 'Chỉnh sửa thông tin' }}
-        </button>
 
+        <!-- Button to trigger edit form -->
+        <!-- Buttons for editing and deleting -->
+        <div class="flex gap-4">
+          <button
+            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-300"
+            @click="isEditing = !isEditing"
+          >
+            {{ isEditing ? 'Cancel Edit' : 'Chỉnh sửa thông tin' }}
+          </button>
+          <button
+            class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition-colors duration-300"
+            @click="deleteUser"
+          >
+            Xóa tài khoản
+          </button>
+        </div>
         <!-- Edit Form -->
-        <div v-if="isEditing" class="w-full mt-4">
+        <div
+          v-if="isEditing"
+          class="w-full mt-4"
+        >
           <form @submit.prevent="updateUserInfo">
             <div class="mb-4">
-              <label for="fullName" class="block text-sm font-medium text-gray-700">Họ và tên</label>
+              <label
+                for="fullName"
+                class="block text-sm font-medium text-gray-700"
+                >Họ và tên</label
+              >
               <input
-                type="text"
                 id="fullName"
                 v-model="updatedInfo.fullName"
+                type="text"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                 placeholder="Họ và tên"
               />
             </div>
             <div class="mb-4">
-              <label for="description" class="block text-sm font-medium text-gray-700">Mô tả</label>
+              <label
+                for="description"
+                class="block text-sm font-medium text-gray-700"
+                >Mô tả</label
+              >
               <textarea
                 id="description"
                 v-model="updatedInfo.description"
@@ -150,26 +226,34 @@ const updateUserInfo = async () => {
               ></textarea>
             </div>
             <div class="mb-4">
-              <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Số điện thoại</label>
+              <label
+                for="phoneNumber"
+                class="block text-sm font-medium text-gray-700"
+                >Số điện thoại</label
+              >
               <input
-                type="text"
                 id="phoneNumber"
                 v-model="updatedInfo.phoneNumber"
+                type="text"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                 placeholder="Số điện thoại"
               />
             </div>
             <div class="mb-4">
-              <label for="address" class="block text-sm font-medium text-gray-700">Địa chỉ</label>
+              <label
+                for="address"
+                class="block text-sm font-medium text-gray-700"
+                >Địa chỉ</label
+              >
               <input
-                type="text"
                 id="address"
                 v-model="updatedInfo.address"
+                type="text"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
                 placeholder="Địa chỉ"
               />
             </div>
-            <button 
+            <button
               type="submit"
               class="w-full bg-blue-600 text-white py-2 px-4 rounded-md"
             >
@@ -203,7 +287,7 @@ const updateUserInfo = async () => {
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Email</dt>
                   <dd class="text-lg font-semibold">{{ userInfo?.email || 'Not Provided' }}</dd>
                 </div>
-               
+
                 <div class="flex flex-col py-3">
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Địa chỉ</dt>
                   <dd class="text-lg font-semibold">{{ userInfo?.address || 'Not Provided' }}</dd>
@@ -215,19 +299,19 @@ const updateUserInfo = async () => {
       </div>
     </div>
 
-  <!-- Recipe Cards -->
-  <h2
-    class="ml-4 mr-4 mx-auto bg-gradient-to-r from-orange-400 to-yellow-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
-  >
-    Danh sách món ăn
-  </h2>
-  <div class="container px-6 py-6 mx-auto">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <Card
-        v-for="user in users"
-        :key="user.id"
-        :user="user"
-      />
+    <!-- Recipe Cards -->
+    <h2
+      class="ml-4 mr-4 mx-auto bg-gradient-to-r from-orange-400 to-yellow-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+    >
+      Danh sách món ăn
+    </h2>
+    <div class="container px-6 py-6 mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <Card
+          v-for="user in users"
+          :key="user.id"
+          :user="user"
+        />
       </div>
     </div>
   </section>
