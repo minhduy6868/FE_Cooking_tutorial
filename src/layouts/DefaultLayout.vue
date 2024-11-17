@@ -6,26 +6,36 @@ import ChatBox from '@/components/layout/ChatBox.vue'
 import ListCard from '@/components/layout/ListCard.vue'
 </script>
 <template>
+ <div >
   <SideBar />
-  
- <div class="main-content">
-      <router-view></router-view> <!-- Nội dung của từng route con sẽ hiển thị tại đây -->
-    </div>
+ </div>
+
+  <div class="main-content">
+    <router-view></router-view>
+    <!-- Nội dung của từng route con sẽ hiển thị tại đây -->
+  </div>
 
   <Footer></Footer>
   <ChatBox></ChatBox>
 </template>
 <style lang="scss" scoped>
-.container-div {
+.layout-container {
   display: flex;
-  height: 200vh;
-  min-height: 300vh;
-  width: 900%;
+  min-height: 100vh;
+  position: relative;
+}
 
-  .wrapper {
-    height: 100%;
-    overflow-y: auto;
-    width: 100%;
-  }
+.SideBar {
+  position: sticky; /* Make sidebar sticky */
+  top: 0; /* Stick to the top of the page */
+  width: 250px; /* Set the width of your sidebar */
+  height: 100vh; /* Full viewport height */
+  overflow-y: auto; /* Allow scrolling inside the sidebar if necessary */
+}
+
+.main-content {
+  flex-grow: 1; /* Let the main content take the remaining space */
+  padding: 20px;
+  overflow-y: auto; /* Optional: If you want the content area to scroll */
 }
 </style>

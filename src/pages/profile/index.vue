@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { getUserInfo, updateUser, deleteAccount } from '@/services/user'
-import { getLinkImage } from '@/services/photo'
 import type { User } from '@/types/user'
-import type { BaseResponse } from '@/types/baseapi'
 import router from '@/routers/router'
 import { showToast } from '@/utils/toast'
+import CardCooking from '@/components/ui/card/CardCooking.vue'
 import Swal from 'sweetalert2'
 
+// Dữ liệu người dùng và bài đăng
 const userInfo = ref<User | null>(null)
+const posts = ref<any[]>([]) // Danh sách bài đăng (post)
 const isEditing = ref(false) // Biến theo dõi trạng thái chỉnh sửa
 const updatedInfo = ref({
   fullName: '',
@@ -22,6 +23,8 @@ onMounted(async () => {
   try {
     const userData = await getUserInfo()
     userInfo.value = userData.data
+    posts.value = userData.data.post || [] // Lưu danh sách bài đăng
+
     // Khởi tạo giá trị cho các trường chỉnh sửa
     if (userInfo.value) {
       updatedInfo.value.fullName = userInfo.value.fullName || ''
@@ -34,8 +37,8 @@ onMounted(async () => {
   }
 })
 
+// Hàm xóa tài khoản người dùng
 const deleteUser = async () => {
-  // Thêm bước xác nhận trước khi xóa
   const result = await Swal.fire({
     title: 'Bạn có chắc không?',
     text: 'Bạn xóa tài khoản thì không thể hoàn tác được đâu.',
@@ -53,25 +56,18 @@ const deleteUser = async () => {
     },
   })
 
-  // Nếu người dùng không xác nhận, không làm gì
   if (!result.isConfirmed) return
 
   try {
-    // Gọi API xóa tài khoản
     await deleteAccount()
-
-    // Thông báo xóa tài khoản thành công
     showToast({
       title: 'Xóa tài khoản thành công',
       description: 'Bạn đã xóa tài khoản, vui lòng đăng nhập lại để tiếp tục',
       variant: 'default',
-      duration: 5000, // Tự động đóng toast sau 5 giây
+      duration: 5000,
     })
-
-    // Chuyển hướng người dùng đến trang đăng nhập sau khi xóa tài khoản
     router.push('/login')
   } catch (error) {
-    // Xử lý lỗi nếu có
     console.error('Lỗi khi xóa tài khoản:', error)
     Swal.fire({
       icon: 'error',
@@ -91,8 +87,8 @@ const updateUserInfo = async () => {
         phoneNumber: updatedInfo.value.phoneNumber,
         address: updatedInfo.value.address,
       })
-      userInfo.value = { ...userInfo.value, ...response.data } // Cập nhật lại thông tin người dùng
-      isEditing.value = false // Đóng form chỉnh sửa
+      userInfo.value = { ...userInfo.value, ...response.data }
+      isEditing.value = false
       console.log('Thông tin đã được cập nhật!')
     }
   } catch (error) {
@@ -307,11 +303,26 @@ const updateUserInfo = async () => {
     </h2>
     <div class="container px-6 py-6 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <Card
-          v-for="user in users"
-          :key="user.id"
-          :user="user"
-        />
+        
+          <!-- Loop through posts and display each one -->
+          <div
+            v-for="post in posts"
+            :key="post.id"
+            class="post-card"
+          >
+            <!-- Sử dụng CardCooking để hiển thị từng món ăn -->
+            <router-link :to="`/post/detail/${post.id}`">
+              <CardCooking
+                :title="post.title"
+                :description="post.description"
+                :image="post.pictures?.[0] || 'https://via.placeholder.com/130'"
+                :link="post.linkVideo"
+                :category="post.category || 'Chưa có thể loại'"
+                :time="post.time || 'Chưa rõ thời gian'"
+                :likeCount="post.likeCount"
+              />
+            </router-link>
+      </div>
       </div>
     </div>
   </section>

@@ -1,13 +1,12 @@
 import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router'
 import { authRoute, profileRoute, adminRoute, notFoundRoute, demoRoute, postRoute } from './modules'
-import { authGuard } from './auth-guard' // Import authGuard
+import { authGuard } from './auth-guard' 
 import MainLayout from '@/layouts/DefaultLayout.vue'
-import AdminLayout from '@/layouts/AdminLayout.vue' // Import AdminLayout
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
 const { progress } = useIndicator()
 
 const routes: RouteRecordRaw[] = [
-  // Route chính với MainLayout
   {
     path: '/',
     component: MainLayout,
@@ -15,6 +14,10 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: () => import('@/pages/home/home.vue'),
+      },
+      {
+        path: '/postcooking',
+        component: () => import('@/pages/postcooking/postcooking.vue'),
       },
       {
         path: '/about',
@@ -32,6 +35,12 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/post/createpost.vue'),
       },
       {
+        path: '/post/detail/:id',
+        name: 'post-detail',
+        component: () => import('@/pages/post/detailpost.vue'),
+        props: true,
+      },
+      {
         path: '/profile',
         name: 'profile',
         component: () => import('@/pages/profile/index.vue'),
@@ -39,76 +48,49 @@ const routes: RouteRecordRaw[] = [
     ],
   },
 
-  // Các route với layout khác
   {
     path: '/auth',
-    meta: {
-      layout: 'GuestLayout', // Layout cho trang đăng nhập, đăng ký
-      public: true,
-    },
+    meta: { layout: 'GuestLayout', public: true },
     children: authRoute,
-  }, 
+  },
 
   {
     path: '/loginadmin',
     name: 'loginadmin',
     component: () => import('@/pages/admin/loginadmin.vue'),
-    meta: {
-      layout: 'GuestLayout',
-      public: true,
-    },
+    meta: { layout: 'GuestLayout', public: true },
   },
 
-  // Đảm bảo AdminLayout được áp dụng cho các route trong admin và sử dụng guard
   {
     path: '/admin',
-    component: AdminLayout, // Sử dụng AdminLayout cho các route dưới đây
-    beforeEnter: authGuard, // Áp dụng authGuard cho tất cả các route dưới /admin
-    children: [
-      {
-        path: '',
-        component: () => import('@/pages/admin/dashboard.vue'),
-      },
-      {
-        path: '/inforadmin',
-        name: 'information',
-        component: () => import('@/pages/admin/inforadmin.vue'),
-      },
-      {
-        path: '/users-manage',
-        name: 'usersManage',
-        component: () => import('@/pages/admin/usersmanage.vue'),
-      },
-    ],
+    component: AdminLayout,
+    beforeEnter: authGuard,
+    children: adminRoute, // Assuming you defined these routes separately
   },
 
   {
     path: '/test',
     component: () => import('@/pages/test.vue'),
   },
+
   {
     path: '/pagenotfound',
-    meta: {
-      layout: 'NotFoundLayout', // Layout cho trang không tìm thấy
-    },
+    meta: { layout: 'NotFoundLayout' },
     children: notFoundRoute,
   },
+
   {
     path: '/demoapi',
-    meta: {
-      layout: 'DemoLayout', // Layout Demo
-    },
+    meta: { layout: 'DemoLayout' },
     children: demoRoute,
   },
+
   {
-    path: '/post/view', // Thay đổi path để tránh trùng với '/post'
-    meta: {
-      layout: 'PostLayout', // Layout Post
-    },
+    path: '/post/view',
+    meta: { layout: 'PostLayout' },
     children: postRoute,
   },
 
-  // Route catch-all (bắt tất cả các đường dẫn không hợp lệ)
   {
     path: '/:catchAll(.*)',
     redirect: '/pagenotfound',
@@ -120,7 +102,6 @@ const router = createRouter({
   routes,
 })
 
-// Set up loading progress bar
 router.beforeEach(() => {
   progress.value = 0.3
 })

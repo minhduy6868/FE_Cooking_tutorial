@@ -1,4 +1,4 @@
-import axios from 'axios'
+
 import type { Login } from '@/types/login' // Đảm bảo đường dẫn đúng
 import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
 import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng

@@ -1,12 +1,14 @@
-import type { Ingredient } from "./ingredient"
-import type { Picture } from "./picture"
-import type { User } from "./user"
+// src/types/post.ts
+import type { Ingredient } from './ingredient'
+import type { Picture } from './picture'
+import type { User } from './user'
 
 export interface Post {
-  id: string // UUID hoặc string nếu tự sinh
+  id: string // UUID hoặc string tự sinh
   linkVideo: string
   title: string
   description: string
+  likeCount: number
   tutorial: string
   ingredients: Ingredient[] // Mảng các đối tượng Ingredient
   pictures: Picture[] // Mảng các đối tượng Picture

@@ -1,238 +1,143 @@
 <script setup lang="ts">
-// import { validPass, validPassConfirm } from '~/modules/validation/ValidAuth.js';
-// import { reset_password_client_api } from '~/services/authService';
-// import langAuth from '~/components/Layout/langAuth.vue';
-// import QuestionPopup from '~/components/Layout/QuestionPopup.vue';
-// //for confirm password reset
-// export default {
-//     auth: false,
-//     components: {
-//         langAuth,
-//         QuestionPopup,
-//     },
-//     middleware: 'guest',
-//     data() {
-//         return {
-//             password: null,
-//             confirm_password: null,
-//             token: null,
-//             checked: false,
-//             errorPassword: '',
-//             errorConfirmPassword: '',
-//             question: null,
-//         };
-//     },
+import { ref } from 'vue'
+import { useForm } from 'vee-validate'
+import * as yup from 'yup'
+import { updatePasswordApi } from '@/services/authen' // Import hàm gọi API cập nhật mật khẩu
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import ErrorMessage from '@/components/base/ErrorMessage.vue'
+import { useRouter } from 'vue-router'
 
-//     created() {
-//         this.token = this.$route.query.token;
-//         if (!this.token) {
-//             this.$router.push('/login');
-//         }
-//     },
+const router = useRouter()
 
-//     methods: {
-//         checkPassword() {
-//             const check = validPass(this.password);
-//             this.errorPassword = check.mess;
+// Định nghĩa schema validation cho form
+const { errors, defineField, handleSubmit } = useForm({
+  validationSchema: yup.object({
+    email: yup.string().email().required('Email là bắt buộc'),
+    otp: yup.string().length(6, 'OTP phải có 6 chữ số').required('OTP là bắt buộc'),
+    newPassword: yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Mật khẩu mới là bắt buộc'),
+  }),
+})
 
-//             return check.check;
-//         },
-//         checkConfirmPassword() {
-//             const check = validPassConfirm(this.confirm_password, this.password);
-//             this.errorConfirmPassword = check.mess;
+const [email, emailAttrs] = defineField('email')
+const [otp, otpAttrs] = defineField('otp')
+const [newPassword, newPasswordAttrs] = defineField('newPassword')
 
-//             return check.check;
-//         },
-//         async resetPassword() {
-//             if (this.checkPassword() && this.checkConfirmPassword()) {
-//                 try {
-//                     await reset_password_client_api({
-//                         confirm_token: this.token,
-//                         password: this.password,
-//                         confirm_password: this.confirm_password,
-//                     }).then(() => {
-//                         this.question = {
-//                             type: 'SUCCESS',
-//                             body: this.$t('question.reset_pass_success'),
-//                             router: '/login',
-//                         };
-//                     });
-//                 } catch {}
-//             }
-//         },
-//     },
-// };
-const password = ref('')
-const confirm_password = ref('')
-const errorPassword = ref('')
-const errorConfirmPassword = ref('')
+const errorEmail = ref<string | null>(null)
+const errorOtp = ref<string | null>(null)
+const errorNewPassword = ref<string | null>(null)
 
-const checkPassword = () => {}
-const resetPassword = () => {}
-const checkConfirmPassword = () => {}
+// Thực hiện việc xử lý khi người dùng bấm nút đặt lại mật khẩu
+const handleResetPassword = handleSubmit(async (values) => {
+  try {
+    // Gọi API để cập nhật mật khẩu mới
+    const response = await updatePasswordApi({
+      email: values.email,
+      otp: values.otp,
+      newPassword: values.newPassword,
+    })
+
+    if (response.status === 200) {
+      // Hiển thị thông báo thành công và chuyển hướng đến trang login
+      alert('Mật khẩu của bạn đã được cập nhật thành công.')
+      router.push('/login')
+    } else {
+      alert('Có lỗi xảy ra khi cập nhật mật khẩu. Vui lòng thử lại.')
+    }
+  } catch (error) {
+    console.error('Lỗi khi cập nhật mật khẩu:', error)
+    alert('Đã xảy ra lỗi, vui lòng thử lại.')
+  }
+})
 </script>
 
 <template>
-  <div>
-    <!-- <question-popup
-            v-if="question != null"
-            :question="question"
-            @close="$router.push('/login')"
-            @accept="question.action()"
-        /> -->
-    <div class="forgot-header"></div>
-    <div class="forgot-container">
-      <div class="forgot-container-head">{{ $t('auth.create_new_pass') }}</div>
-      <div class="forgot-container-intro"></div>
-      <br />
-      <div class="forgot-input-container">
-        <div class="forgot-input-label">{{ $t('auth.new_pass') }}</div>
-        <input
-          v-model="password"
-          type="password"
-          class="forgot-input"
-          :placeholder="$t('placeholder.enter_pass')"
-          @input="checkPassword"
-        />
-        <div class="login-validation">{{ errorPassword }}</div>
-
-        <div class="forgot-input-label">{{ $t('auth.confirm_pass') }}</div>
-        <input
-          v-model="confirm_password"
-          type="password"
-          class="forgot-input"
-          :placeholder="$t('placeholder.enter_confirm_pass')"
-          @input="checkConfirmPassword"
-        />
-        <div class="login-validation">{{ errorConfirmPassword }}</div>
-
-        <div
-          class="fotgot-btn"
-          @click="resetPassword"
-        >
-          {{ $t('common.send') }}
+  <div class="h-full flex p-8">
+    <div class="flex-1 flex justify-center items-center">
+      <form
+        class="form-shadow p-6 rounded-xl"
+        @submit="handleResetPassword" 
+      >
+        <div class="flex items-center gap-0.5 mb-4">
+          <h1 class="text-[344054] text-lg font-semibold mt-3">Đặt lại mật khẩu</h1>
         </div>
-      </div>
+        <div>
+          <h2 class="mt-1 text-[#667085]">Nhập thông tin để đặt lại mật khẩu</h2>
+        </div>
+        <div class="mt-6">
+          <div class="form-data">
+            <Label for="email">Email</Label>
+            <Input
+              id="email"
+              v-model="email"
+              placeholder="Nhập email..."
+              v-bind="emailAttrs"
+              :invalid="errors.email"
+              type="email"
+              class="h-10 mt-1"
+            />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.email"
+            />
+          </div>
+          <div class="form-data mt-4">
+            <Label for="otp">OTP</Label>
+            <Input
+              id="otp"
+              v-model="otp"
+              placeholder="Nhập mã OTP..."
+              v-bind="otpAttrs"
+              :invalid="errors.otp"
+              class="h-10 mt-1"
+            />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.otp"
+            />
+          </div>
+          <div class="form-data mt-4">
+            <Label for="newPassword">Mật khẩu mới</Label>
+            <Input
+              id="newPassword"
+              v-model="newPassword"
+              placeholder="Nhập mật khẩu mới..."
+              v-bind="newPasswordAttrs"
+              :invalid="errors.newPassword"
+              type="password"
+              class="h-10 mt-1"
+            />
+            <ErrorMessage
+              class="text-xs mt-0.5"
+              :error="errors.newPassword"
+            />
+          </div>
+        </div>
+        <Button class="mt-4 w-full h-10"> Đặt lại mật khẩu </Button>
+        <div class="text-end mt-6">
+          <RouterLink
+            class="text-[#0921D9] text-xs font-semibold"
+            to="/login"
+          >
+           Trở về đăng nhập
+          </RouterLink>
+        </div>
+      </form>
     </div>
-    <langAuth :on-top="true" />
+    <div class="flex-1 relative max-md:hidden">
+      <img
+        class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
+        src="@/assets/img/robot.png"
+        alt="image"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped>
-.forgot-header {
-  width: 100%;
-  height: 56px;
-  background: #334d6e;
-  display: flex;
-  align-items: center;
-}
-
-.forgot-container {
-  text-align: center;
-}
-
-.forgot-container-head {
-  font-weight: bold;
-  font-size: 36px;
-  line-height: 42px;
-  text-align: center;
-
-  /* Dark green */
-  color: #00693b;
-  margin-top: 74px;
-}
-
-.forgot-container-intro {
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-
-  /* or 150% */
-  text-align: center;
-  letter-spacing: 0.02em;
-
-  /* Body text 2 */
-  color: #525252;
-  margin-top: 24px;
-  max-width: 556px;
-  clear: both;
-  display: inline-block;
-}
-
-.forgot-input-label {
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 24px;
-
-  /* identical to box height, or 160% */
-  letter-spacing: 0.02em;
-
-  /* Title text */
-  color: #363445;
-}
-
-.forgot-input-container {
-  width: 556px;
-  height: 200px;
-  clear: both;
-  display: inline-block;
-  text-align: left;
-  margin-top: 24px;
-}
-
-.forgot-input {
-  width: 566px;
-  height: 48px;
-
-  background: #dde1cd;
-  border-radius: 4px;
-  border: none;
-
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: 0.02em;
-  color: #525252;
-  padding: 0px 12px;
-}
-
-.login-validation {
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 22px;
-
-  /* identical to box height, or 157% */
-  display: flex;
-  align-items: center;
-  letter-spacing: 0.02em;
-
-  /* highlight */
-  color: #f46414;
-  min-height: 24px;
-}
-
-.fotgot-btn {
-  width: 566px;
-  height: 48px;
-
-  /* Dark green */
-  background: #00693b;
-  border-radius: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-
-  /* identical to box height, or 150% */
-  text-align: center;
-  letter-spacing: 0.02em;
-
-  color: #ffffff;
-}
-
-.fotgot-btn:hover {
-  cursor: pointer;
+.form-shadow {
+  box-shadow:
+    0px 1px 3px 0px rgba(16, 24, 40, 0.1),
+    0px 1px 2px 0px rgba(16, 24, 40, 0.06);
 }
 </style>

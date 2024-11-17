@@ -1,87 +1,110 @@
 <template>
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <article class="bg-white rounded-2xl shadow-xl overflow-hidden">
-      <!-- Post Image and Title -->
       <div class="relative h-96">
         <img
-          :src="post?.pictures?.[0] || 'https://via.placeholder.com/500'"
-          alt="Post Image"
+          src="https://images.unsplash.com/photo-1556911220-bff31c812dba"
+          alt="Cooking preparation"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
           <div class="p-8">
-            <h1 class="text-4xl font-bold text-white mb-4">{{ post?.title }}</h1>
-            <p class="text-gray-200 text-lg">{{ post?.description }}</p>
+            <h1 class="text-4xl font-bold text-white mb-4">Perfect Homemade Pizza Tutorial</h1>
+            <p class="text-gray-200 text-lg">
+              Master the art of creating restaurant-quality pizza from scratch with this
+              comprehensive guide
+            </p>
           </div>
         </div>
       </div>
 
       <div class="p-8">
-        <!-- Post Video Section -->
         <div class="aspect-w-16 aspect-h-9 mb-8 rounded-xl overflow-hidden">
           <video
             controls
             class="w-full h-full object-cover"
-            poster="https://via.placeholder.com/500"
+            poster="https://images.unsplash.com/photo-1513104890138-7c749659a591"
           >
-            <!-- Sử dụng cú pháp v-bind để truyền giá trị cho src -->
             <source
-              :src="post?.linkVideo"
+              src="#"
               type="video/mp4"
             />
             Your browser does not support the video tag.
           </video>
         </div>
 
-        <!-- Post Metadata Section -->
         <div class="grid lg:grid-cols-2 gap-8">
           <div>
-            <h2 class="text-2xl font-bold mb-4">Thông tin</h2>
+            <h2 class="text-2xl font-bold mb-4">Ingredients</h2>
             <ul class="space-y-3">
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Thời gian:</strong> {{ 'Chưa có thời gian' }}</span>
+                <span>3 cups all-purpose flour</span>
               </li>
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Danh mục:</strong> {{ 'Chưa có thể loại' }}</span>
+                <span>2 1/4 tsp active dry yeast</span>
               </li>
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Số lượt thích:</strong> {{ post?.likeCount }}</span>
+                <span>1 tsp salt</span>
               </li>
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Người đăng:</strong> {{ post?.user.fullName || 'Chưa rõ' }}</span>
-                <span><strong>Người đăng:</strong> {{ post?.user.id || 'Chưa rõ' }}</span>
+                <span>1 cup warm water</span>
               </li>
             </ul>
           </div>
 
-          <!-- Instructions Section -->
           <div>
-            <h2 class="text-2xl font-bold mb-4">Hướng dẫn</h2>
+            <h2 class="text-2xl font-bold mb-4">Instructions</h2>
             <ol class="space-y-4">
               <li class="flex space-x-4">
                 <span
                   class="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center"
                   >1</span
                 >
-                <p>{{ post?.tutorial || 'Chưa có hướng dẫn' }}</p>
+                <p>Mix flour, yeast, and salt in a large bowl</p>
+              </li>
+              <li class="flex space-x-4">
+                <span
+                  class="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center"
+                  >2</span
+                >
+                <p>Add warm water and knead until smooth</p>
+              </li>
+              <li class="flex space-x-4">
+                <span
+                  class="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-500 text-white flex items-center justify-center"
+                  >3</span
+                >
+                <p>Let rise for 1 hour in a warm place</p>
               </li>
             </ol>
           </div>
         </div>
 
-        <!-- Process Gallery -->
         <div class="mt-12">
-          <h2 class="text-2xl font-bold mb-6">Hình ảnh quá trình</h2>
+          <h2 class="text-2xl font-bold mb-6">Process Gallery</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <img
-              v-for="(image, index) in post?.pictures"
-              :key="index"
-              :src="image || 'https://via.placeholder.com/500'"
-              alt="Process Image"
+              src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3"
+              alt="Mixing ingredients"
+              class="rounded-lg hover:opacity-75 transition duration-300 ease-in-out"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1595854341625-f33ee10dbf94"
+              alt="Kneading dough"
+              class="rounded-lg hover:opacity-75 transition duration-300 ease-in-out"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1588315029754-2dd089d39a1a"
+              alt="Adding toppings"
+              class="rounded-lg hover:opacity-75 transition duration-300 ease-in-out"
+            />
+            <img
+              src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e"
+              alt="Final pizza"
               class="rounded-lg hover:opacity-75 transition duration-300 ease-in-out"
             />
           </div>

@@ -2,6 +2,9 @@ import axios from 'axios'
 import type { Login } from '@/types/login' // Đảm bảo đường dẫn đúng
 import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
 import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
+import type { OtpResponseData } from '@/types/otp'
+import type { UpdatePasswordRequest } from '@/types/updatepass'
+import api from '@/api/api_client'
 // Đảm bảo đường dẫn đúng
 
 export const loginApi = async (email: string, password: string): Promise<Login> => {
@@ -122,6 +125,105 @@ export const registerApi = async (user: {
         default:
           alert(`Đã xảy ra lỗi: ${errorMessage}`)
       }
+    } else if (error.request) {
+      console.error('Không nhận được phản hồi từ server:', error.request)
+      alert('Không nhận được phản hồi từ server. Vui lòng thử lại sau.')
+    } else {
+      console.error('Lỗi trong quá trình gửi yêu cầu:', error.message)
+      alert('Lỗi trong quá trình gửi yêu cầu. Vui lòng thử lại.')
+    }
+
+    throw error
+  }
+}
+
+
+export const sendOtp = async (email: string): Promise<BaseResponse<OtpResponseData>> => {
+  try {
+    // Gửi yêu cầu POST đến API gửi OTP
+    const response = await axios.post<BaseResponse<OtpResponseData>>(
+      'http://localhost:8080/user/forgotPassword',
+      { email },
+      { timeout: 5000 } // 5 giây timeout
+    )
+
+    // Kiểm tra nếu response trả về status 200
+    if (response.status === 200) {
+      return response.data // Trả về dữ liệu OTP từ API
+    } else {
+      throw new Error('Không thể gửi OTP. Vui lòng thử lại sau.')
+    }
+  } catch (error: any) {
+    // Xử lý lỗi khi gọi API
+    if (error.response) {
+      const status = error.response.status
+      const errorMessage = error.response.data.message || 'Có lỗi xảy ra từ API'
+
+      console.error('Lỗi từ API:', error.response.data)
+      console.error('Mã lỗi HTTP:', status)
+
+      switch (status) {
+        case 400:
+          alert(`Yêu cầu không hợp lệ: ${errorMessage}`)
+          break
+        case 404:
+          alert(`API không tìm thấy: ${errorMessage}`)
+          break
+        case 500:
+          alert(`Lỗi máy chủ: ${errorMessage}. Vui lòng thử lại sau.`)
+          break
+        default:
+          alert(`Đã xảy ra lỗi: ${errorMessage}`)
+      }
+    } else if (error.code === 'ECONNABORTED') {
+      alert('Yêu cầu đã bị hủy do thời gian chờ lâu.')
+    } else if (error.request) {
+      console.error('Không nhận được phản hồi từ server:', error.request)
+      alert('Không nhận được phản hồi từ server. Vui lòng thử lại sau.')
+    } else {
+      console.error('Lỗi trong quá trình gửi yêu cầu:', error.message)
+      alert('Lỗi trong quá trình gửi yêu cầu. Vui lòng thử lại.')
+    }
+
+    throw error
+  }
+}
+
+
+export const updatePasswordApi = async (data: UpdatePasswordRequest): Promise<BaseResponse<any>> => {
+  try {
+    const response = await api.put<BaseResponse<any>>('/user/updatePass', data, {
+      timeout: 5000, // 5 giây timeout
+    })
+
+    if (response.status === 200 && response.data.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Cập nhật mật khẩu không thành công.')
+    }
+  } catch (error: any) {
+    if (error.response) {
+      const status = error.response.status
+      const errorMessage = error.response.data.message || 'Có lỗi xảy ra từ API'
+
+      console.error('Lỗi từ API:', error.response.data)
+      console.error('Mã lỗi HTTP:', status)
+
+      switch (status) {
+        case 400:
+          alert(`Yêu cầu không hợp lệ: ${errorMessage}`)
+          break
+        case 404:
+          alert(`Không tìm thấy API: ${errorMessage}`)
+          break
+        case 500:
+          alert(`Lỗi máy chủ: ${errorMessage}. Vui lòng thử lại sau.`)
+          break
+        default:
+          alert(`Đã xảy ra lỗi: ${errorMessage}`)
+      }
+    } else if (error.code === 'ECONNABORTED') {
+      alert('Yêu cầu đã bị hủy do thời gian chờ lâu.')
     } else if (error.request) {
       console.error('Không nhận được phản hồi từ server:', error.request)
       alert('Không nhận được phản hồi từ server. Vui lòng thử lại sau.')

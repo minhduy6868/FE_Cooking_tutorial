@@ -14,22 +14,23 @@ export const authRoute: RouteRecordRaw[] = [
         name: 'register',
         component: () => import('@/pages/auth/register/register.vue'),
       },
-      {
-        path: 'confirm',
-        name: 'register-confirm',
-        component: () => import('@/pages/auth/register/confirm.vue'),
-      },
     ],
+  },
+  {
+    path: '/resetpass',
+    name: 'password-reset',
+    component: () => import('@/pages/auth/password/reset.vue'),
   },
   {
     path: '/password',
     name: 'password',
     children: [
       {
-        path: 'forgot',
+        path: '',
         name: 'password-forgot',
         component: () => import('@/pages/auth/password/forgot.vue'),
       },
+      
     ],
   },
 ]

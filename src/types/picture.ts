@@ -1,4 +1,4 @@
-import type { Post } from "./post"
+import type { Post } from './post'
 
 export interface Picture {
   id: string // UUID hoặc string nếu tự sinh

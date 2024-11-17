@@ -106,14 +106,9 @@ const onSubmit = handleSubmit(async (values) => {
             />
           </div>
         </div>
-        <div class="text-end">
-          <RouterLink
-            class="text-[#0921D9] text-xs font-semibold"
-            to="/password/forgot"
-          >
-            Quên mật khẩu?
-          </RouterLink>
-        </div>
+        <router-link to="/password">
+          <p class="text-blue-500 hover:text-black">Quên mật khẩu?</p>
+        </router-link>
         <Button class="mt-6 w-full h-10 bg-orange-600">Đăng Nhập</Button>
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>

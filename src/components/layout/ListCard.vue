@@ -1,91 +1,74 @@
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      <Card
-        v-for="(item, index) in items"
-        :key="index"
-        :title="item.title"
-        :description="item.description"
-        :image="item.image"
-        :link="item.link"
-        :category="item.category"
-        :time="item.time"
-        :comments="item.comments"
-      />
+  <div class="card">
+    <img :src="image" alt="Post Image" />
+    <div class="card-content">
+      <div class="card-title">{{ title }}</div>
+      <div class="card-description">{{ description }}</div>
+      <div class="card-like-count">Likes: {{ likeCount }}</div>
+      <a :href="link" class="card-link">View Details</a>
     </div>
-  </template>
-  
-  <script>
-  import Card from '@/components/ui/card/CardCooking.vue'
-  
-  export default {
-    components: {
-      Card
-    },
-    data() {
-      return {
-        items: [
-          {
-            title: "Simplest Salad Recipe ever",
-            description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            image: "https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            link: "#",
-            category: "Cooking",
-            time: "6 mins ago",
-            comments: 39
-          },
-          {
-            title: "Best FastFood Ideas (Yummy)",
-            description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            image: "https://images.pexels.com/photos/1600727/pexels-photo-1600727.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            link: "#",
-            category: "Cooking",
-            time: "10 days ago",
-            comments: 0
-          },
-          {
-            title: "Why to eat salad?",
-            description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            image: "https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            link: "#",
-            category: "Cooking",
-            time: "16 hours ago",
-            comments: 9
-          },
-          {
-            title: "Simplest Salad Recipe ever",
-            description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            image: "https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            link: "#",
-            category: "Cooking",
-            time: "6 mins ago",
-            comments: 39
-          },
-          {
-            title: "Best FastFood Ideas (Yummy)",
-            description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            image: "https://images.pexels.com/photos/1600727/pexels-photo-1600727.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            link: "#",
-            category: "Cooking",
-            time: "10 days ago",
-            comments: 0
-          },
-          {
-            title: "Why to eat salad?",
-            description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-            image: "https://images.pexels.com/photos/6086/food-salad-healthy-vegetables.jpg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-            link: "#",
-            category: "Cooking",
-            time: "16 hours ago",
-            comments: 9
-          }
-          // Thêm nhiều item nếu cần
-        ]
-      }
-    }
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    title: String,
+    description: String,
+    image: String,
+    likeCount: Number,
+    link: String
   }
-  </script>
-  
-  <style scoped>
-  /* Thêm kiểu cho layout nếu cần */
-  </style>
-  
+}
+</script>
+
+<style scoped>
+/* Style cho card */
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-content {
+  padding: 16px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.card-description {
+  color: #666;
+  font-size: 1rem;
+  margin: 8px 0;
+}
+
+.card-like-count {
+  color: #ff6347;
+  font-weight: bold;
+}
+
+.card-link {
+  display: block;
+  text-align: center;
+  background-color: #ff6347;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.card-link:hover {
+  background-color: #e55347;
+}
+</style>

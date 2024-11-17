@@ -1,78 +1,14 @@
 <script setup lang="ts">
-import { forgotPasswordApi } from '@/services/auth'
-import ErrorMessage from '@/components/base/ErrorMessage.vue'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { ref } from 'vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-// import Vue from 'vue';
-// import { validEmail } from '~/modules/validation/ValidAuth.js';
-// import { mapActions } from 'vuex';
-// import { forgot_password_client_api } from '~/services/authService';
-// import langAuth from '~/components/Layout/langAuth.vue';
-// import QuestionPopup from '~/components/Layout/QuestionPopup.vue';
-// export default Vue.extend({
-//     auth: false,
-//     components: {
-//         langAuth,
-//         QuestionPopup,
-//     },
-//     middleware: 'guest',
-//     data() {
-//         return {
-//             checked: false,
-//             email: '',
-//             errorEmail: '',
-//             question: null,
-//         };
-//     },
-//     methods: {
-//         ...mapActions({
-//             set_noti_mess: 'noti_mess/set_noti_mess',
-//         }),
-//         checkEmail() {
-//             const check = validEmail(this.email);
-//             this.errorEmail = check.mess;
+import { sendOtp } from '@/services/authen' // Đảm bảo import đúng service gửi OTP
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import ErrorMessage from '@/components/base/ErrorMessage.vue'
+import { useRouter } from 'vue-router'
 
-//             return check.check;
-//         },
-//         onGoToLogin() {
-//             this.$router.push('/login');
-//         },
-//         onGoToHomePage() {
-//             this.$router.push('/');
-//         },
-//         async sendForgotPassword() {
-//             if (this.checkEmail()) {
-//                 try {
-//                     await forgot_password_client_api({
-//                         email: this.email,
-//                     }).then(() => {
-//                         this.question = {
-//                             type: 'SUCCESS',
-//                             body: this.$t('question.check_email_confirm'),
-//                         };
-//                     });
-//                 } catch (e) {
-//                     this.errorEmail = e;
-//                 }
-//             }
-//         },
-//     },
-// });
-const errorEmail = ref()
-
-const handleForgot = async () => {
-  try {
-    if (!email.value) {
-      errorEmail.value = 'Email không được để trống'
-      return
-    }
-    await forgotPasswordApi(email.value)
-  } catch (error) {
-    notify.error(((error as any).data?.error?.message as string) || 'Gửi lỗi quên mật khẩu')
-  }
-}
+const router = useRouter()
 
 const { errors, defineField } = useForm({
   validationSchema: yup.object({
@@ -81,7 +17,35 @@ const { errors, defineField } = useForm({
 })
 
 const [email, emailAttrs] = defineField('email')
+const errorEmail = ref<string | null>(null)
+
+const handleForgot = async (event: Event) => {
+  event.preventDefault()
+
+  if (!email.value) {
+    errorEmail.value = 'Email không được để trống'
+    return
+  }
+
+  try {
+    // Gọi API gửi OTP
+    const response = await sendOtp(email.value)
+
+    if (response.status === 200) {
+      // Hiển thị thông báo thành công hoặc chuyển hướng đến trang tiếp theo
+      alert('OTP đã được gửi vào email của bạn.')
+      // Chuyển hướng đến trang đặt lại mật khẩu
+      router.push('/resetpass')
+    } else {
+      alert('Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại.')
+    }
+  } catch (error) {
+    console.error('Lỗi khi gửi OTP:', error)
+    alert('Đã xảy ra lỗi, vui lòng thử lại.')
+  }
+}
 </script>
+
 <template>
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
@@ -113,7 +77,7 @@ const [email, emailAttrs] = defineField('email')
             />
           </div>
         </div>
-        <Button class="mt-4 w-full h-10"> Submit </Button>
+        <Button class="mt-4 w-full h-10"> Gửi OTP </Button>
         <div class="text-end mt-6">
           <RouterLink
             class="text-[#0921D9] text-xs font-semibold"
@@ -128,11 +92,12 @@ const [email, emailAttrs] = defineField('email')
       <img
         class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
         src="@/assets/img/robot.png"
-        alt=""
+        alt="image"
       />
     </div>
   </div>
 </template>
+
 <style scoped>
 .form-shadow {
   box-shadow:
