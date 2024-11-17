@@ -9,10 +9,16 @@
       class="group text-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center w-14 h-14 relative"
       @click="toggleChat"
     >
-      <img src="@/assets/img/6.png" alt="Chat Icon" class="chat" />
+      <img
+        src="@/assets/img/6.png"
+        alt="Chat Icon"
+        class="chat"
+      />
 
       <!-- Tooltip -->
-      <span class="tooltip absolute right-full mr-3 px-4 py-2 text-sm text-white bg-black bg-opacity-80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+      <span
+        class="tooltip absolute right-full mr-3 px-4 py-2 text-sm text-white bg-black bg-opacity-80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap"
+      >
         AI hỗ trợ
       </span>
     </button>
@@ -33,7 +39,7 @@
           id="chat-title"
           class="font-semibold flex items-center"
         >
-          <i class="fas fa-robot mr-2"></i> Hỏi AI 
+          <i class="fas fa-robot mr-2"></i> Hỏi AI
         </h2>
         <button
           class="text-white hover:text-gray-200 transition-colors"
@@ -56,19 +62,31 @@
           :class="msg.sender === 'user' ? 'justify-end' : ''"
           class="flex items-start"
         >
-          <div :class="msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-gray-800'"
-            class="rounded-lg p-3 max-w-[80%]">
-            <p v-html="msg.text"></p> <!-- Render HTML content -->
+          <div
+            :class="msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-blue-100 text-gray-800'"
+            class="rounded-lg p-3 max-w-[80%]"
+          >
+            <p v-html="msg.text"></p>
+            <!-- Render HTML content -->
           </div>
         </div>
       </div>
 
       <!-- Typing Indicator -->
-      <div v-if="isTyping" class="px-4 py-2">
+      <div
+        v-if="isTyping"
+        class="px-4 py-2"
+      >
         <div class="flex items-center space-x-2">
           <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+          <div
+            class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+            style="animation-delay: 0.2s"
+          ></div>
+          <div
+            class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+            style="animation-delay: 0.4s"
+          ></div>
         </div>
       </div>
 
@@ -157,6 +175,99 @@ export default {
       }, 2000)
     },
     async getBotResponse(userMessage: string): Promise<string> {
+      if (userMessage.toLowerCase() === 'trang web này làm gì') {
+        return 'Web này dạy nấu ăn.'
+      }
+
+      if (userMessage.toLowerCase() === 'ai là chủ của trang web này') {
+        return 'Minh Duy.'
+      }
+
+      if (userMessage.toLowerCase() === 'mục đích của trang web này là gì') {
+        return 'Trang web này cung cấp các công thức nấu ăn và hướng dẫn chi tiết để bạn có thể học nấu những món ăn ngon.'
+      }
+
+      if (userMessage.toLowerCase() === 'trang web này có những gì') {
+        return 'Trang web này có các công thức nấu ăn, video hướng dẫn, và các mẹo nấu ăn hữu ích.'
+      }
+
+      if (userMessage.toLowerCase() === 'trang web này dạy gì') {
+        return 'Chúng tôi dạy bạn cách nấu các món ăn ngon từ đơn giản đến phức tạp.'
+      }
+
+      if (userMessage.toLowerCase() === 'làm sao để học nấu ăn trên trang web này') {
+        return 'Bạn chỉ cần tìm công thức nấu ăn mà bạn yêu thích, theo dõi các bước hướng dẫn chi tiết và bắt tay vào nấu ngay.'
+      }
+
+      if (userMessage.toLowerCase() === 'có thể học nấu ăn từ đâu trên trang web này') {
+        return 'Bạn có thể tìm công thức nấu ăn theo thể loại món ăn, nguyên liệu, hoặc mức độ khó.'
+      }
+
+      if (userMessage.toLowerCase() === 'trang web này có công thức nấu ăn miễn phí không') {
+        return 'Vâng, tất cả các công thức nấu ăn trên trang web đều miễn phí cho bạn.'
+      }
+
+      if (userMessage.toLowerCase() === 'tôi có thể tìm công thức nấu ăn theo nguyên liệu không') {
+        return 'Có, bạn có thể tìm công thức dựa trên nguyên liệu bạn có, và chúng tôi sẽ gợi ý những món ăn phù hợp.'
+      }
+
+      if (userMessage.toLowerCase() === 'có video hướng dẫn nấu ăn không') {
+        return 'Có, chúng tôi cung cấp các video hướng dẫn chi tiết về từng công thức nấu ăn.'
+      }
+
+      if (
+        userMessage.toLowerCase() === 'trang web có hướng dẫn các món ăn từ các quốc gia khác không'
+      ) {
+        return 'Đúng vậy, chúng tôi có các công thức nấu ăn từ nhiều quốc gia và nền văn hóa khác nhau.'
+      }
+
+      if (userMessage.toLowerCase() === 'làm thế nào để tìm công thức nấu ăn nhanh chóng') {
+        return 'Bạn có thể sử dụng chức năng tìm kiếm trên trang chủ để tìm các công thức nấu ăn theo tên món ăn, nguyên liệu, hoặc thể loại.'
+      }
+
+      if (userMessage.toLowerCase() === 'ai là người sáng lập trang web này') {
+        return 'Trang web này được sáng lập bởi Minh Duy, người đam mê nấu ăn và chia sẻ kiến thức về ẩm thực.'
+      }
+
+      if (
+        userMessage.toLowerCase() ===
+        'trang web này có hướng dẫn nấu ăn cho người mới bắt đầu không'
+      ) {
+        return 'Vâng, chúng tôi có rất nhiều công thức dễ dàng dành cho người mới bắt đầu. Bạn có thể bắt đầu với các món ăn đơn giản và dần nâng cao kỹ năng.'
+      }
+
+      if (userMessage.toLowerCase() === 'tôi có thể tìm công thức nấu ăn theo món ăn không') {
+        return 'Đúng vậy, bạn có thể tìm công thức theo loại món ăn như món khai vị, món chính, món tráng miệng, v.v.'
+      }
+
+      if (userMessage.toLowerCase() === 'trang web này có giúp tôi nấu món ăn chay không') {
+        return 'Chắc chắn! Chúng tôi có rất nhiều công thức nấu ăn chay phù hợp với nhu cầu của bạn.'
+      }
+
+      if (
+        userMessage.toLowerCase() ===
+        'trang web này có cung cấp công thức nấu ăn cho món ăn nhanh không'
+      ) {
+        return 'Vâng, chúng tôi có các công thức nấu ăn nhanh giúp bạn chuẩn bị bữa ăn trong thời gian ngắn.'
+      }
+
+      // Câu hỏi về thông tin liên hệ
+      if (userMessage.toLowerCase() === 'thông tin liên hệ của bạn là gì') {
+        return `Bạn có thể liên hệ với chúng tôi qua số điện thoại: 0916 267 402 hoặc qua email: duynm.23it@vku.udn.vn. Địa chỉ của chúng tôi là: 470, Trần Đại Nghĩa, Hòa Vang, Ngũ Hành Sơn, Đà Nẵng.`
+      }
+
+      if (userMessage.toLowerCase() === 'số điện thoại của bạn là gì') {
+        return 'Số điện thoại của chúng tôi là 0916 267 402.'
+      }
+
+      if (userMessage.toLowerCase() === 'email của bạn là gì') {
+        return 'Email của chúng tôi là duynm.23it@vku.udn.vn.'
+      }
+
+      if (userMessage.toLowerCase() === 'địa chỉ của bạn là đâu') {
+        return 'Địa chỉ của chúng tôi là 470, Trần Đại Nghĩa, Hòa Vang, Ngũ Hành Sơn, Đà Nẵng.'
+      }
+
       const apiUrl =
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
       const apiKey = 'AIzaSyDlUcwhu795awo9PB49kFbhznnMHDea9oI' // Thay bằng API key của bạn
@@ -176,7 +287,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
             },
-          }
+          },
         )
 
         // Kiểm tra và lấy nội dung phản hồi từ API Gemini
@@ -200,10 +311,10 @@ export default {
         .replace(/\*([^*]+)\*/g, '<b>$1</b>') // In đậm các từ trong dấu *
         .replace(/\n/g, '<br>') // Thêm ngắt dòng
         .replace(/^\s*\*\s+/gm, '<ul><li>') // Thêm danh sách
-        .replace(/\*+$/, '</li></ul>'); // Đóng thẻ ul
+        .replace(/\*+$/, '</li></ul>') // Đóng thẻ ul
 
       return formattedText
-    }
+    },
   },
 }
 </script>

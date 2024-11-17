@@ -13,7 +13,7 @@ const router = useRouter()
 // Định nghĩa schema validation cho form
 const { errors, defineField, handleSubmit } = useForm({
   validationSchema: yup.object({
-    email: yup.string().email().required('Email là bắt buộc'),
+    email: yup.string().email().required('Email là bắt buộc và đúng email đã gửi OTP trước đó'),
     otp: yup.string().length(6, 'OTP phải có 6 chữ số').required('OTP là bắt buộc'),
     newPassword: yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Mật khẩu mới là bắt buộc'),
   }),

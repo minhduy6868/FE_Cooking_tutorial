@@ -11,6 +11,16 @@ const menus = ref([
     ],
   },
   {
+    
+    children: [
+      {
+        class: 'i-solar-user-linear group-hover:i-solar-user-bold-duotone',
+        title: 'Bài viết',
+        link: '/posts-manage',
+      },
+    ],
+  },
+  {
     title: 'THÔNG TIN VÀ ĐIỀU KHOẢN',
     children: [
       {
