@@ -74,8 +74,8 @@
             <router-link to="/">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-white bg-orange-700 rounded lg:bg-transparent lg:text-white lg:p-0 dark:text-white hover:bg-orange-500"
-                aria-current="page"
+                 class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                  aria-current="page"
                 >Trang chủ</a>
             </router-link>
           </li>
@@ -83,7 +83,7 @@
             <router-link to="/postcooking">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white  text-lg hover:text-blue-800 transition duration-300"
                 >Công thức món ăn</a>
               </router-link>
           </li>
@@ -91,7 +91,7 @@
             <router-link to="/post">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white  dark:text-white  text-lg hover:text-blue-800 transition duration-300"
                 >Đăng bài</a>
             </router-link>
           </li>
@@ -99,16 +99,16 @@
             <router-link to="/profile">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Trang cá nhân</a>
+                class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                 >Trang cá nhân</a>
             </router-link>
           </li>
           <li>
             <router-link to="/about">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 text-white hover:bg-orange-500 lg:hover:bg-transparent lg:border-0 lg:hover:text-white lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >Giới thiệu</a>
+                class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                 >Giới thiệu</a>
             </router-link>
           </li>
         </ul>
