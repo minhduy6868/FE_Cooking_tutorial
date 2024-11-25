@@ -116,3 +116,75 @@ export const searchPosts = async (title: string): Promise<BaseResponse<Post[]>> 
     }
   }
 }
+
+export const createPost = async (
+  title: string,
+  description: string,
+  tutorial: string,
+  typePost: string,
+  images: File[], // Array of image files
+  fileVideo: File | null, // Single video file
+): Promise<BaseResponse<Post>> => {
+  try {
+    if (!Array.isArray(images)) {
+      throw new Error('Images should be an array')
+    }
+
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('tutorial', tutorial)
+    formData.append('typePost', typePost)
+
+    if (images.length > 0) {
+      images.forEach((image) => formData.append('images', image))
+    }
+
+    // Only append the video if it exists
+    if (fileVideo && fileVideo instanceof File) {
+      formData.append('fileVideo', fileVideo)
+    }
+
+    // Log the formData entries to inspect the content
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value instanceof File ? 'File' : value}`);
+    }
+
+    // Sending the request to the backend
+    const response = await api.post<BaseResponse<Post>>('/post/createPost', formData, {
+      headers: {
+        'Content-Type': 'form-data',
+      },
+      timeout: 20000, // Increased timeout
+    })
+    console.log(response); 
+
+    if (response.status === 200) {
+      return response
+    } else {
+      throw new Error('Unable to create post.')
+    }
+  } catch (error: any) {
+    console.error('Error creating post:', error)
+
+    let errorMessage = 'An error occurred while creating the post.'
+    if (error.response) {
+      errorMessage = error.response.data.message || errorMessage
+      console.error('API Error:', error.response.data)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Request timed out due to long wait time.'
+    } else if (error.request) {
+      console.error('No response from server:', error.request)
+      errorMessage = 'No response from server. Please try again later.'
+    } else {
+      console.error('Request error:', error.message)
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: null,
+    }
+  }
+}
+

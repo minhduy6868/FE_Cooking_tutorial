@@ -6,7 +6,7 @@
     <div class="relative">
       <!-- Thumbnail image and hover effect -->
       <a :href="link">
-        <img class="w-full" :src="image || 'https://via.placeholder.com/130'" :alt="title" />
+        <img class="w-full" :src="image ? image : 'https://via.placeholder.com/130'" :alt="title" />
         <div class="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"></div>
       </a>
       <a href="#!">
@@ -60,7 +60,7 @@ export default {
   props: {
     title: String,
     description: String,
-    image: String ,
+    image: String,  // Đảm bảo nhận giá trị URL cho ảnh
     link: String,
     category: String,
     time: String,

@@ -7,7 +7,7 @@ import { loginApi } from '@/services/authen'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
 import { useRouter } from 'vue-router' // Import router để điều hướng
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
-
+import { showToast } from '@/utils/toast'
 // Lấy router từ Vue Router
 const router = useRouter()
 
@@ -38,8 +38,15 @@ const onSubmit = handleSubmit(async (values) => {
       // Lưu access token vào localStorage
       localStorage.setItem('access_token', data.access_token)
 
+      showToast({
+      title: 'Đăng nhập thành công',
+      description: 'Bạn đã xóa tài khoản, vui lòng đăng nhập lại để tiếp tục',
+      variant: 'default',
+      duration: 5000,
+    })
       // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
       router.push('/')
+
     } else {
       // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
       loginError = 'Đăng nhập thất bại'

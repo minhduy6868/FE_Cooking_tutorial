@@ -1,10 +1,10 @@
 // src/services/httpClient.ts
-import axios from 'axios';
+import axios from 'axios'
 
 // Hàm để lấy token từ localStorage
 const getAuthToken = () => {
-  return localStorage.getItem('access_token');
-};
+  return localStorage.getItem('access_token')
+}
 
 // Tạo axios instance
 const api = axios.create({
@@ -12,20 +12,20 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
+})
 
 // Thêm token vào request headers nếu có
 api.interceptors.request.use(
   (config) => {
-    const token = getAuthToken();
+    const token = getAuthToken()
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`; // Thêm Bearer token
+      config.headers['Authorization'] = `Bearer ${token}` // Thêm Bearer token
     }
-    return config;
+    return config
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
+    return Promise.reject(error)
+  },
+)
 
-export default api;
+export default api

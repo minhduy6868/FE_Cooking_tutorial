@@ -4,14 +4,14 @@
       <!-- Post Image and Title -->
       <div class="relative h-96">
         <img
-          :src="post?.pictures?.[0] || 'https://via.placeholder.com/500'"
+          :src="post?.pictures?.[0]?.link || 'https://via.placeholder.com/500'"
           alt="Post Image"
           class="w-full h-full object-cover"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
           <div class="p-8">
-            <h1 class="text-4xl font-bold text-white mb-4">{{ post?.title }}</h1>
-            <p class="text-gray-200 text-lg">{{ post?.description }}</p>
+            <h1 class="text-4xl font-bold text-white mb-4">{{ post?.title || 'No Title' }}</h1>
+            <p class="text-gray-200 text-lg">{{ post?.description || 'No description available' }}</p>
           </div>
         </div>
       </div>
@@ -20,17 +20,18 @@
         <!-- Post Video Section -->
         <div class="aspect-w-16 aspect-h-9 mb-8 rounded-xl overflow-hidden">
           <video
+            v-if="post?.linkVideo"
             controls
             class="w-full h-full object-cover"
             poster="https://via.placeholder.com/500"
           >
-            <!-- Sử dụng cú pháp v-bind để truyền giá trị cho src -->
             <source
-              :src="post?.linkVideo"
+              :src="post.linkVideo"
               type="video/mp4"
             />
             Your browser does not support the video tag.
           </video>
+          <p v-else class="text-center text-gray-500">No video available</p>
         </div>
 
         <!-- Post Metadata Section -->
@@ -40,20 +41,20 @@
             <ul class="space-y-3">
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Thời gian:</strong> {{ 'Chưa có thời gian' }}</span>
+                <span><strong>Thời gian:</strong> {{ post?.date || 'Chưa có thời gian' }}</span>
               </li>
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Danh mục:</strong> {{ 'Chưa có thể loại' }}</span>
+                <span><strong>Danh mục:</strong> {{ post?.typePost || 'Chưa có thể loại' }}</span>
               </li>
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
-                <span><strong>Số lượt thích:</strong> {{ post?.likeCount }}</span>
+                <span><strong>Số lượt thích:</strong> {{ post?.likeCount || 0 }}</span>
               </li>
               <li class="flex items-center space-x-3">
                 <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
                 <span><strong>Người đăng:</strong> {{ post?.user.fullName || 'Chưa rõ' }}</span>
-                <span><strong>Người đăng:</strong> {{ post?.user.id || 'Chưa rõ' }}</span>
+                <span><strong>ID người đăng:</strong> {{ post?.user.id || 'Chưa rõ' }}</span>
               </li>
             </ul>
           </div>
@@ -78,9 +79,9 @@
           <h2 class="text-2xl font-bold mb-6">Hình ảnh quá trình</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <img
-              v-for="(image, index) in post?.pictures"
+              v-for="(image, index) in post?.pictures || []"
               :key="index"
-              :src="image || 'https://via.placeholder.com/500'"
+              :src="image.link || 'https://via.placeholder.com/500'"
               alt="Process Image"
               class="rounded-lg hover:opacity-75 transition duration-300 ease-in-out"
             />

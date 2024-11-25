@@ -9,6 +9,7 @@
         <form
           id="recipeForm"
           class="space-y-6"
+          @submit.prevent="submitForm"
         >
           <div>
             <label
@@ -18,19 +19,12 @@
             >
             <input
               id="title"
+              v-model="post.title"
               type="text"
-              name="title"
               required
-              aria-required="true"
               class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Enter recipe title"
             />
-            <p
-              id="titleError"
-              class="mt-1 hidden text-red-500 text-sm"
-            >
-              Title is required
-            </p>
           </div>
 
           <div>
@@ -41,96 +35,69 @@
             >
             <textarea
               id="description"
-              name="description"
+              v-model="post.description"
               required
-              aria-required="true"
               rows="4"
               class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               placeholder="Describe your recipe"
             ></textarea>
-            <p
-              id="descriptionError"
-              class="mt-1 hidden text-red-500 text-sm"
-            >
-              Description is required
-            </p>
           </div>
 
           <div>
-            <label class="text-sm font-medium text-orange-700 block mb-2">Main Image</label>
-            <div
-              class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-orange-300 border-dashed rounded-lg bg-orange-50"
+            <label
+              for="tutorial"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Tutorial Steps</label
             >
-              <div class="space-y-1 text-center">
-                <img
-                  id="mainImagePreview"
-                  class="mx-auto h-48 w-96 object-cover rounded-lg hidden"
-                  src=""
-                  alt="Recipe preview"
-                />
-                <div class="flex text-sm text-orange-600">
-                  <label
-                    for="mainImage"
-                    class="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-orange-500"
-                  >
-                    <span>Upload a file</span>
-                    <input
-                      id="mainImage"
-                      name="mainImage"
-                      type="file"
-                      class="sr-only"
-                      accept="image/*"
-                    />
-                  </label>
-                  <p class="pl-1">or drag and drop</p>
-                </div>
-                <p class="text-xs text-orange-500">PNG, JPG, GIF up to 10MB</p>
-              </div>
-            </div>
+            <textarea
+              id="tutorial"
+              v-model="post.tutorial"
+              required
+              rows="4"
+              class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Describe the tutorial or steps"
+            ></textarea>
           </div>
 
-          <div class="recipe-steps">
-            <label class="text-sm font-medium text-orange-700 block mb-2">Recipe Steps</label>
-            <div
-              id="stepsContainer"
-              class="space-y-4"
+          <div>
+            <label
+              for="typePost"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Post Type</label
             >
-              <div class="step-item bg-orange-50 p-4 rounded-lg border border-orange-200">
-                <div class="flex items-center gap-4 mb-2">
-                  <span class="text-lg font-semibold text-orange-700">Step 1</span>
-                  <button
-                    type="button"
-                    class="text-orange-500 hover:text-orange-700"
-                  >
-                    Remove
-                  </button>
-                </div>
-                <textarea
-                  required
-                  aria-required="true"
-                  class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  rows="2"
-                  placeholder="Describe this step"
-                ></textarea>
-                <div class="mt-2">
-                  <label class="block text-sm font-medium text-orange-700"
-                    >Step Image (optional)</label
-                  >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    class="mt-1 block w-full text-sm text-orange-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
-                  />
-                </div>
-              </div>
-            </div>
-            <button
-              id="addStep"
-              type="button"
-              class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-orange-700 bg-orange-100 hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+            <select
+              id="typePost"
+              v-model="post.typePost"
+              required
+              class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
-              Add Another Step
-            </button>
+              <option value="recipe">Recipe</option>
+              <option value="blog">Blog</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-sm font-medium text-orange-700 block mb-2">Recipe Images</label>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              class="w-full py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              @change="handleFileUpload"
+            />
+          </div>
+
+          <div>
+            <label class="text-sm font-medium text-orange-700 block mb-2"
+              >Recipe Video (Optional)</label
+            >
+            <input
+              type="file"
+              accept="video/*"
+              class="w-full py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              @change="handleVideoUpload"
+            />
           </div>
 
           <div class="flex gap-4 justify-end mt-8">
@@ -138,14 +105,38 @@
               id="previewBtn"
               type="button"
               class="px-6 py-3 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              @click="openPreviewModal"
             >
               Preview
             </button>
             <button
               type="submit"
               class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              :disabled="isLoading"
             >
-              Share Recipe
+              <span v-if="isLoading">
+                <svg
+                  class="animate-spin h-5 w-5 text-white mx-auto"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 0116 0"
+                  ></path>
+                </svg>
+              </span>
+              <span v-else>Share Recipe</span>
             </button>
           </div>
         </form>
@@ -153,8 +144,8 @@
 
       <!-- Preview Modal -->
       <div
-        id="previewModal"
-        class="hidden fixed inset-0 bg-orange-600 bg-opacity-50 overflow-y-auto h-full w-full"
+        v-if="previewModalOpen"
+        class="fixed inset-0 bg-orange-600 bg-opacity-50 overflow-y-auto h-full w-full"
       >
         <div
           class="relative top-20 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white"
@@ -162,8 +153,8 @@
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-xl font-bold text-orange-800">Recipe Preview</h3>
             <button
-              id="closePreview"
               class="text-orange-400 hover:text-orange-500"
+              @click="closePreviewModal"
             >
               <svg
                 class="h-6 w-6"
@@ -180,11 +171,33 @@
               </svg>
             </button>
           </div>
-          <div
-            id="previewContent"
-            class="mt-4"
-          >
-            <!-- Preview content will be inserted here -->
+          <div>
+            <h3 class="text-lg font-semibold text-orange-700">{{ post.title }}</h3>
+            <p>{{ post.description }}</p>
+            <p>{{ post.tutorial }}</p>
+            <p>Type: {{ post.typePost }}</p>
+            <div v-if="post.images.length > 0">
+              <h4 class="font-medium text-orange-600">Uploaded Images:</h4>
+              <div
+                v-for="(image, index) in post.images"
+                :key="index"
+                class="flex"
+              >
+                <img
+                  :src="URL.createObjectURL(image)"
+                  alt="Recipe Image"
+                  class="w-24 h-24 object-cover rounded-md"
+                />
+              </div>
+            </div>
+            <div v-if="post.video">
+              <h4 class="font-medium text-orange-600">Uploaded Video:</h4>
+              <video
+                :src="URL.createObjectURL(post.video)"
+                controls
+                class="w-full h-auto"
+              ></video>
+            </div>
           </div>
         </div>
       </div>
@@ -194,33 +207,78 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import SideBar from '@/components/layout/SideBar.vue'
-import Carousel from '@/components/layout/Carousel.vue'
-import Footer from '@/components/layout/Footer.vue'
-import ListCard from '@/components/layout/ListCard.vue'
+import { useRouter } from 'vue-router'
+import { createPost } from '@/services/post'
 
+// Define a ref to hold the post data
 const post = ref({
   title: '',
-  content: '',
-  image: null,
-  tags: '',
+  description: '',
+  tutorial: '',
+  typePost: 'recipe',
+  images: [] as File[], // List of images
+  video: null as File | null,
 })
 
+// Loading state
+const isLoading = ref(false)
+
+// Router instance for navigation
+const router = useRouter()
+
+// Open preview modal
+const previewModalOpen = ref(false)
+const openPreviewModal = () => previewModalOpen.value = true
+const closePreviewModal = () => previewModalOpen.value = false
+
+// Handle file upload
 const handleFileUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  if (target.files && target.files.length > 0) {
-    post.value.image = target.files[0]
+  const input = event.target as HTMLInputElement
+  if (input.files) {
+    post.value.images = Array.from(input.files)
   }
 }
 
-const submitForm = () => {
-  // Xử lý gửi form, ví dụ: gửi đến API hoặc lưu vào cơ sở dữ liệu
-  console.log(post.value)
+const handleVideoUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  if (input.files && input.files[0]) {
+    post.value.video = input.files[0]
+  }
+}
+
+// Submit the form
+const submitForm = async () => {
+  try {
+    // Set loading state to true
+    isLoading.value = true
+
+    // Call the API to create the post
+    const response = await createPost(
+      post.value.title,
+      post.value.description,
+      post.value.tutorial,
+      post.value.typePost,
+      post.value.images,
+      post.value.video
+    )
+
+    if (response.status === 200) {
+      alert('Post created successfully!')
+      // Navigate to another route upon success
+      router.push('/profile')  // Change this to the route you want to navigate to
+    } else {
+      alert('Failed to create post.')
+    }
+  } catch (error) {
+    console.error('Error submitting form:', error)
+    alert('An error occurred while submitting the form.')
+  } finally {
+    // Set loading state to false
+    isLoading.value = false
+  }
 }
 </script>
 
 <style scoped>
-.container {
-  max-width: 800px;
-}
+/* Custom styles here */
 </style>
