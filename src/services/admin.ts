@@ -3,6 +3,7 @@ import type { Login } from '@/types/login' // Đảm bảo đường dẫn đún
 import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
 import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
 import api from '@/api/api_client'
+import type { Post } from '@/types/post'
 
 // API đăng nhập
 export const loginApi = async (email: string, password: string): Promise<Login> => {
@@ -181,3 +182,86 @@ export const deleteUser = async (userId: string): Promise<BaseResponse<any>> => 
     }
   }
 }
+
+
+export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
+  try {
+    const response = await api.get<BaseResponse<Post[]>>('/post/getAllPost', {
+      timeout: 5000, // 5 giây timeout
+    })
+
+    if (response.status === 200) {
+      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+    } else {
+      throw new Error('Không thể lấy danh sách người dùng.')
+    }
+  } catch (error: any) {
+    // Xử lý lỗi tương tự như trong loginApi
+    console.error('Error fetching users:', error)
+
+    let errorMessage = 'Có lỗi xảy ra khi lấy danh sách người dùng.'
+    if (error.response) {
+      const status = error.response.status
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+      console.error('Mã lỗi HTTP:', status)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
+    } else if (error.request) {
+      console.error('Không nhận được phản hồi từ server:', error.request)
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
+    } else {
+      console.error('Lỗi trong quá trình gửi yêu cầu:', error.message)
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: [],
+    }
+  }
+}
+
+export const getTopDislikePost = async (limit: number): Promise<BaseResponse<Post[]>> => {
+  try {
+    // Truyền tham số limit vào request
+    const response = await api.post<BaseResponse<Post[]>>(
+      '/post/topDislikePost',
+      { limit: String(limit) }, // Chuyển số limit thành chuỗi (text) trước khi gửi đi
+      {
+        timeout: 5000, // 5 giây timeout
+      },
+    )
+
+    if (response.status === 200) {
+      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+    } else {
+      throw new Error('Không thể lấy bài viết dislike cao nhất.')
+    }
+  } catch (error: any) {
+    // Xử lý lỗi tương tự như trong các API trước
+    console.error('Error fetching top disliked posts:', error)
+
+    let errorMessage = 'Có lỗi xảy ra khi lấy bài viết dislike cao nhất.'
+    if (error.response) {
+      const status = error.response.status
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+      console.error('Mã lỗi HTTP:', status)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
+    } else if (error.request) {
+      console.error('Không nhận được phản hồi từ server:', error.request)
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
+    } else {
+      console.error('Lỗi trong quá trình gửi yêu cầu:', error.message)
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: [], // Default empty array for failed request
+    }
+  }
+}
+

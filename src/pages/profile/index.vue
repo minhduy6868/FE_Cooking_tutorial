@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getUserInfo, updateUser, deleteAccount } from '@/services/user'
+import { getUserInfo, updateUser, deleteAccount, updateAvatar } from '@/services/user'
 import type { User } from '@/types/user'
 import router from '@/routers/router'
 import { showToast } from '@/utils/toast'
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 
 // Dữ liệu người dùng và bài đăng
 const userInfo = ref<User | null>(null)
+const likedPosts = ref<any[]>([]) // Biến lưu danh sách bài đã thích
 const posts = ref<any[]>([]) // Danh sách bài đăng (post)
 const isEditing = ref(false) // Biến theo dõi trạng thái chỉnh sửa
 const updatedInfo = ref({
@@ -18,25 +19,45 @@ const updatedInfo = ref({
   address: '',
 })
 
-// Lấy thông tin người dùng khi component được mount
+
 onMounted(async () => {
   try {
     const userData = await getUserInfo()
     userInfo.value = userData.data
-    posts.value = userData.data.post || [] // Lưu danh sách bài đăng
-
-    // Khởi tạo giá trị cho các trường chỉnh sửa
-    if (userInfo.value) {
-      updatedInfo.value.fullName = userInfo.value.fullName || ''
-      updatedInfo.value.description = userInfo.value.description || ''
-      updatedInfo.value.phoneNumber = userInfo.value.phoneNumber || ''
-      updatedInfo.value.address = userInfo.value.address || ''
-    }
+    posts.value = userData.data.post || [] // Danh sách bài đăng
+    likedPosts.value = userData.data.likePosts || [] // Gán danh sách bài đã thích
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)
   }
 })
 
+
+const handleAvatarChange = async (event: Event) => {
+  const fileInput = event.target as HTMLInputElement
+  if (fileInput.files?.length) {
+    const avatarFile = fileInput.files[0]
+    try {
+      const response = await updateAvatar(avatarFile)
+      if (userInfo.value) {
+        userInfo.value.avatar = response.data // Update the avatar in userInfo
+      }
+      showToast({
+        title: 'Cập nhật avatar thành công!',
+        description: 'Avatar của bạn đã được cập nhật.',
+        variant: 'default',
+        duration: 3000,
+      })
+    } catch (error) {
+      console.error('Lỗi khi cập nhật avatar:', error)
+      showToast({
+        title: 'Cập nhật avatar thất bại!',
+        description: 'Vui lòng thử lại sau.',
+        variant: 'error',
+        duration: 3000,
+      })
+    }
+  }
+}
 // Hàm xóa tài khoản người dùng
 const deleteUser = async () => {
   const result = await Swal.fire({
@@ -303,27 +324,58 @@ const updateUserInfo = async () => {
     </h2>
     <div class="container px-6 py-6 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        
-          <!-- Loop through posts and display each one -->
-          <div
-            v-for="post in posts"
-            :key="post.id"
-            class="post-card"
-          >
-            <!-- Sử dụng CardCooking để hiển thị từng món ăn -->
-            <router-link :to="`/post/detail/${post.id}`">
-              <CardCooking
+        <!-- Loop through posts and display each one -->
+        <div
+          v-for="post in posts"
+          :key="post.id"
+          class="post-card"
+        >
+          <!-- Sử dụng CardCooking để hiển thị từng món ăn -->
+          <router-link :to="`/post/detail/${post.id}`">
+            <CardCooking
                 :title="post.title"
                 :description="post.description"
-                :image="post.pictures?.[0] || 'https://via.placeholder.com/130'"
+                :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
                 :link="post.linkVideo"
-                :category="post.category || 'Chưa có thể loại'"
-                :time="post.time || 'Chưa rõ thời gian'"
+                :category="post.typePost || 'Chưa có thể loại'"
+                :time="post.commentPosts || 'Chưa rõ thời gian'"
                 :likeCount="post.likeCount"
               />
-            </router-link>
-      </div>
+          </router-link>
+        </div>
       </div>
     </div>
+
+ <!-- Liked Recipe Cards -->
+<h2
+  class="ml-4 mr-4 mx-auto bg-gradient-to-r from-green-400 to-blue-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+>
+  Danh sách món ăn đã thích
+</h2>
+<div class="container px-6 py-6 mx-auto">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <!-- Loop through likedPosts and display each one -->
+    <div
+      v-for="post in likedPosts"
+      :key="post.id"
+      class="post-card"
+    >
+      <!-- Sử dụng CardCooking để hiển thị từng món ăn đã thích -->
+      <router-link :to="`/post/detail/${post.id}`">
+        <CardCooking
+          :title="post.title"
+          :description="post.description"
+          :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
+          :link="post.linkVideo"
+          :category="post.typePost || 'Chưa có thể loại'"
+          :time="post.commentPosts || 'Chưa rõ thời gian'"
+          :likeCount="post.likeCount"
+        />
+      </router-link>
+    </div>
+  </div>
+</div>
+
+
   </section>
 </template>

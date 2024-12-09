@@ -44,6 +44,10 @@
 </template>
 
 <script>
+import slideImage1 from '@/assets/img/img1.png';
+import slideImage2 from '@/assets/img/img2.jpg';
+import slideImage3 from '@/assets/img/img3.png';
+
 export default {
   name: 'CarouselComponent',
   data() {
@@ -51,20 +55,20 @@ export default {
       currentIndex: 0,
       items: [
         {
-          img: 'https://photo.znews.vn/w660/Uploaded/mdf_eioxrd/2021_07_06/2.jpg',
+          img: slideImage1,
           alt: 'Slide 1',
           text: 'First Slide'
         },
         {
-          img: 'https://flowbite.com/docs/images/carousel/carousel-2.svg',
+          img: slideImage2,
           alt: 'Slide 2'
         },
         {
-          img: 'https://flowbite.com/docs/images/carousel/carousel-3.svg',
+          img: slideImage3,
           alt: 'Slide 3'
         }
       ]
-    }
+    };
   },
   methods: {
     nextSlide() {
@@ -79,12 +83,12 @@ export default {
 
 <style scoped>
 #default-carousel {
-  height: 40vh; /* Chiều cao carousel là 35% màn hình */
+  height: 40vh;
 }
 
 img {
-  object-fit: cover; /* Đảm bảo ảnh không bị méo và được bọc lại đúng tỷ lệ */
-  width: 100%; /* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng */
-  height: 40vh; /* Chiều cao tự động theo chiều cao của carousel */
+  object-fit: cover;
+  width: 100%;
+  height: 40vh;
 }
 </style>

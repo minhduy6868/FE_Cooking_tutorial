@@ -43,7 +43,7 @@ export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
 export const getPostById = async (id: string): Promise<BaseResponse<Post>> => {
   try {
     const response = await api.get<BaseResponse<Post>>(`/post/${id}`, {
-      timeout: 5000, // Timeout 5 giây
+      timeout: 10000, // Timeout 5 giây
     })
 
     if (response.status === 200) {
@@ -117,67 +117,43 @@ export const searchPosts = async (title: string): Promise<BaseResponse<Post[]>> 
   }
 }
 
-export const createPost = async (
-  title: string,
-  description: string,
-  tutorial: string,
-  typePost: string,
-  images: File[], // Array of image files
-  fileVideo: File | null, // Single video file
-): Promise<BaseResponse<Post>> => {
+export const createPost = async (formData: FormData): Promise<BaseResponse<Post>> => {
   try {
-    if (!Array.isArray(images)) {
-      throw new Error('Images should be an array')
-    }
-
-    const formData = new FormData()
-    formData.append('title', title)
-    formData.append('description', description)
-    formData.append('tutorial', tutorial)
-    formData.append('typePost', typePost)
-
-    if (images.length > 0) {
-      images.forEach((image) => formData.append('images', image))
-    }
-
-    // Only append the video if it exists
-    if (fileVideo && fileVideo instanceof File) {
-      formData.append('fileVideo', fileVideo)
-    }
-
-    // Log the formData entries to inspect the content
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value instanceof File ? 'File' : value}`);
-    }
-
-    // Sending the request to the backend
-    const response = await api.post<BaseResponse<Post>>('/post/createPost', formData, {
-      headers: {
-        'Content-Type': 'form-data',
-      },
-      timeout: 20000, // Increased timeout
+    const response = await api.post('/post/createPost', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
-    console.log(response); 
+    return response.data
+  } catch (error) {
+    console.error('Error creating post:', error)
+    throw error
+  }
+}
+
+// API like bài viết
+export const likePost = async (id: string): Promise<BaseResponse<Post>> => {
+  try {
+    const response = await api.post<BaseResponse<Post>>(`/post/like/${id}`, null, {
+      timeout: 5000, // Timeout 5 giây
+    })
 
     if (response.status === 200) {
-      return response
+      return response.data // Trả về dữ liệu bài viết sau khi like
     } else {
-      throw new Error('Unable to create post.')
+      throw new Error('Không thể like bài viết.')
     }
   } catch (error: any) {
-    console.error('Error creating post:', error)
+    console.error('Error liking post:', error)
 
-    let errorMessage = 'An error occurred while creating the post.'
+    let errorMessage = 'Có lỗi xảy ra khi like bài viết.'
     if (error.response) {
       errorMessage = error.response.data.message || errorMessage
-      console.error('API Error:', error.response.data)
+      console.error('Lỗi từ API:', error.response.data)
     } else if (error.code === 'ECONNABORTED') {
-      errorMessage = 'Request timed out due to long wait time.'
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
     } else if (error.request) {
-      console.error('No response from server:', error.request)
-      errorMessage = 'No response from server. Please try again later.'
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
     } else {
-      console.error('Request error:', error.message)
+      errorMessage = error.message
     }
 
     return {
@@ -188,3 +164,75 @@ export const createPost = async (
   }
 }
 
+// API dislike bài viết
+export const dislikePost = async (id: string): Promise<BaseResponse<Post>> => {
+  try {
+    const response = await api.post<BaseResponse<Post>>(`/post/dislike/${id}`, null, {
+      timeout: 5000, // Timeout 5 giây
+    })
+
+    if (response.status === 200) {
+      return response.data // Trả về dữ liệu bài viết sau khi dislike
+    } else {
+      throw new Error('Không thể dislike bài viết.')
+    }
+  } catch (error: any) {
+    console.error('Error disliking post:', error)
+
+    let errorMessage = 'Có lỗi xảy ra khi dislike bài viết.'
+    if (error.response) {
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
+    } else if (error.request) {
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
+    } else {
+      errorMessage = error.message
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: null,
+    }
+  }
+}
+
+export const addComment = async (idpost: string, text: string): Promise<BaseResponse<Comment>> => {
+  try {
+    const response = await api.post<BaseResponse<Comment>>(
+      '/post/comment/${idpost}',
+      { text },
+      {
+        timeout: 5000, // Timeout 5 giây
+      },
+    )
+
+    if (response.status === 200) {
+      return response.data // Trả về dữ liệu bài viết sau khi thêm bình luận
+    } else {
+      throw new Error('Không thể thêm bình luận vào bài viết.')
+    }
+  } catch (error: any) {
+    console.error('Error adding comment:', error)
+
+    let errorMessage = 'Có lỗi xảy ra khi thêm bình luận vào bài viết.'
+    if (error.response) {
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
+    } else if (error.request) {
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
+    } else {
+      errorMessage = error.message
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: null,
+    }
+  }
+}

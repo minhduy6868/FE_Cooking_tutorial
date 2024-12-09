@@ -100,3 +100,42 @@ const handleApiError = (error: any) => {
     alert('Lỗi trong quá trình gửi yêu cầu. Vui lòng thử lại.')
   }
 }
+
+
+export const updateAvatar = async (avatarFile: File): Promise<BaseResponse> => {
+  const formData = new FormData()
+  formData.append('image', avatarFile)
+
+  try {
+    const response = await api.put<BaseResponse>('/user/updateAvatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Không thể cập nhật avatar')
+    }
+  } catch (error: any) {
+    handleApiError(error)
+    throw error
+  }
+}
+
+
+export const getInfoUser = async (userId: string): Promise<BaseResponse<User>> => {
+  try {
+    const response = await api.get<BaseResponse<User>>(`/user/info/${userId}`)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Failed to fetch user info')
+    }
+  } catch (error: any) {
+    console.error('Error fetching user info:', error)
+    handleApiError(error)  // Ensure you log or handle it appropriately
+    throw error
+  }
+}
+

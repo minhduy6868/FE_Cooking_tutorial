@@ -149,7 +149,7 @@ onMounted(() => {
           <div class="p-4 shadow-lg rounded-lg bg-white hover:shadow-xl transition-shadow">
             <h3 class="text-xl font-bold">Công Thức Độc Đáo</h3>
             <p class="text-gray-700 mt-2">
-              Khám phá những công thức nấu ăn độc đáo từ khắp nơi trên thế giới.
+              Khám phá những công thức nấu ăn độc đáo và mới lạ từ khắp nơi trên thế giới.
             </p>
           </div>
         </div>
@@ -194,9 +194,9 @@ onMounted(() => {
               <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                 <a href="#">Nguyễn Minh Duy</a>
               </h3>
-              <span class="text-gray-500 dark:text-gray-400">CEO & Web Developer</span>
+              <span class="text-gray-500 dark:text-gray-400">CEO & Software Engineer</span>
               <p class="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">
-                Bonnie drives the technical strategy of the flowbite platform and brand.
+                Mặt trời có thể mọc hướng Tây, nhưng Minh Duy không thể thất bại được!
               </p>
               <ul class="flex space-x-4 sm:mt-0">
                 <li>

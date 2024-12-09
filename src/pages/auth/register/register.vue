@@ -131,7 +131,7 @@ const onSubmit = handleSubmit(async (values) => {
     <div class="flex-1 relative max-md:hidden">
       <img
         class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"
-        src="@/assets/img/auth-bg.png"
+        src="/src/assets/img/robot-bg.png"
         alt=""
       />
     </div>

@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router'
-import { authRoute, profileRoute, adminRoute, notFoundRoute, demoRoute, postRoute } from './modules'
+import { authRoute, profileRoute, adminRoute, notFoundRoute, postRoute } from './modules'
 import { authGuard } from './auth-guard' // Import authGuard
 import MainLayout from '@/layouts/DefaultLayout.vue'
 import AdminLayout from '@/layouts/AdminLayout.vue' // Import AdminLayout
@@ -46,6 +46,13 @@ const routes: RouteRecordRaw[] = [
         name: 'profile',
         component: () => import('@/pages/profile/index.vue'),
       },
+      {
+        path: '/profile/:id',
+        name: 'profileUser',
+        component: () => import('@/pages/profile/profileUser.vue'), 
+        props: true,
+      }
+      
     ],
   },
 
@@ -107,13 +114,6 @@ const routes: RouteRecordRaw[] = [
       layout: 'NotFoundLayout', // Layout cho trang không tìm thấy
     },
     children: notFoundRoute,
-  },
-  {
-    path: '/demoapi',
-    meta: {
-      layout: 'DemoLayout', // Layout Demo
-    },
-    children: demoRoute,
   },
   {
     path: '/post/view', // Thay đổi path để tránh trùng với '/post'

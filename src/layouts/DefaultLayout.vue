@@ -6,7 +6,7 @@ import ChatBox from '@/components/layout/ChatBox.vue'
 import ListCard from '@/components/layout/ListCard.vue'
 </script>
 <template>
- <div >
+ <div class="fixed w-full z-50 top-0" >
   <SideBar />
  </div>
 
@@ -35,7 +35,6 @@ import ListCard from '@/components/layout/ListCard.vue'
 
 .main-content {
   flex-grow: 1; /* Let the main content take the remaining space */
-  padding: 20px;
   overflow-y: auto; /* Optional: If you want the content area to scroll */
 }
 </style>

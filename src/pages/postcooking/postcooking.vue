@@ -73,7 +73,7 @@ export default defineComponent({
 <template>
   <div>
     <!-- Thanh tìm kiếm -->
-    <div class="sticky top-0 bg-white shadow-md p-4 z-10">
+    <div class="fixed w-full z-40  mt-16 bg-white shadow-md p-3 ">
       <input
         v-model="searchQuery"
         type="text"
@@ -96,7 +96,7 @@ export default defineComponent({
             <CardCooking
               :title="post.title"
               :description="post.description"
-              :image="post.pictures?.[0] || 'https://via.placeholder.com/130'"
+              :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
               :link="post.linkVideo"
               :category="post.category || 'Chưa có thể loại'"
               :time="post.time || 'Chưa rõ thời gian'"

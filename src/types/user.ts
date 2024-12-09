@@ -1,14 +1,14 @@
 import type { Post } from './post'
 
 export interface User {
-  id: string // UUID hoặc string nếu tự sinh
+  id: string // UUID
   email: string
-  password: string
   fullName: string
-  avatar: string
-  description: string
-  phoneNumber: string
-  address: string
-  roles: Set<string> // Tập hợp các vai trò của người dùng
-  post: Post[] // Một User có thể có nhiều Post
+  avatar: string | null
+  description: string | null
+  phoneNumber: string | null
+  address: string | null
+  roles: string[] | null // Hoặc Set<string> nếu đảm bảo không null
+  likePosts: Post[]
+  post: Post[]
 }

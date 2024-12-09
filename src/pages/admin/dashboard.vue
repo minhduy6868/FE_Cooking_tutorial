@@ -1,10 +1,45 @@
 <template>
-  <div class="grid grid-cols-1 gap-8 p-10 mt-14 lg:grid-cols-2 xl:grid-cols-4">
+  <div class="">
+    <div class="bg-teal-600">
+      <div class="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center justify-between lg:flex-row lg:justify-center">
+          <div class="flex flex-1 items-center lg:mr-3 lg:flex-none">
+            <p class="ml-3 text-center font-medium text-white">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                aria-hidden="true"
+                class="mr-2 hidden h-6 w-6 lg:inline"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                ></path>
+              </svg>
+              Thông tin với tư cách admin tối cao, bạn có mọi quyền trong trang web! Nếu có lỗi
+            </p>
+          </div>
+          <div class="mt-2 w-full flex-shrink-0 lg:mt-0 lg:w-auto">
+            <a
+              class="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-2 text-sm font-medium text-teal-600 shadow-sm hover:bg-teal-50"
+              href="#pricing"
+              >Liên hệ developer!
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 gap-8 p-10 lg:grid-cols-2 xl:grid-cols-4">
     <!-- Value card: Số người truy cập -->
     <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
       <div>
         <h6 class="text-xs font-medium leading-none tracking-wider text-gray-500 uppercase">
-          Tông số bài viết 
+          Tông số bài viết
         </h6>
         <span class="text-xl font-semibold">{{ userPostCount?.post || '0' }}</span>
         <span class="inline-block px-2 py-px ml-2 text-xs text-green-500 bg-green-100 rounded-md">
@@ -93,8 +128,8 @@
       </div>
     </div>
 
-     <!-- Value card: Số người truy cập -->
-     <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
+    <!-- Value card: Số người truy cập -->
+    <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
       <div>
         <h6 class="text-xs font-medium leading-none tracking-wider text-gray-500 uppercase">
           Tỉ lệ tăng trưởng
@@ -124,11 +159,27 @@
       </div>
     </div>
   </div>
+
+  <!-- Biểu đồ 1 -->
+  <div class="ml-10 mt-10 mr-10">
+    <!-- Thêm khoảng cách từ viền trái -->
+    <h1 class="text-3xl font-bold mb-10">Tốc độ tăng trưởng của người dùng</h1>
+    <!-- Tăng kích thước chữ và in đậm -->
+    <canvas id="myChart"></canvas>
+  </div>
+
+  <!-- Biểu đồ 2 -->
+  <div class="ml-10 mt-20 mr-10 mb-20">
+    <!-- Thêm khoảng cách từ viền trái -->
+    <h1 class="text-3xl font-bold mb-10">Tổng số công thức nấu ăn theo tháng</h1>
+    <!-- Tăng kích thước chữ và in đậm -->
+    <canvas id="myChart2"></canvas>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
-import { getUserPostCount } from '@/services/admin' // Đảm bảo rằng hàm này được import đúng
+import { getUserPostCount } from '@/services/admin'
 
 export default defineComponent({
   name: 'Dashboard',
@@ -140,23 +191,83 @@ export default defineComponent({
       postChange: number
     } | null>(null)
 
-    // Fetch dữ liệu khi component được mount
     onMounted(async () => {
       try {
-        const response = await getUserPostCount() // Gọi API để lấy dữ liệu số người dùng và số bài viết
+        const response = await getUserPostCount()
         if (response.data) {
-          // Cập nhật chỉ các giá trị cần thiết
           userPostCount.value = {
-            user: response.data.user, // Tổng số người dùng
-            post: response.data.post, // Tổng số bài viết
-            userChange: 2.6, // Thay đổi % của người dùng
-            postChange: 4.4, // Thay đổi % của bài viết
+            user: response.data.user,
+            post: response.data.post,
+            userChange: 2.6,
+            postChange: 4.4,
           }
         } else {
           console.error('Không thể lấy dữ liệu')
         }
+
+        // First chart
+        const ctx = document.getElementById('myChart')?.getContext('2d')
+        if (ctx) {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: [
+                'Tháng 1',
+                'Tháng 2',
+                'Tháng 3',
+                'Tháng 4',
+                'Tháng 5',
+                'Tháng 6',
+                'Tháng 7',
+                'Tháng 8',
+                'Tháng 9',
+              ],
+              datasets: [
+                {
+                  label: 'Người dùng',
+                  data: [12, 19, 3, 5, 2, 3, 14, 11, 122],
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: { beginAtZero: true },
+              },
+            },
+          })
+        }
+
+        // Second chart
+        const ctx2 = document.getElementById('myChart2')?.getContext('2d')
+        if (ctx2) {
+          new Chart(ctx2, {
+            type: 'bar',
+            data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+              datasets: [
+                {
+                  label: 'Công thức nấu ăn ',
+                  data: [112, 10, 225, 134, 55, 100, 35, 60, 200],
+                  backgroundColor: '#34D399',
+                  borderColor: '#34D399',
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: { beginAtZero: true },
+              },
+            },
+          })
+        }
       } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu:', error)
+        console.error('Error fetching user post count:', error)
       }
     })
 

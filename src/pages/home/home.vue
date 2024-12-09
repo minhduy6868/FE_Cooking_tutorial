@@ -24,10 +24,10 @@
               <CardCooking
                 :title="post.title"
                 :description="post.description"
-                :image="post.pictures?.[0] || 'https://via.placeholder.com/130'"
+                :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
                 :link="post.linkVideo"
-                :category="post.category || 'Chưa có thể loại'"
-                :time="post.time || 'Chưa rõ thời gian'"
+                :category="post.typePost || 'Chưa có thể loại'"
+                :time="post.commentPosts || 'Chưa rõ thời gian'"
                 :likeCount="post.likeCount"
               />
             </router-link>
@@ -48,6 +48,7 @@ import { getAllPost } from '@/services/post'
 import Carousel from '@/components/layout/Carousel.vue'
 import CardCooking from '@/components/ui/card/CardCooking.vue'
 import type { Post } from '@/types/post'
+import { link } from 'fs';
 
 export default {
   name: 'Home',

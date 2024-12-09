@@ -30,8 +30,8 @@ if (accessToken) {
 // Toast chào mừng
 onMounted(() => {
   showToast({
-    title: 'Welcome to OJk Global',
-    description: 'This is a production from OJk Global',
+    title: 'Chào mừng đến với Cooking Dev',
+    description: 'Thỏa thích học hỏi, chia sẻ công thức nấu ăn',
     variant: 'default',
     duration: 5000,  // Tự động đóng toast sau 5 giây
   })
