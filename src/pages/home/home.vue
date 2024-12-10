@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { getAllPost } from '@/services/post'
+import { getAllAcceptPost } from '@/services/post'
 import Carousel from '@/components/layout/Carousel.vue'
 import CardCooking from '@/components/ui/card/CardCooking.vue'
 import type { Post } from '@/types/post'
@@ -69,7 +69,7 @@ export default {
     async fetchPosts() {
       this.loading = true
       try {
-        const response = await getAllPost()
+        const response = await getAllAcceptPost()
         if (response.status === 200) {
           this.posts = response.data
         } else {

@@ -1,6 +1,6 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { searchPosts, getAllPost } from '@/services/post'  // Import API
+import { searchPosts, getAllAcceptPost} from '@/services/post'  // Import API
 import CardCooking from '@/components/ui/card/CardCooking.vue'  // Đảm bảo đã import CardCooking
 
 export default defineComponent({
@@ -42,7 +42,7 @@ export default defineComponent({
       loading.value = true
       error.value = null
       try {
-        const response = await getAllPost()
+        const response = await getAllAcceptPost()
         if (response.status === 200) {
           posts.value = response.data  // Lưu tất cả bài viết
         } else {

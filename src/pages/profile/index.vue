@@ -19,18 +19,18 @@ const updatedInfo = ref({
   address: '',
 })
 
-
 onMounted(async () => {
   try {
     const userData = await getUserInfo()
     userInfo.value = userData.data
     posts.value = userData.data.post || [] // Danh sách bài đăng
     likedPosts.value = userData.data.likePosts || [] // Gán danh sách bài đã thích
+    console.log('in ra likepost là: ' + userData.data.likePosts)
+    console.log('in ra post là: ' + userData.data.post)
   } catch (error) {
     console.error('Lỗi khi lấy dữ liệu:', error)
   }
 })
-
 
 const handleAvatarChange = async (event: Event) => {
   const fileInput = event.target as HTMLInputElement
@@ -333,49 +333,47 @@ const updateUserInfo = async () => {
           <!-- Sử dụng CardCooking để hiển thị từng món ăn -->
           <router-link :to="`/post/detail/${post.id}`">
             <CardCooking
-                :title="post.title"
-                :description="post.description"
-                :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
-                :link="post.linkVideo"
-                :category="post.typePost || 'Chưa có thể loại'"
-                :time="post.commentPosts || 'Chưa rõ thời gian'"
-                :likeCount="post.likeCount"
-              />
+              :title="post.title"
+              :description="post.description"
+              :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
+              :link="post.linkVideo"
+              :category="post.typePost || 'Chưa có thể loại'"
+              :time="post.commentPosts || 'Chưa rõ thời gian'"
+              :like-count="post.likeCount"
+            />
           </router-link>
         </div>
       </div>
     </div>
 
- <!-- Liked Recipe Cards -->
-<h2
-  class="ml-4 mr-4 mx-auto bg-gradient-to-r from-green-400 to-blue-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
->
-  Danh sách món ăn đã thích
-</h2>
-<div class="container px-6 py-6 mx-auto">
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    <!-- Loop through likedPosts and display each one -->
-    <div
-      v-for="post in likedPosts"
-      :key="post.id"
-      class="post-card"
+    <!-- Liked Recipe Cards -->
+    <h2
+      class="ml-4 mr-4 mx-auto bg-gradient-to-r from-green-400 to-blue-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
     >
-      <!-- Sử dụng CardCooking để hiển thị từng món ăn đã thích -->
-      <router-link :to="`/post/detail/${post.id}`">
-        <CardCooking
-          :title="post.title"
-          :description="post.description"
-          :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
-          :link="post.linkVideo"
-          :category="post.typePost || 'Chưa có thể loại'"
-          :time="post.commentPosts || 'Chưa rõ thời gian'"
-          :likeCount="post.likeCount"
-        />
-      </router-link>
+      Danh sách món ăn đã thích
+    </h2>
+    <div class="container px-6 py-6 mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Loop through likedPosts and display each one -->
+        <div
+          v-for="post in likedPosts"
+          :key="post.id"
+          class="post-card"
+        >
+          <!-- Sử dụng CardCooking để hiển thị từng món ăn đã thích -->
+          <router-link :to="`/post/detail/${post.id}`">
+            <CardCooking
+              :title="post.title"
+              :description="post.description"
+              :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
+              :link="post.linkVideo"
+              :category="post.typePost || 'Chưa có thể loại'"
+              :time="post.commentPosts || 'Chưa rõ thời gian'"
+              :like-count="post.likeCount"
+            />
+          </router-link>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
-
   </section>
 </template>

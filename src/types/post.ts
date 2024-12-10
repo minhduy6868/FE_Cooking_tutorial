@@ -1,7 +1,7 @@
 import type { Ingredient } from './ingredient'
 import type { Picture } from './picture'
 import type { User } from './user'
-import type { CommentPost } from './comment'
+import type { Comment } from './comment'
 
 export interface Post {
   id: string // UUID
@@ -15,7 +15,8 @@ export interface Post {
   listUserLike: User[] // List of users who liked the post
   listUserDislike: User[] // List of users who disliked the post
   ingredients: Ingredient[] // List of ingredients in the post
-  commentPosts: CommentPost[] // List of comments on the post
+  commentPosts: Comment[] // List of comments on the post
   pictures: Picture[] // List of pictures associated with the post
-  user: User // User who created the post
+  user: User 
+  approved: boolean 
 }
