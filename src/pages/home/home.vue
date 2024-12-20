@@ -15,7 +15,7 @@
         <div class="card-grid">
           <!-- Loop through posts and display each one -->
           <div
-            v-for="post in posts"
+            v-for="(post, index) in posts.slice(0, displayedPosts)"
             :key="post.id"
             class="post-card"
           >
@@ -33,6 +33,16 @@
             </router-link>
           </div>
         </div>
+
+        <!-- Nút Xem thêm -->
+        <div v-if="displayedPosts < totalPosts" class="text-center mt-4">
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            @click="loadMorePosts"
+          >
+            Xem thêm
+          </button>
+        </div>
       </div>
 
       <div v-else>
@@ -48,7 +58,6 @@ import { getAllAcceptPost } from '@/services/post'
 import Carousel from '@/components/layout/Carousel.vue'
 import CardCooking from '@/components/ui/card/CardCooking.vue'
 import type { Post } from '@/types/post'
-import { link } from 'fs';
 
 export default {
   name: 'Home',
@@ -58,8 +67,10 @@ export default {
   },
   data() {
     return {
-      posts: [] as Post[],
-      loading: false,
+      posts: [] as Post[], // Danh sách bài viết
+      loading: false, // Trạng thái tải
+      displayedPosts: 12, // Số lượng bài viết hiển thị mỗi lần
+      totalPosts: 0, // Tổng số bài viết
     }
   },
   mounted() {
@@ -72,6 +83,7 @@ export default {
         const response = await getAllAcceptPost()
         if (response.status === 200) {
           this.posts = response.data
+          this.totalPosts = response.data.length // Lưu tổng số bài viết
         } else {
           console.error('Lỗi: Dữ liệu không hợp lệ hoặc không có bài viết.')
           alert('Không thể tải danh sách bài viết.')
@@ -92,6 +104,13 @@ export default {
         this.loading = false
       }
     },
+
+    // Hàm tải thêm bài viết
+    loadMorePosts() {
+      if (this.displayedPosts < this.totalPosts) {
+        this.displayedPosts += 12; // Tăng số lượng bài viết hiển thị lên 12
+      }
+    }
   },
 }
 </script>

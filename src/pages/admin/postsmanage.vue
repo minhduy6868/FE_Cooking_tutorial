@@ -16,7 +16,7 @@
         v-model="searchQuery"
         type="text"
         placeholder="Tìm kiếm bài viết theo tiêu đề"
-        class="border p-2"
+        class="border p-2 pr-10"
       />
       <button
         class="bg-blue-500 text-white p-2"
@@ -30,7 +30,7 @@
         v-model="topDislikeCount"
         type="number"
         placeholder="Nhập số lượng bài viết có lượt không thích cao nhất"
-        class="border p-2 mt-3"
+        class="border p-2 mt-3 ml-4"
         min="1"
       />
       <button
@@ -78,7 +78,7 @@
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-              Duyệt bài
+             Trạng thái
             </th>
             <th
               class="px-6 py-3 ml-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -102,15 +102,15 @@
               {{ post.dislikeCount }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              <span :class="!post.isApproved ? 'text-green-500' : 'text-red-500'">
+              <span :class="!post.approved ? 'text-red-500' : 'text-green-500'">
                 {{ post.approved ? 'Đã duyệt' : 'Chưa duyệt' }}
               </span>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               <button
-                class="text-green-600 hover:text-green-800"
-                @click="handleAcceptPost(post.id)"
                 v-if="!post.approved"
+                class="text-green-600 hover:text-green-800 mr-4"
+                @click="handleAcceptPost(post.id)"
               >
                 Duyệt
               </button>
@@ -118,12 +118,12 @@
                 class="text-red-600 hover:text-red-800"
                 @click="handleDelete(post.id)"
               >
-                Delete
+               Xóa bài
               </button>
               <button>
                 <router-link
                   :to="`/post/detail/${post.id}`"
-                  class="text-gray-600 hover:text-gray-900 ml-10"
+                  class="text-gray-600 hover:text-gray-900 ml-4"
                 >
                   Chi tiết
                 </router-link>
@@ -148,7 +148,7 @@ export default {
     const loading = ref<boolean>(false)
     const error = ref<boolean>(false)
     const searchQuery = ref<string>('') // Query tìm kiếm bài viết theo tiêu đề
-    const topDislikeCount = ref<number>(5) // Số lượng bài viết có lượt không thích cao nhất
+    const topDislikeCount = ref<number>() // Số lượng bài viết có lượt không thích cao nhất
 
     // Lấy tất cả bài viết
     const fetchAllPosts = async () => {
@@ -235,7 +235,8 @@ export default {
       try {
         const response = await acceptPost(postId)
         if (response.status === 200) {
-          const post = allPosts.value.find((p) => p.id === postId)
+          fetchAllPosts()
+          //const post = allPosts.value.find((p) => p.id === postId)
           if (post) {
             post.isApproved = true
           }
@@ -252,10 +253,10 @@ export default {
       try {
         // Call the deletePost service to delete the post
         const response = await deletePostByAdmin(postId)
-        
+
         if (response.status === 200) {
           // If delete was successful, remove the post from the allPosts array
-          allPosts.value = allPosts.value.filter(post => post.id !== postId)
+          allPosts.value = allPosts.value.filter((post) => post.id !== postId)
           console.log('Post deleted successfully')
         } else {
           console.error('Failed to delete post:', response.message)
