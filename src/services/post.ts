@@ -1,6 +1,7 @@
 import api from '@/api/api_client'
 import type { BaseResponse } from '@/types/baseapi'
 import type { Post } from '@/types/post'
+import type { Comment } from '@/types/comment'
 
 export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
   try {
@@ -239,15 +240,11 @@ export const dislikePost = async (id: string): Promise<BaseResponse<Post>> => {
 
 export const addComment = async (idpost: string, text: string): Promise<BaseResponse<Comment>> => {
   try {
-    const response = await api.post<BaseResponse<Comment>>(
-      '/post/comment/${idpost}',
-      { text },
-      {
-        timeout: 5000, // Timeout 5 giây
-      },
-    )
+    const response = await api.post<BaseResponse<Comment>>(`/post/comment/${idpost}`, text, {
+      timeout: 5000, // Timeout 5 giây
+    })
 
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return response.data // Trả về dữ liệu bài viết sau khi thêm bình luận
     } else {
       throw new Error('Không thể thêm bình luận vào bài viết.')
@@ -282,7 +279,7 @@ export const getTopDislikePost = async (limit: number): Promise<BaseResponse<Pos
       timeout: 5000, // Timeout of 5 seconds
     })
 
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 201) {
       return response.data // Return data in the correct format: { status, message, data }
     } else {
       throw new Error('Không thể lấy bài viết với lượt không thích cao nhất.')

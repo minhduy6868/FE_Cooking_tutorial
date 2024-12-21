@@ -1,5 +1,5 @@
 <template>
-  <div class="home-container">
+  <div class="home-container mb-5">
     <!-- Carousel -->
     <Carousel />
 
@@ -26,7 +26,8 @@
                 :description="post.description"
                 :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
                 :link="post.linkVideo"
-                :category="post.typePost || 'Chưa có thể loại'"
+                :isApproved="post.approved"
+                :typePost="post.typePost || 'Chưa có thể loại'"
                 :time="post.commentPosts || 'Chưa rõ thời gian'"
                 :likeCount="post.likeCount"
               />

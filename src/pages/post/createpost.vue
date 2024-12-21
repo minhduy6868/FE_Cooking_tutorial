@@ -34,6 +34,18 @@
             ></textarea>
           </div>
           <div>
+  <label for="ingredient" class="text-sm font-medium text-orange-700 block mb-2">Công thức</label>
+  <textarea
+    id="ingredient"
+    v-model="post.ingredient"
+    required
+    rows="4"
+    class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+    placeholder="Nhập các nguyên liệu cần thiết"
+  ></textarea>
+</div>
+
+          <div>
             <label for="tutorial" class="text-sm font-medium text-orange-700 block mb-2">Các bước thực hiện</label>
             <textarea
               id="tutorial"
@@ -154,6 +166,7 @@ const post = ref({
   title: '',
   description: '',
   tutorial: '',
+  ingredient: '',
   typePost: 'recipe',
   images: [] as File[], // Images
   video: null as File | null, // Single video
@@ -202,6 +215,7 @@ const submitForm = async () => {
     formData.append('title', post.value.title)
     formData.append('description', post.value.description)
     formData.append('tutorial', post.value.tutorial)
+    formData.append('ingredient', post.value.ingredient)  
     formData.append('typePost', post.value.typePost)
 
     // Đảm bảo các hình ảnh được gửi dưới dạng mảng

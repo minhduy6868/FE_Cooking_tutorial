@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { searchPosts, getAllAcceptPost} from '@/services/post'  // Import API
-import CardCooking from '@/components/ui/card/CardCooking.vue'  // Đảm bảo đã import CardCooking
+import { searchPosts, getAllAcceptPost } from '@/services/post' // Import API
+import CardCooking from '@/components/ui/card/CardCooking.vue' // Đảm bảo đã import CardCooking
 
 export default defineComponent({
   name: 'SearchPosts',
@@ -9,15 +9,15 @@ export default defineComponent({
     CardCooking,
   },
   setup() {
-    const searchQuery = ref('')  // Từ khóa tìm kiếm
-    const posts = ref([])  // Danh sách các bài viết
-    const loading = ref(false)  // Trạng thái tải
-    const error = ref(null)  // Lỗi khi lấy dữ liệu
+    const searchQuery = ref('') // Từ khóa tìm kiếm
+    const posts = ref([]) // Danh sách các bài viết
+    const loading = ref(false) // Trạng thái tải
+    const error = ref(null) // Lỗi khi lấy dữ liệu
 
     // Hàm gọi API tìm kiếm bài viết
     const searchPostsFunc = async () => {
       if (searchQuery.value.trim() === '') {
-        posts.value = []  // Nếu không có từ khóa tìm kiếm, reset danh sách bài viết
+        posts.value = [] // Nếu không có từ khóa tìm kiếm, reset danh sách bài viết
         return
       }
 
@@ -26,7 +26,7 @@ export default defineComponent({
       try {
         const response = await searchPosts(searchQuery.value)
         if (response.status === 200) {
-          posts.value = response.data  // Lưu kết quả tìm kiếm
+          posts.value = response.data // Lưu kết quả tìm kiếm
         } else {
           error.value = 'Không tìm thấy bài viết.'
         }
@@ -44,7 +44,7 @@ export default defineComponent({
       try {
         const response = await getAllAcceptPost()
         if (response.status === 200) {
-          posts.value = response.data  // Lưu tất cả bài viết
+          posts.value = response.data // Lưu tất cả bài viết
         } else {
           error.value = 'Không thể tải tất cả bài viết.'
         }
@@ -57,7 +57,7 @@ export default defineComponent({
 
     // Lấy tất cả bài viết khi component được mount
     onMounted(() => {
-      fetchAllPosts()  // Lấy tất cả bài viết khi lần đầu tiên load trang
+      fetchAllPosts() // Lấy tất cả bài viết khi lần đầu tiên load trang
     })
 
     return {
@@ -65,7 +65,7 @@ export default defineComponent({
       posts,
       loading,
       error,
-      searchPostsFunc  // Expose searchPostsFunc instead of searchPosts
+      searchPostsFunc, // Expose searchPostsFunc instead of searchPosts
     }
   },
 })
@@ -73,7 +73,7 @@ export default defineComponent({
 <template>
   <div>
     <!-- Thanh tìm kiếm -->
-    <div class="fixed w-full z-40  mt-16 bg-white shadow-md p-3 ">
+    <div class="fixed w-full z-40 mt-16 bg-white shadow-md p-3">
       <input
         v-model="searchQuery"
         type="text"
@@ -85,22 +85,45 @@ export default defineComponent({
 
     <!-- Danh sách bài viết -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div v-if="loading" class="text-center text-lg">Đang tải...</div>
-      <div v-if="error" class="text-center text-red-500">{{ error }}</div>
-      <div v-if="posts.length === 0" class="text-center">Không có bài viết nào.</div>
+      <div
+        v-if="loading"
+        class="text-center text-lg"
+      >
+        Đang tải...
+      </div>
+      <div
+        v-if="error"
+        class="text-center text-red-500"
+      >
+        {{ error }}
+      </div>
+      <div
+        v-if="posts.length === 0"
+        class="text-center"
+      >
+        Không có bài viết nào.
+      </div>
 
       <!-- Hiển thị bài viết dưới dạng các CardCooking -->
-      <div v-if="posts.length > 0" class="card-grid">
-        <div v-for="post in posts" :key="post.id" class="post-card">
+      <div
+        v-if="posts.length > 0"
+        class="card-grid"
+      >
+        <div
+          v-for="post in posts"
+          :key="post.id"
+          class="post-card"
+        >
           <router-link :to="`/post/detail/${post.id}`">
             <CardCooking
               :title="post.title"
               :description="post.description"
               :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
               :link="post.linkVideo"
-              :category="post.category || 'Chưa có thể loại'"
+              :isApproved="post.approved"
+              :typePost="post.typePost || 'Chưa có thể loại'"
               :time="post.time || 'Chưa rõ thời gian'"
-              :likeCount="post.likeCount"
+              :like-count="post.likeCount"
             />
           </router-link>
         </div>
@@ -138,7 +161,10 @@ input {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid with minimum 300px per item */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(300px, 1fr)
+  ); /* Responsive grid with minimum 300px per item */
   gap: 20px; /* Space between items */
   padding: 20px; /* Padding around the grid */
 }
@@ -148,7 +174,9 @@ input {
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .card-grid .post-card:hover {
@@ -159,7 +187,10 @@ input {
 /* Responsive tweaks */
 @media (max-width: 768px) {
   .card-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Smaller grid items on smaller screens */
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(250px, 1fr)
+    ); /* Smaller grid items on smaller screens */
     gap: 16px; /* Reduced gap */
   }
 }
