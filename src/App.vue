@@ -1,11 +1,36 @@
+<template>
+  <ConfirmModal />
+  <Toaster />
+
+  <!-- Hiển thị Loading Spinner nếu đang tải -->
+  <div
+    v-if="loadingStore.getLoading"
+    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] loading-overlay"
+  >
+    <Icon
+      icon="svg-spinners:90-ring-with-bg"
+      class="w-10 h-10"
+    />
+  </div>
+
+  <!-- Hiển thị Poll ngay khi vào app -->
+  <FoodPollForm v-if="showPoll" @close="closePoll" />
+
+  <!-- Dynamic Layout -->
+  <component :is="layout">
+    <RouterView />
+  </component>
+</template>
+
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmDialog.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
 import { useConfirmDialog } from './stores/modal'
+import FoodPollForm from './components/ui/form/FoodPollForm.vue' 
 
 const route = useRoute()
 
@@ -23,6 +48,10 @@ if (accessToken) {
   console.log('Chưa có token trong localStorage')
 }
 
+<<<<<<< HEAD
+=======
+// Toast chào mừng
+>>>>>>> e2b2ecde3e3ed11680674e7f2c48b5f1ac56d3f5
 onMounted(() => {
   showToast({
     title: 'Chào mừng đến với Cooking Dev',
@@ -44,8 +73,17 @@ const openConfirm = async () => {
     console.log('Action canceled')
   }
 }
+
+// // Poll form state   // đừng xóa ni
+// const showPoll = ref(true)
+
+// // Hàm đóng Poll
+// const closePoll = () => {
+//   showPoll.value = false
+// }
 </script>
 
+<<<<<<< HEAD
 <template>
   <ConfirmModal />
 
@@ -66,6 +104,8 @@ const openConfirm = async () => {
   </component>
 </template>
 
+=======
+>>>>>>> e2b2ecde3e3ed11680674e7f2c48b5f1ac56d3f5
 <style scoped>
 .loading-overlay {
   background-color: rgba(76, 76, 76, 0.38);
