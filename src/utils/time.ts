@@ -73,7 +73,6 @@ export function getTimezoneOffsetString(): string {
   const offsetInHours = Math.abs(offsetInMinutes / 60)
   const offsetSign = offsetInMinutes >= 0 ? '-' : '+'
 
-  // Xác định dấu (+ hoặc -) và số mã múi giờ
   const timezoneString = `UTC${offsetSign}${offsetInHours}`
   return timezoneString
 }

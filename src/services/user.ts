@@ -1,7 +1,7 @@
 // src/services/userService.ts
-import api from '@/api/api_client' // Import axios instance đã cấu hình
-import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
-import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
+import api from '@/api/api_client'
+import type { BaseResponse } from '@/types/baseapi'
+import type { User } from '@/types/user'
 
 // Lấy thông tin người dùng
 export const getUserInfo = async (): Promise<BaseResponse<User>> => {
@@ -18,7 +18,6 @@ export const getUserInfo = async (): Promise<BaseResponse<User>> => {
   }
 }
 
-// Cập nhật thông tin người dùng
 export const updateUser = async (userUpdateData: Partial<User>): Promise<BaseResponse<User>> => {
   try {
     const response = await api.put<BaseResponse<User>>('/user/updateUser', userUpdateData)
@@ -33,7 +32,6 @@ export const updateUser = async (userUpdateData: Partial<User>): Promise<BaseRes
   }
 }
 
-// Lấy danh sách tất cả người dùng
 export const getAllUsers = async (): Promise<BaseResponse<User[]>> => {
   try {
     const response = await api.get<BaseResponse<User[]>>('/user/getAllUser')
@@ -52,20 +50,18 @@ export const deleteAccount = async (): Promise<BaseResponse> => {
   try {
     const response = await api.delete<BaseResponse>('/user/deleteAccount')
 
-    // Kiểm tra mã trạng thái trả về từ API
     if (response.status === 200) {
       localStorage.removeItem('access_token')
-      return response.data // Trả về dữ liệu nếu xóa thành công
+      return response.data
     } else {
       throw new Error(response.data.message || 'Không thể xóa tài khoản')
     }
   } catch (error: any) {
-    handleApiError(error) // Xử lý lỗi từ API
+    handleApiError(error)
     throw error
   }
 }
 
-// Xử lý lỗi API
 const handleApiError = (error: any) => {
   if (error.response) {
     const status = error.response.status
@@ -101,7 +97,6 @@ const handleApiError = (error: any) => {
   }
 }
 
-
 export const updateAvatar = async (avatarFile: File): Promise<BaseResponse> => {
   const formData = new FormData()
   formData.append('image', avatarFile)
@@ -109,8 +104,8 @@ export const updateAvatar = async (avatarFile: File): Promise<BaseResponse> => {
   try {
     const response = await api.put<BaseResponse>('/user/updateAvatar', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
     })
     if (response.status === 200) {
       return response.data
@@ -123,7 +118,6 @@ export const updateAvatar = async (avatarFile: File): Promise<BaseResponse> => {
   }
 }
 
-
 export const getInfoUser = async (userId: string): Promise<BaseResponse<User>> => {
   try {
     const response = await api.get<BaseResponse<User>>(`/user/info/${userId}`)
@@ -134,8 +128,7 @@ export const getInfoUser = async (userId: string): Promise<BaseResponse<User>> =
     }
   } catch (error: any) {
     console.error('Error fetching user info:', error)
-    handleApiError(error)  // Ensure you log or handle it appropriately
+    handleApiError(error)
     throw error
   }
 }
-

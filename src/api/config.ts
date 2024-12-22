@@ -4,8 +4,8 @@ export const config = {
     refreshToken: 'auth/refresh-tokens',
   },
   key: {
-    refreshToken: 'refresh_token', //KEY SAVED IN LOCALSTORAGEFlocalStorage
-    accessToken: 'access_token', //KEY SAVED IN LOCALSTORAGE
+    refreshToken: 'refresh_token',
+    accessToken: 'access_token',
   },
   retryStatusCodes: [401, 403],
 }

@@ -5,12 +5,11 @@ import { ref, onMounted } from 'vue'
 
 const isVisible = ref(false)
 
-// Intersection Observer to trigger animation on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      isVisible.value = true // Set to true when the section is in view
-      observer.unobserve(entry.target) // Stop observing after it becomes visible
+      isVisible.value = true
+      observer.unobserve(entry.target)
     }
   })
 })
@@ -18,7 +17,7 @@ const observer = new IntersectionObserver((entries) => {
 onMounted(() => {
   const section = document.querySelector('.technology-section')
   if (section) {
-    observer.observe(section) // Start observing the section
+    observer.observe(section)
   }
 })
 </script>

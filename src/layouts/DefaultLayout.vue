@@ -6,13 +6,12 @@ import ChatBox from '@/components/layout/ChatBox.vue'
 import ListCard from '@/components/layout/ListCard.vue'
 </script>
 <template>
- <div class="fixed w-full z-50 top-0" >
-  <SideBar />
- </div>
+  <div class="fixed w-full z-50 top-0">
+    <SideBar />
+  </div>
 
   <div class="main-content">
     <router-view></router-view>
-    <!-- Nội dung của từng route con sẽ hiển thị tại đây -->
   </div>
 
   <Footer></Footer>
@@ -26,15 +25,15 @@ import ListCard from '@/components/layout/ListCard.vue'
 }
 
 .SideBar {
-  position: sticky; /* Make sidebar sticky */
-  top: 0; /* Stick to the top of the page */
-  width: 250px; /* Set the width of your sidebar */
-  height: 100vh; /* Full viewport height */
-  overflow-y: auto; /* Allow scrolling inside the sidebar if necessary */
+  position: sticky;
+  top: 0;
+  width: 250px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .main-content {
-  flex-grow: 1; /* Let the main content take the remaining space */
-  overflow-y: auto; /* Optional: If you want the content area to scroll */
+  flex-grow: 1;
+  overflow-y: auto;
 }
 </style>

@@ -136,9 +136,7 @@
               href="/"
               class="text-gray-500 transition-colors duration-300 hover:text-deep-purple-accent-400"
             >
-              <!-- SVG cho mạng xã hội -->
             </a>
-            <!-- Thêm các liên kết mạng xã hội khác -->
           </div>
 
           <p class="text-sm text-gray-500">
@@ -159,12 +157,10 @@
       <p>&copy; Bản quyền COOK DEV. Tất cả quyền được bảo lưu. ⛵</p>
     </footer>
 
-    <!-- Form báo cáo -->
     <div
       v-if="isReportFormOpen"
       class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
     >
-      <!-- Nút đóng -->
       <button
         class="absolute bottom-3.5 text-white bg-gray-500 p-2 rounded-full hover:bg-gray-700"
         @click="closeReportForm"

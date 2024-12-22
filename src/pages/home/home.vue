@@ -1,10 +1,8 @@
 <template>
   <div class="home-container mb-5">
-    <!-- Carousel -->
     <Carousel />
 
     <div class="wrapper ml-5 mr-5 mt-5">
-      <!-- Tiêu đề của phần nội dung -->
       <h2
         class="ml-4 mr-4 mx-auto bg-gradient-to-r from-orange-400 to-yellow-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
       >
@@ -13,13 +11,11 @@
 
       <div v-if="posts.length > 0">
         <div class="card-grid">
-          <!-- Loop through posts and display each one -->
           <div
             v-for="(post, index) in posts.slice(0, displayedPosts)"
             :key="post.id"
             class="post-card"
           >
-            <!-- Sử dụng CardCooking để hiển thị từng món ăn -->
             <router-link :to="`/post/detail/${post.id}`">
               <CardCooking
                 :title="post.title"
@@ -35,8 +31,10 @@
           </div>
         </div>
 
-        <!-- Nút Xem thêm -->
-        <div v-if="displayedPosts < totalPosts" class="text-center mt-4">
+        <div
+          v-if="displayedPosts < totalPosts"
+          class="text-center mt-4"
+        >
           <button
             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
             @click="loadMorePosts"
@@ -68,10 +66,10 @@ export default {
   },
   data() {
     return {
-      posts: [] as Post[], // Danh sách bài viết
-      loading: false, // Trạng thái tải
-      displayedPosts: 12, // Số lượng bài viết hiển thị mỗi lần
-      totalPosts: 0, // Tổng số bài viết
+      posts: [] as Post[],
+      loading: false,
+      displayedPosts: 12,
+      totalPosts: 0,
     }
   },
   mounted() {
@@ -84,7 +82,7 @@ export default {
         const response = await getAllAcceptPost()
         if (response.status === 200) {
           this.posts = response.data
-          this.totalPosts = response.data.length // Lưu tổng số bài viết
+          this.totalPosts = response.data.length
         } else {
           console.error('Lỗi: Dữ liệu không hợp lệ hoặc không có bài viết.')
           alert('Không thể tải danh sách bài viết.')
@@ -106,12 +104,11 @@ export default {
       }
     },
 
-    // Hàm tải thêm bài viết
     loadMorePosts() {
       if (this.displayedPosts < this.totalPosts) {
-        this.displayedPosts += 12; // Tăng số lượng bài viết hiển thị lên 12
+        this.displayedPosts += 12
       }
-    }
+    },
   },
 }
 </script>
@@ -145,7 +142,9 @@ h2 {
   border-radius: 10px;
   background-color: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .card-grid .post-card:hover {

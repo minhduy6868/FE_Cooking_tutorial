@@ -1,7 +1,7 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { searchPosts, getAllAcceptPost } from '@/services/post' // Import API
-import CardCooking from '@/components/ui/card/CardCooking.vue' // Đảm bảo đã import CardCooking
+import { searchPosts, getAllAcceptPost } from '@/services/post'
+import CardCooking from '@/components/ui/card/CardCooking.vue'
 
 export default defineComponent({
   name: 'SearchPosts',
@@ -9,15 +9,14 @@ export default defineComponent({
     CardCooking,
   },
   setup() {
-    const searchQuery = ref('') // Từ khóa tìm kiếm
-    const posts = ref([]) // Danh sách các bài viết
-    const loading = ref(false) // Trạng thái tải
-    const error = ref(null) // Lỗi khi lấy dữ liệu
+    const searchQuery = ref('')
+    const posts = ref([])
+    const loading = ref(false)
+    const error = ref(null)
 
-    // Hàm gọi API tìm kiếm bài viết
     const searchPostsFunc = async () => {
       if (searchQuery.value.trim() === '') {
-        posts.value = [] // Nếu không có từ khóa tìm kiếm, reset danh sách bài viết
+        posts.value = []
         return
       }
 
@@ -26,7 +25,7 @@ export default defineComponent({
       try {
         const response = await searchPosts(searchQuery.value)
         if (response.status === 200) {
-          posts.value = response.data // Lưu kết quả tìm kiếm
+          posts.value = response.data
         } else {
           error.value = 'Không tìm thấy bài viết.'
         }
@@ -37,14 +36,13 @@ export default defineComponent({
       }
     }
 
-    // Hàm lấy tất cả bài viết khi không có tìm kiếm
     const fetchAllPosts = async () => {
       loading.value = true
       error.value = null
       try {
         const response = await getAllAcceptPost()
         if (response.status === 200) {
-          posts.value = response.data // Lưu tất cả bài viết
+          posts.value = response.data
         } else {
           error.value = 'Không thể tải tất cả bài viết.'
         }
@@ -55,9 +53,8 @@ export default defineComponent({
       }
     }
 
-    // Lấy tất cả bài viết khi component được mount
     onMounted(() => {
-      fetchAllPosts() // Lấy tất cả bài viết khi lần đầu tiên load trang
+      fetchAllPosts()
     })
 
     return {
@@ -65,14 +62,13 @@ export default defineComponent({
       posts,
       loading,
       error,
-      searchPostsFunc, // Expose searchPostsFunc instead of searchPosts
+      searchPostsFunc,
     }
   },
 })
 </script>
 <template>
   <div>
-    <!-- Thanh tìm kiếm -->
     <div class="fixed w-full z-40 mt-16 bg-white shadow-md p-3">
       <input
         v-model="searchQuery"
@@ -83,7 +79,6 @@ export default defineComponent({
       />
     </div>
 
-    <!-- Danh sách bài viết -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div
         v-if="loading"
@@ -104,7 +99,6 @@ export default defineComponent({
         Không có bài viết nào.
       </div>
 
-      <!-- Hiển thị bài viết dưới dạng các CardCooking -->
       <div
         v-if="posts.length > 0"
         class="card-grid"
@@ -132,7 +126,6 @@ export default defineComponent({
   </div>
 </template>
 <style scoped>
-/* Custom styles */
 .sticky {
   position: sticky;
   top: 0;
@@ -161,12 +154,9 @@ input {
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(300px, 1fr)
-  ); /* Responsive grid with minimum 300px per item */
-  gap: 20px; /* Space between items */
-  padding: 20px; /* Padding around the grid */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
 .card-grid .post-card {
@@ -180,25 +170,21 @@ input {
 }
 
 .card-grid .post-card:hover {
-  transform: translateY(-5px); /* Slight lift on hover */
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Increased shadow on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive tweaks */
 @media (max-width: 768px) {
   .card-grid {
-    grid-template-columns: repeat(
-      auto-fill,
-      minmax(250px, 1fr)
-    ); /* Smaller grid items on smaller screens */
-    gap: 16px; /* Reduced gap */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .card-grid {
-    grid-template-columns: 1fr; /* Single column on very small screens */
-    gap: 12px; /* Further reduced gap */
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 </style>

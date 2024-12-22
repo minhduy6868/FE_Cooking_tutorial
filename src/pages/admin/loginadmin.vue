@@ -24,10 +24,10 @@
                 <label
                   for="email"
                   class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
-                >Email</label>
+                  >Email</label
+                >
               </div>
 
-              <!-- Password Input -->
               <div class="relative">
                 <input
                   id="password"
@@ -40,10 +40,10 @@
                 <label
                   for="password"
                   class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
-                >Mật khẩu</label>
+                  >Mật khẩu</label
+                >
               </div>
 
-              <!-- Submit Button -->
               <div class="relative">
                 <button
                   class="bg-orange-400 hover:bg-gray-200 hover:text-orange-600 hover:border-l-green-950 text-white rounded-md px-2 py-1"
@@ -53,8 +53,10 @@
                 </button>
               </div>
 
-              <!-- Error Message -->
-              <div v-if="errorMessage" class="mt-4 text-red-500 text-sm">
+              <div
+                v-if="errorMessage"
+                class="mt-4 text-red-500 text-sm"
+              >
                 {{ errorMessage }}
               </div>
             </div>
@@ -69,7 +71,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
-import { loginApi } from '@/services/admin' // Đảm bảo đường dẫn đúng
+import { loginApi } from '@/services/admin'
+import { showToast } from '@/utils/toast'
 
 const email = ref('')
 const password = ref('')
@@ -79,21 +82,22 @@ const router = useRouter()
 const handleSubmit = async () => {
   try {
     if (email.value === 'admin@gmail.com') {
-      // Gọi API đăng nhập
       const response = await loginApi(email.value, password.value)
 
-      // Kiểm tra nếu đăng nhập thành công
       if (response && response.authenticated) {
-        // Lưu token vào localStorage (nếu cần)
         localStorage.setItem('access_token', response.access_token)
 
-        // Chuyển hướng đến trang Admin
         router.push('/admin')
+        showToast({
+          title: 'Đăng nhập trang admin thành công!',
+          description: 'Chào mừng bạn đã quay trở lại.',
+          variant: 'default',
+          duration: 5000,
+        })
       } else {
         errorMessage.value = 'Thông tin đăng nhập không đúng!'
       }
     } else {
-      // Hiển thị thông báo lỗi nếu email không phải là admin
       await Swal.fire({
         title: 'Lỗi',
         text: 'Email không hợp lệ.',
@@ -102,13 +106,10 @@ const handleSubmit = async () => {
       })
     }
   } catch (error) {
-    // Nếu có lỗi từ API, hiển thị thông báo lỗi
     errorMessage.value = 'Đăng nhập không thành công, vui lòng thử lại!'
     console.error(error)
   }
 }
 </script>
 
-<style scoped>
-/* Custom styles */
-</style>
+<style scoped></style>

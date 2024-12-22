@@ -1,23 +1,21 @@
-
-import type { Login } from '@/types/login' // Đảm bảo đường dẫn đúng
-import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
-import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
+import type { Login } from '@/types/login'
+import type { User } from '@/types/user'
+import type { BaseResponse } from '@/types/baseapi'
 import api from '@/api/api_client'
 import type { Post } from '@/types/post'
 
-// API đăng nhập
 export const loginApi = async (email: string, password: string): Promise<Login> => {
   try {
     const response = await api.post<BaseResponse<Login>>(
       '/login',
       { email, password },
       {
-        timeout: 5000, // 5 giây timeout
+        timeout: 5000,
       },
     )
 
     if (response.status === 200 && response.data.data.authenticated) {
-      return response.data.data // Trả về dữ liệu Login từ API
+      return response.data.data
     } else {
       throw new Error('Đăng nhập không thành công.')
     }
@@ -62,20 +60,16 @@ export const loginApi = async (email: string, password: string): Promise<Login> 
 // Hàm service getAllUser
 export const getAllUser = async (): Promise<BaseResponse<User[]>> => {
   try {
-    const response = await api.get<BaseResponse<User[]>>(
-      '/user/getAllUser',
-      {
-        timeout: 5000, // 5 giây timeout
-      },
-    )
+    const response = await api.get<BaseResponse<User[]>>('/user/getAllUser', {
+      timeout: 5000,
+    })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy danh sách người dùng.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong loginApi
     console.error('Error fetching users:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy danh sách người dùng.'
@@ -106,17 +100,16 @@ export const getUserPostCount = async (): Promise<BaseResponse<{ post: number; u
     const response = await api.get<BaseResponse<{ post: number; user: number }>>(
       '/user/admin/count',
       {
-        timeout: 5000, // 5 giây timeout
+        timeout: 5000,
       },
     )
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy dữ liệu đếm người dùng và bài viết.')
     }
   } catch (error: any) {
-    // Xử lý lỗi như trong loginApi
     console.error('Error fetching user and post count:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy dữ liệu đếm người dùng và bài viết.'
@@ -137,27 +130,23 @@ export const getUserPostCount = async (): Promise<BaseResponse<{ post: number; u
     return {
       status: 500,
       message: errorMessage,
-      data: { post: 0, user: 0 }, // Default values for failed request
+      data: { post: 0, user: 0 },
     }
   }
 }
 
 export const deleteUser = async (userId: string): Promise<BaseResponse<any>> => {
   try {
-    const response = await api.delete<BaseResponse<any>>(
-      `/user/admin/delete/${userId}`,
-      {
-        timeout: 5000, // 5 giây timeout
-      },
-    )
+    const response = await api.delete<BaseResponse<any>>(`/user/admin/delete/${userId}`, {
+      timeout: 5000,
+    })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu thành công từ API
+      return response.data
     } else {
       throw new Error('Không thể xóa người dùng.')
     }
   } catch (error: any) {
-    // Xử lý lỗi như trong các hàm API trước
     console.error('Error deleting user:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi xóa người dùng.'
@@ -183,20 +172,18 @@ export const deleteUser = async (userId: string): Promise<BaseResponse<any>> => 
   }
 }
 
-
 export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
   try {
     const response = await api.get<BaseResponse<Post[]>>('/post/getAllPost', {
-      timeout: 5000, // 5 giây timeout
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy danh sách người dùng.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong loginApi
     console.error('Error fetching users:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy danh sách người dùng.'
@@ -224,22 +211,20 @@ export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
 
 export const getTopDislikePost = async (limit: number): Promise<BaseResponse<Post[]>> => {
   try {
-    // Truyền tham số limit vào request
     const response = await api.post<BaseResponse<Post[]>>(
       '/post/topDislikePost',
-      { limit: String(limit) }, // Chuyển số limit thành chuỗi (text) trước khi gửi đi
+      { limit: String(limit) },
       {
-        timeout: 5000, // 5 giây timeout
+        timeout: 5000,
       },
     )
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy bài viết dislike cao nhất.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong các API trước
     console.error('Error fetching top disliked posts:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy bài viết dislike cao nhất.'
@@ -260,8 +245,7 @@ export const getTopDislikePost = async (limit: number): Promise<BaseResponse<Pos
     return {
       status: 500,
       message: errorMessage,
-      data: [], // Default empty array for failed request
+      data: [],
     }
   }
 }
-

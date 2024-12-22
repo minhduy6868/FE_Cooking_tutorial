@@ -2,20 +2,23 @@
 import { ref } from 'vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { updatePasswordApi } from '@/services/authen' // Import hàm gọi API cập nhật mật khẩu
+import { updatePasswordApi } from '@/services/authen'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { useRouter } from 'vue-router'
+import { showToast } from '@/utils/toast'
 
 const router = useRouter()
 
-// Định nghĩa schema validation cho form
 const { errors, defineField, handleSubmit } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email là bắt buộc và đúng email đã gửi OTP trước đó'),
     otp: yup.string().length(6, 'OTP phải có 6 chữ số').required('OTP là bắt buộc'),
-    newPassword: yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Mật khẩu mới là bắt buộc'),
+    newPassword: yup
+      .string()
+      .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+      .required('Mật khẩu mới là bắt buộc'),
   }),
 })
 
@@ -27,10 +30,8 @@ const errorEmail = ref<string | null>(null)
 const errorOtp = ref<string | null>(null)
 const errorNewPassword = ref<string | null>(null)
 
-// Thực hiện việc xử lý khi người dùng bấm nút đặt lại mật khẩu
 const handleResetPassword = handleSubmit(async (values) => {
   try {
-    // Gọi API để cập nhật mật khẩu mới
     const response = await updatePasswordApi({
       email: values.email,
       otp: values.otp,
@@ -38,15 +39,29 @@ const handleResetPassword = handleSubmit(async (values) => {
     })
 
     if (response.status === 200) {
-      // Hiển thị thông báo thành công và chuyển hướng đến trang login
-      alert('Mật khẩu của bạn đã được cập nhật thành công.')
+      showToast({
+        title: 'Cập nhật thành công!',
+        description: 'Mật khẩu của bạn đã được cập nhật thành công.',
+        variant: 'default',
+        duration: 5000,
+      })
       router.push('/login')
     } else {
-      alert('Có lỗi xảy ra khi cập nhật mật khẩu. Vui lòng thử lại.')
+      showToast({
+        title: 'Cập nhật thất bại!',
+        description: 'Cập nhật mật khẩu thất bại. Vui lòng thử lại.',
+        variant: 'default',
+        duration: 5000,
+      })
     }
   } catch (error) {
     console.error('Lỗi khi cập nhật mật khẩu:', error)
-    alert('Đã xảy ra lỗi, vui lòng thử lại.')
+    showToast({
+      title: 'Đã có lỗi xảy ra!',
+      description: 'Có lỗi xảy ra khi cập nhật mật khẩu. Vui lòng thử lại.',
+      variant: 'default',
+      duration: 5000,
+    })
   }
 })
 </script>
@@ -56,7 +71,7 @@ const handleResetPassword = handleSubmit(async (values) => {
     <div class="flex-1 flex justify-center items-center">
       <form
         class="form-shadow p-6 rounded-xl"
-        @submit="handleResetPassword" 
+        @submit="handleResetPassword"
       >
         <div class="flex items-center gap-0.5 mb-4">
           <h1 class="text-[344054] text-lg font-semibold mt-3">Đặt lại mật khẩu</h1>
@@ -119,7 +134,7 @@ const handleResetPassword = handleSubmit(async (values) => {
             class="text-[#0921D9] text-xs font-semibold"
             to="/login"
           >
-           Trở về đăng nhập
+            Trở về đăng nhập
           </RouterLink>
         </div>
       </form>

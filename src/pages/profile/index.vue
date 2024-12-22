@@ -7,11 +7,10 @@ import { showToast } from '@/utils/toast'
 import CardCooking from '@/components/ui/card/CardCooking.vue'
 import Swal from 'sweetalert2'
 
-// Dữ liệu người dùng và bài đăng
 const userInfo = ref<User | null>(null)
-const likedPosts = ref<any[]>([]) // Biến lưu danh sách bài đã thích
-const posts = ref<any[]>([]) // Danh sách bài đăng (post)
-const isEditing = ref(false) // Biến theo dõi trạng thái chỉnh sửa
+const likedPosts = ref<any[]>([])
+const posts = ref<any[]>([])
+const isEditing = ref(false)
 const updatedInfo = ref({
   fullName: '',
   description: '',
@@ -23,8 +22,8 @@ onMounted(async () => {
   try {
     const userData = await getUserInfo()
     userInfo.value = userData.data
-    posts.value = userData.data.post || [] // Danh sách bài đăng
-    likedPosts.value = userData.data.likePosts || [] // Gán danh sách bài đã thích
+    posts.value = userData.data.post || []
+    likedPosts.value = userData.data.likePosts || []
     console.log('in ra likepost là: ' + userData.data.likePosts)
     console.log('in ra post là: ' + userData.data.post)
   } catch (error) {
@@ -39,7 +38,7 @@ const handleAvatarChange = async (event: Event) => {
     try {
       const response = await updateAvatar(avatarFile)
       if (userInfo.value) {
-        userInfo.value.avatar = response.data // Update the avatar in userInfo
+        userInfo.value.avatar = response.data
       }
       showToast({
         title: 'Cập nhật avatar thành công!',
@@ -58,7 +57,7 @@ const handleAvatarChange = async (event: Event) => {
     }
   }
 }
-// Hàm xóa tài khoản người dùng
+
 const deleteUser = async () => {
   const result = await Swal.fire({
     title: 'Bạn có chắc không?',
@@ -98,7 +97,6 @@ const deleteUser = async () => {
   }
 }
 
-// Hàm cập nhật thông tin người dùng
 const updateUserInfo = async () => {
   try {
     if (userInfo.value) {
@@ -111,9 +109,21 @@ const updateUserInfo = async () => {
       userInfo.value = { ...userInfo.value, ...response.data }
       isEditing.value = false
       console.log('Thông tin đã được cập nhật!')
+      showToast({
+        title: 'Thông tin đã được cập nhật!',
+        description: 'Thông tin cá nhân đã được cập nhật thành công.',
+        variant: 'default',
+        duration: 5000,
+      })
     }
   } catch (error) {
     console.error('Lỗi khi cập nhật thông tin:', error)
+    showToast({
+      title: 'Đã xảy ra lỗi!',
+      description: 'Thông tin cá nhân cập nhật thất bại.',
+      variant: 'default',
+      duration: 5000,
+    })
   }
 }
 </script>
@@ -121,7 +131,6 @@ const updateUserInfo = async () => {
 <template>
   <section class="w-full overflow-hidden dark:bg-gray-900">
     <div class="flex flex-col">
-      <!-- Cover Image -->
       <div class="relative w-full">
         <img
           :src="
@@ -132,7 +141,6 @@ const updateUserInfo = async () => {
           class="w-full xl:h-[20rem] lg:h-[18rem] md:h-[16rem] sm:h-[14rem] xs:h-[11rem] object-cover"
         />
 
-        <!-- Profile Image and Name -->
         <div
           class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
         >
@@ -184,7 +192,6 @@ const updateUserInfo = async () => {
         </div>
       </div>
 
-      <!-- Description and Details -->
       <div
         class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-6 items-center my-6 mt-24"
       >
@@ -192,8 +199,6 @@ const updateUserInfo = async () => {
           {{ userInfo?.description || 'Lorem ipsum dolor sit amet consectetur adipisicing elit.' }}
         </p>
 
-        <!-- Button to trigger edit form -->
-        <!-- Buttons for editing and deleting -->
         <div class="flex gap-4">
           <button
             class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors duration-300"
@@ -208,7 +213,6 @@ const updateUserInfo = async () => {
             Xóa tài khoản
           </button>
         </div>
-        <!-- Edit Form -->
         <div
           v-if="isEditing"
           class="w-full mt-4"
@@ -316,7 +320,6 @@ const updateUserInfo = async () => {
       </div>
     </div>
 
-    <!-- Recipe Cards -->
     <h2
       class="ml-4 mr-4 mx-auto bg-gradient-to-r from-orange-400 to-yellow-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
     >
@@ -324,13 +327,11 @@ const updateUserInfo = async () => {
     </h2>
     <div class="container px-6 py-6 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <!-- Loop through posts and display each one -->
         <div
           v-for="post in posts"
           :key="post.id"
           class="post-card"
         >
-          <!-- Sử dụng CardCooking để hiển thị từng món ăn -->
           <router-link :to="`/post/detail/${post.id}`">
             <CardCooking
               :title="post.title"
@@ -347,7 +348,6 @@ const updateUserInfo = async () => {
       </div>
     </div>
 
-    <!-- Liked Recipe Cards -->
     <h2
       class="ml-4 mr-4 mx-auto bg-gradient-to-r from-green-400 to-blue-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
     >
@@ -355,13 +355,11 @@ const updateUserInfo = async () => {
     </h2>
     <div class="container px-6 py-6 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        <!-- Loop through likedPosts and display each one -->
         <div
           v-for="post in likedPosts"
           :key="post.id"
           class="post-card"
         >
-          <!-- Sử dụng CardCooking để hiển thị từng món ăn đã thích -->
           <router-link :to="`/post/detail/${post.id}`">
             <CardCooking
               :title="post.title"

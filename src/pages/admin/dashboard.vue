@@ -35,7 +35,6 @@
     </div>
   </div>
   <div class="grid grid-cols-1 gap-8 p-10 lg:grid-cols-2 xl:grid-cols-4">
-    <!-- Value card: Số người truy cập -->
     <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
       <div>
         <h6 class="text-xs font-medium leading-none tracking-wider text-gray-500 uppercase">
@@ -66,7 +65,6 @@
       </div>
     </div>
 
-    <!-- Value card: Số người truy cập -->
     <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
       <div>
         <h6 class="text-xs font-medium leading-none tracking-wider text-gray-500 uppercase">
@@ -97,7 +95,6 @@
       </div>
     </div>
 
-    <!-- Users card: Tổng số người dùng -->
     <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
       <div>
         <h6 class="text-xs font-medium leading-none tracking-wider text-gray-500 uppercase">
@@ -128,7 +125,6 @@
       </div>
     </div>
 
-    <!-- Value card: Số người truy cập -->
     <div class="flex items-center shadow justify-between p-4 bg-white rounded-md">
       <div>
         <h6 class="text-xs font-medium leading-none tracking-wider text-gray-500 uppercase">
@@ -160,19 +156,13 @@
     </div>
   </div>
 
-  <!-- Biểu đồ 1 -->
   <div class="ml-10 mt-10 mr-10">
-    <!-- Thêm khoảng cách từ viền trái -->
     <h1 class="text-3xl font-bold mb-10">Tốc độ tăng trưởng của người dùng</h1>
-    <!-- Tăng kích thước chữ và in đậm -->
     <canvas id="myChart"></canvas>
   </div>
 
-  <!-- Biểu đồ 2 -->
   <div class="ml-10 mt-20 mr-10 mb-20">
-    <!-- Thêm khoảng cách từ viền trái -->
     <h1 class="text-3xl font-bold mb-10">Tổng số công thức nấu ăn theo tháng</h1>
-    <!-- Tăng kích thước chữ và in đậm -->
     <canvas id="myChart2"></canvas>
   </div>
 </template>
@@ -205,7 +195,6 @@ export default defineComponent({
           console.error('Không thể lấy dữ liệu')
         }
 
-        // First chart
         const ctx = document.getElementById('myChart')?.getContext('2d')
         if (ctx) {
           new Chart(ctx, {
@@ -241,7 +230,6 @@ export default defineComponent({
           })
         }
 
-        // Second chart
         const ctx2 = document.getElementById('myChart2')?.getContext('2d')
         if (ctx2) {
           new Chart(ctx2, {

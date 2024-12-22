@@ -1,13 +1,12 @@
 import { createWebHistory, createRouter, type RouteRecordRaw } from 'vue-router'
 import { authRoute, profileRoute, adminRoute, notFoundRoute, postRoute } from './modules'
-import { authGuard } from './auth-guard' // Import authGuard
+import { authGuard } from './auth-guard'
 import MainLayout from '@/layouts/DefaultLayout.vue'
-import AdminLayout from '@/layouts/AdminLayout.vue' // Import AdminLayout
+import AdminLayout from '@/layouts/AdminLayout.vue'
 
 const { progress } = useIndicator()
 
 const routes: RouteRecordRaw[] = [
-  // Route chính với MainLayout
   {
     path: '/',
     component: MainLayout,
@@ -49,22 +48,20 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/profile/:id',
         name: 'profileUser',
-        component: () => import('@/pages/profile/profileUser.vue'), 
+        component: () => import('@/pages/profile/profileUser.vue'),
         props: true,
-      }
-      
+      },
     ],
   },
 
-  // Các route với layout khác
   {
     path: '/auth',
     meta: {
-      layout: 'GuestLayout', // Layout cho trang đăng nhập, đăng ký
+      layout: 'GuestLayout',
       public: true,
     },
     children: authRoute,
-  }, 
+  },
 
   {
     path: '/loginadmin',
@@ -76,11 +73,10 @@ const routes: RouteRecordRaw[] = [
     },
   },
 
-  // Đảm bảo AdminLayout được áp dụng cho các route trong admin và sử dụng guard
   {
     path: '/admin',
-    component: AdminLayout, // Sử dụng AdminLayout cho các route dưới đây
-    beforeEnter: authGuard, // Áp dụng authGuard cho tất cả các route dưới /admin
+    component: AdminLayout,
+    beforeEnter: authGuard,
     children: [
       {
         path: '',
@@ -111,19 +107,18 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/pagenotfound',
     meta: {
-      layout: 'NotFoundLayout', // Layout cho trang không tìm thấy
+      layout: 'NotFoundLayout',
     },
     children: notFoundRoute,
   },
   {
-    path: '/post/view', // Thay đổi path để tránh trùng với '/post'
+    path: '/post/view',
     meta: {
-      layout: 'PostLayout', // Layout Post
+      layout: 'PostLayout',
     },
     children: postRoute,
   },
 
-  // Route catch-all (bắt tất cả các đường dẫn không hợp lệ)
   {
     path: '/:catchAll(.*)',
     redirect: '/pagenotfound',
@@ -135,7 +130,6 @@ const router = createRouter({
   routes,
 })
 
-// Set up loading progress bar
 router.beforeEach(() => {
   progress.value = 0.3
 })

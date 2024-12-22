@@ -1,8 +1,8 @@
 import type { Post } from './post'
 
 export interface Picture {
-  id: string // UUID hoặc string nếu tự sinh
+  id: string
   alt: string
   link: string
-  post: Post // Mối quan hệ ManyToOne với Post
+  post: Post
 }

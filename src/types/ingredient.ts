@@ -1,8 +1,8 @@
-import type { Post } from "./post"
+import type { Post } from './post'
 
 export interface Ingredient {
-  id: string // UUID hoặc string nếu tự sinh
+  id: string
   ingredientName: string
   quantity: string
-  post: Post // Mối quan hệ ManyToOne với Post
+  post: Post
 }

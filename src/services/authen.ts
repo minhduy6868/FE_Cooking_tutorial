@@ -1,11 +1,10 @@
 import axios from 'axios'
-import type { Login } from '@/types/login' // Đảm bảo đường dẫn đúng
-import type { User } from '@/types/user' // Đảm bảo đường dẫn đúng
-import type { BaseResponse } from '@/types/baseapi' // Đảm bảo đường dẫn đúng
+import type { Login } from '@/types/login'
+import type { User } from '@/types/user'
+import type { BaseResponse } from '@/types/baseapi'
 import type { OtpResponseData } from '@/types/otp'
 import type { UpdatePasswordRequest } from '@/types/updatepass'
 import api from '@/api/api_client'
-// Đảm bảo đường dẫn đúng
 
 export const loginApi = async (email: string, password: string): Promise<Login> => {
   try {
@@ -13,12 +12,12 @@ export const loginApi = async (email: string, password: string): Promise<Login> 
       'http://localhost:8080/login',
       { email, password },
       {
-        timeout: 5000, // 5 giây timeout
+        timeout: 5000,
       },
     )
 
     if (response.status === 200 && response.data.data.authenticated) {
-      return response.data.data // Trả về dữ liệu Login từ API
+      return response.data.data
     } else {
       throw new Error('Đăng nhập không thành công.')
     }
@@ -60,28 +59,22 @@ export const loginApi = async (email: string, password: string): Promise<Login> 
   }
 }
 
-// Hàm service getAllUser
 export const getAllUser = async (): Promise<BaseResponse<User[]>> => {
   try {
-    // Gọi API để lấy dữ liệu người dùng
     const response = await fetch('http://localhost:8080/user/getAllUser')
 
-    // Kiểm tra nếu status code không phải 200
     if (!response.ok) {
       throw new Error(`Failed to fetch users. Status: ${response.status}`)
     }
 
-    // Parse dữ liệu JSON từ response
     const data: BaseResponse<User[]> = await response.json()
 
-    // Trả về response theo đúng cấu trúc
     return {
       status: data.status,
       message: data.message,
       data: data.data,
     }
   } catch (error) {
-    // Nếu có lỗi xảy ra trong quá trình gọi API, trả về thông báo lỗi
     console.error('Error fetching users:', error)
     return {
       status: 500,
@@ -97,17 +90,14 @@ export const registerApi = async (user: {
   password: string
 }): Promise<BaseResponse<User>> => {
   try {
-    // Gửi yêu cầu POST đến API đăng ký người dùng
     const response = await axios.post<BaseResponse<User>>('http://localhost:8080/user/DKUser', user)
 
-    // Kiểm tra nếu status code là 200 (thành công)
     if (response.status === 200 && response.data) {
-      return response.data // Trả về dữ liệu người dùng từ API
+      return response.data
     } else {
       throw new Error('Đăng ký không thành công.')
     }
   } catch (error: any) {
-    // Xử lý lỗi từ API
     if (error.response) {
       const status = error.response.status
       const errorMessage = error.response.data.message || 'Có lỗi xảy ra từ API'
@@ -137,24 +127,20 @@ export const registerApi = async (user: {
   }
 }
 
-
 export const sendOtp = async (email: string): Promise<BaseResponse<OtpResponseData>> => {
   try {
-    // Gửi yêu cầu POST đến API gửi OTP
     const response = await axios.post<BaseResponse<OtpResponseData>>(
       'http://localhost:8080/user/forgotPassword',
       { email },
-      { timeout: 5000 } // 5 giây timeout
+      { timeout: 5000 },
     )
 
-    // Kiểm tra nếu response trả về status 200
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu OTP từ API
+      return response.data
     } else {
       throw new Error('Không thể gửi OTP. Vui lòng thử lại sau.')
     }
   } catch (error: any) {
-    // Xử lý lỗi khi gọi API
     if (error.response) {
       const status = error.response.status
       const errorMessage = error.response.data.message || 'Có lỗi xảy ra từ API'
@@ -189,11 +175,12 @@ export const sendOtp = async (email: string): Promise<BaseResponse<OtpResponseDa
   }
 }
 
-
-export const updatePasswordApi = async (data: UpdatePasswordRequest): Promise<BaseResponse<any>> => {
+export const updatePasswordApi = async (
+  data: UpdatePasswordRequest,
+): Promise<BaseResponse<any>> => {
   try {
     const response = await api.put<BaseResponse<any>>('/user/updatePass', data, {
-      timeout: 5000, // 5 giây timeout
+      timeout: 5000,
     })
 
     if (response.status === 200 && response.data.status === 200) {

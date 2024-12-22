@@ -7,15 +7,12 @@ import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
 import { useConfirmDialog } from './stores/modal'
 
-// Lấy thông tin từ route
 const route = useRoute()
 
-// Tính toán layout từ route meta
 const layout = computed(() => {
-  return route.meta.layout || 'Defaulayout'  // fallback nếu không có layout
+  return route.meta.layout || 'Defaulayout'
 })
 
-// Store cho loading
 const loadingStore = useLoadingStore()
 
 const accessToken = localStorage.getItem('access_token')
@@ -26,18 +23,15 @@ if (accessToken) {
   console.log('Chưa có token trong localStorage')
 }
 
-
-// Toast chào mừng
 onMounted(() => {
   showToast({
     title: 'Chào mừng đến với Cooking Dev',
     description: 'Thỏa thích học hỏi, chia sẻ công thức nấu ăn',
     variant: 'default',
-    duration: 5000,  // Tự động đóng toast sau 5 giây
+    duration: 5000,
   })
 })
 
-// Confirm dialog
 const confirmDialog = useConfirmDialog()
 const openConfirm = async () => {
   const result = await confirmDialog.open({
@@ -56,8 +50,7 @@ const openConfirm = async () => {
   <ConfirmModal />
 
   <Toaster />
-  
-  <!-- Hiển thị Loading Spinner nếu đang tải -->
+
   <div
     v-if="loadingStore.getLoading"
     class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] loading-overlay"
@@ -68,19 +61,16 @@ const openConfirm = async () => {
     />
   </div>
 
-  <!-- Dynamic Layout -->
   <component :is="layout">
     <RouterView />
   </component>
 </template>
 
 <style scoped>
-/* Style cho loading overlay */
 .loading-overlay {
-  background-color: rgba(76, 76, 76, 0.38); /* Background bán trong suốt */
+  background-color: rgba(76, 76, 76, 0.38);
 }
 
-/* Logo hover effect */
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -12,7 +12,11 @@
           @submit.prevent="submitForm"
         >
           <div>
-            <label for="title" class="text-sm font-medium text-orange-700 block mb-2">Tiêu đề công thức</label>
+            <label
+              for="title"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Tiêu đề công thức</label
+            >
             <input
               id="title"
               v-model="post.title"
@@ -23,7 +27,11 @@
             />
           </div>
           <div>
-            <label for="description" class="text-sm font-medium text-orange-700 block mb-2">Mô tả</label>
+            <label
+              for="description"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Mô tả</label
+            >
             <textarea
               id="description"
               v-model="post.description"
@@ -34,19 +42,27 @@
             ></textarea>
           </div>
           <div>
-  <label for="ingredient" class="text-sm font-medium text-orange-700 block mb-2">Công thức</label>
-  <textarea
-    id="ingredient"
-    v-model="post.ingredient"
-    required
-    rows="4"
-    class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-    placeholder="Nhập các nguyên liệu cần thiết"
-  ></textarea>
-</div>
+            <label
+              for="ingredient"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Công thức</label
+            >
+            <textarea
+              id="ingredient"
+              v-model="post.ingredient"
+              required
+              rows="4"
+              class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Nhập các nguyên liệu cần thiết"
+            ></textarea>
+          </div>
 
           <div>
-            <label for="tutorial" class="text-sm font-medium text-orange-700 block mb-2">Các bước thực hiện</label>
+            <label
+              for="tutorial"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Các bước thực hiện</label
+            >
             <textarea
               id="tutorial"
               v-model="post.tutorial"
@@ -57,7 +73,11 @@
             ></textarea>
           </div>
           <div>
-            <label for="typePost" class="text-sm font-medium text-orange-700 block mb-2">Loại món ăn</label>
+            <label
+              for="typePost"
+              class="text-sm font-medium text-orange-700 block mb-2"
+              >Loại món ăn</label
+            >
             <select
               id="typePost"
               v-model="post.typePost"
@@ -72,9 +92,10 @@
             </select>
           </div>
 
-          <!-- File Upload for Images -->
           <div class="mb-6 pt-4">
-            <label class="text-sm font-medium text-orange-700 block mb-2">Thêm ảnh chi tiết công thức</label>
+            <label class="text-sm font-medium text-orange-700 block mb-2"
+              >Thêm ảnh chi tiết công thức</label
+            >
             <div class="mb-8">
               <input
                 id="file"
@@ -89,9 +110,14 @@
                 class="relative flex min-h-[160px] items-center justify-center rounded-md border border-dashed border-orange-300 p-6 text-center"
               >
                 <div>
-                  <span class="mb-2 block text-lg font-semibold text-orange-700">Drop files here</span>
+                  <span class="mb-2 block text-lg font-semibold text-orange-700"
+                    >Drop files here</span
+                  >
                   <span class="mb-2 block text-base font-medium text-gray-500">Or</span>
-                  <span class="inline-flex rounded border border-orange-300 py-2 px-7 text-base font-medium text-orange-700">Browse</span>
+                  <span
+                    class="inline-flex rounded border border-orange-300 py-2 px-7 text-base font-medium text-orange-700"
+                    >Browse</span
+                  >
                 </div>
               </label>
             </div>
@@ -106,9 +132,10 @@
             </div>
           </div>
 
-          <!-- Video Upload -->
           <div>
-            <label class="text-sm font-medium text-orange-700 block mb-2">Video công thức (Tùy chọn)</label>
+            <label class="text-sm font-medium text-orange-700 block mb-2"
+              >Video công thức (Tùy chọn)</label
+            >
             <input
               type="file"
               accept="video/*"
@@ -117,7 +144,6 @@
             />
           </div>
 
-          <!-- Submit Button -->
           <div class="flex gap-4 justify-end mt-8">
             <button
               type="submit"
@@ -159,41 +185,33 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { createPost } from '@/services/post'
-import { showToast } from '@/utils/toast';
+import { showToast } from '@/utils/toast'
 
-// Define post data
 const post = ref({
   title: '',
   description: '',
   tutorial: '',
   ingredient: '',
   typePost: 'recipe',
-  images: [] as File[], // Images
-  video: null as File | null, // Single video
+  images: [] as File[],
+  video: null as File | null,
 })
 
-// Store image preview URLs
 const imagePreviews = ref<string[]>([])
 
-// Loading state
 const isLoading = ref(false)
 
-// Router instance for navigation
 const router = useRouter()
 
-// Handle image file upload
 const handleFileUpload = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (input.files) {
-    // Append new images to the existing images array
     post.value.images.push(...Array.from(input.files))
 
-    // Generate preview URLs for the new images and append to imagePreviews
     imagePreviews.value.push(...Array.from(input.files).map((file) => URL.createObjectURL(file)))
   }
 }
 
-// Handle video file upload
 const handleVideoUpload = (event: Event) => {
   const input = event.target as HTMLInputElement
   if (input.files && input.files[0]) {
@@ -205,9 +223,13 @@ const submitForm = async () => {
   try {
     isLoading.value = true
 
-    // Kiểm tra xem có ít nhất một ảnh chưa
     if (post.value.images.length === 0) {
-      showToast('Vui lòng thêm ít nhất một ảnh')
+      showToast({
+        title: 'Yêu cầu thêm hình ảnh',
+        description: 'Vui lòng thêm ít nhất 1 ảnh để hoàn tất bài viết.',
+        variant: 'default',
+        duration: 3000,
+      })
       return
     }
 
@@ -215,34 +237,46 @@ const submitForm = async () => {
     formData.append('title', post.value.title)
     formData.append('description', post.value.description)
     formData.append('tutorial', post.value.tutorial)
-    formData.append('ingredient', post.value.ingredient)  
+    formData.append('ingredient', post.value.ingredient)
     formData.append('typePost', post.value.typePost)
 
-    // Đảm bảo các hình ảnh được gửi dưới dạng mảng
     post.value.images.forEach((image) => {
-      formData.append('images', image) // Append images as 'images[]'
+      formData.append('images', image)
     })
 
-    // Thêm video nếu có
     if (post.value.video) {
       formData.append('fileVideo', post.value.video)
     }
 
-    // Gửi form data lên backend
     const response = await createPost(formData)
 
     if (response.status === 200 || response.status === 201) {
-      alert('Đăng bài thành công!')
+      showToast({
+        title: 'Đăng bài thành công!',
+        description: 'Bài viết của bạn đã được đăng lên thành công.',
+        variant: 'default',
+        duration: 3000,
+      })
       router.push('/profile')
     } else {
-      alert('Đăng bài không thành công.')
+      showToast({
+        title: 'Đăng bài không thành công!',
+        description: 'Bài viết của bạn đăng lên không thành công.',
+        variant: 'default',
+        duration: 3000,
+      })
     }
   } catch (error) {
     console.error('Lỗi khi gửi form:', error)
-    alert('Có lỗi xảy ra khi gửi form.')
+
+    showToast({
+      title: 'Đã có lỗi xảy ra!',
+      description: 'Có lỗi xảy ra khi gửi form.',
+      variant: 'default',
+      duration: 3000,
+    })
   } finally {
     isLoading.value = false
   }
 }
-
 </script>

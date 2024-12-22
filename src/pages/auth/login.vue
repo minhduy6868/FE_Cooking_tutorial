@@ -5,13 +5,12 @@ import { useForm, defineField } from 'vee-validate'
 import * as yup from 'yup'
 import { loginApi } from '@/services/authen'
 import { apiExceptionHandler } from '@/utils/exceptionHandler'
-import { useRouter } from 'vue-router' // Import router để điều hướng
+import { useRouter } from 'vue-router'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { showToast } from '@/utils/toast'
-// Lấy router từ Vue Router
+
 const router = useRouter()
 
-// Định nghĩa validation schema với Yup
 const { errors, handleSubmit, defineField } = useForm({
   validationSchema: yup.object({
     email: yup.string().email().required('Email là bắt buộc'),
@@ -19,46 +18,46 @@ const { errors, handleSubmit, defineField } = useForm({
   }),
 })
 
-// Định nghĩa các trường
 const [email, emailAttrs] = defineField('email')
 const [password, passwordAttrs] = defineField('password')
 
-// Biến để lưu trạng thái lỗi đăng nhập
 let loginError: string | null = null
 
-// Hàm xử lý đăng nhập
 const onSubmit = handleSubmit(async (values) => {
   try {
     const data = await loginApi(values.email, values.password)
 
-    // Kiểm tra dữ liệu trả về từ API
     if (data?.authenticated) {
       console.log('Đăng nhập thành công:', data)
 
-      // Lưu access token vào localStorage
       localStorage.setItem('access_token', data.access_token)
 
       showToast({
-      title: 'Đăng nhập thành công',
-      description: 'Bạn đã xóa tài khoản, vui lòng đăng nhập lại để tiếp tục',
+        title: 'Đăng nhập thành công!',
+        description: 'Chào mừng bạn đã quay trở lại!',
+        variant: 'default',
+        duration: 5000,
+      })
+      router.push('/')
+    } else {
+      console.error(loginError)
+
+      showToast({
+        title: 'Đăng nhập thất bại!',
+        description: 'Vui lòng đăng nhập lại!',
+        variant: 'default',
+        duration: 5000,
+      })
+    }
+  } catch (error) {
+    apiExceptionHandler(error)
+    console.error('Đã có lỗi xảy ra:', error)
+    showToast({
+      title: 'Đã có lỗi xảy ra!',
+      description: 'Đã xảy ra lỗi. Vui lòng thử lại!',
       variant: 'default',
       duration: 5000,
     })
-      // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
-      router.push('/')
-
-    } else {
-      // Nếu đăng nhập không thành công, hiển thị thông báo lỗi
-      loginError = 'Đăng nhập thất bại'
-      console.error(loginError)
-      alert(loginError)  // Hiển thị lỗi cho người dùng
-    }
-  } catch (error) {
-    // Xử lý lỗi từ API
-    apiExceptionHandler(error)
-    console.error('Đã có lỗi xảy ra:', error)
-    loginError = 'Đã xảy ra lỗi. Vui lòng thử lại!'
-    alert(loginError)  // Hiển thị lỗi cho người dùng
   }
 })
 </script>

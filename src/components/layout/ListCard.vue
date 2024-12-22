@@ -1,11 +1,18 @@
 <template>
   <div class="card">
-    <img :src="image" alt="Post Image" />
+    <img
+      :src="image"
+      alt="Post Image"
+    />
     <div class="card-content">
       <div class="card-title">{{ title }}</div>
       <div class="card-description">{{ description }}</div>
       <div class="card-like-count">Likes: {{ likeCount }}</div>
-      <a :href="link" class="card-link">View Details</a>
+      <a
+        :href="link"
+        class="card-link"
+        >View Details</a
+      >
     </div>
   </div>
 </template>
@@ -17,13 +24,12 @@ export default {
     description: String,
     image: String,
     likeCount: Number,
-    link: String
-  }
+    link: String,
+  },
 }
 </script>
 
 <style scoped>
-/* Style cho card */
 .card {
   background-color: white;
   border-radius: 8px;

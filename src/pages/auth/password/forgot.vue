@@ -2,11 +2,12 @@
 import { ref } from 'vue'
 import { useForm } from 'vee-validate'
 import * as yup from 'yup'
-import { sendOtp } from '@/services/authen' // Đảm bảo import đúng service gửi OTP
+import { sendOtp } from '@/services/authen'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import ErrorMessage from '@/components/base/ErrorMessage.vue'
 import { useRouter } from 'vue-router'
+import { showToast } from '@/utils/toast'
 
 const router = useRouter()
 
@@ -28,20 +29,32 @@ const handleForgot = async (event: Event) => {
   }
 
   try {
-    // Gọi API gửi OTP
     const response = await sendOtp(email.value)
 
     if (response.status === 200) {
-      // Hiển thị thông báo thành công hoặc chuyển hướng đến trang tiếp theo
-      alert('OTP đã được gửi vào email của bạn.')
-      // Chuyển hướng đến trang đặt lại mật khẩu
+      showToast({
+        title: 'Gửi OTP thành công!',
+        description: 'OTP đã được gửi vào email của bạn. Vui lòng kiểm tra gmail!',
+        variant: 'default',
+        duration: 5000,
+      })
       router.push('/resetpass')
     } else {
-      alert('Có lỗi xảy ra khi gửi OTP. Vui lòng thử lại.')
+      showToast({
+        title: 'Gửi OTP thất bại!',
+        description: 'OTP đã xảy ra lỗi gửi vào email của bạn.',
+        variant: 'default',
+        duration: 5000,
+      })
     }
   } catch (error) {
     console.error('Lỗi khi gửi OTP:', error)
-    alert('Đã xảy ra lỗi, vui lòng thử lại.')
+    showToast({
+      title: 'Đã xảy ra lỗi!',
+      description: 'Đã xảy ra lỗi, vui lòng thử lại. otp',
+      variant: 'default',
+      duration: 5000,
+    })
   }
 }
 </script>
@@ -83,7 +96,7 @@ const handleForgot = async (event: Event) => {
             class="text-[#0921D9] text-xs font-semibold"
             to="/login"
           >
-           Trở về
+            Trở về
           </RouterLink>
         </div>
       </form>

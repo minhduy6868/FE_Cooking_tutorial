@@ -3,7 +3,6 @@
     id="chat-container"
     class="fixed bottom-6 right-6 z-50"
   >
-    <!-- Chat Icon Button -->
     <button
       v-if="!isChatVisible"
       class="group text-white rounded-full shadow-lg transition-all duration-300 flex items-center justify-center w-14 h-14 relative"
@@ -15,7 +14,6 @@
         class="chat"
       />
 
-      <!-- Tooltip -->
       <span
         class="tooltip absolute right-full mr-3 px-4 py-2 text-sm text-white bg-black bg-opacity-80 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap"
       >
@@ -23,7 +21,6 @@
       </span>
     </button>
 
-    <!-- Chat Window -->
     <div
       v-if="isChatVisible"
       id="chat-window"
@@ -31,7 +28,6 @@
       role="dialog"
       aria-labelledby="chat-title"
     >
-      <!-- Chat Header -->
       <div
         class="flex items-center justify-between p-4 border-b bg-blue-600 text-white rounded-t-lg"
       >
@@ -50,7 +46,6 @@
         </button>
       </div>
 
-      <!-- Chat Messages -->
       <div
         id="messages"
         ref="messagesContainer"
@@ -67,12 +62,10 @@
             class="rounded-lg p-3 max-w-[80%]"
           >
             <p v-html="msg.text"></p>
-            <!-- Render HTML content -->
           </div>
         </div>
       </div>
 
-      <!-- Typing Indicator -->
       <div
         v-if="isTyping"
         class="px-4 py-2"
@@ -90,7 +83,6 @@
         </div>
       </div>
 
-      <!-- Message Input -->
       <div class="p-4 border-t">
         <form
           class="flex items-center space-x-2"
@@ -150,7 +142,7 @@ export default {
       if (message) {
         this.addMessage(message, 'user')
         this.userMessage = ''
-        this.simulateResponse() // Show typing indicator
+        this.simulateResponse()
 
         try {
           const response = await this.getBotResponse(message)
@@ -251,7 +243,6 @@ export default {
         return 'Vâng, chúng tôi có các công thức nấu ăn nhanh giúp bạn chuẩn bị bữa ăn trong thời gian ngắn.'
       }
 
-      // Câu hỏi về thông tin liên hệ
       if (userMessage.toLowerCase() === 'thông tin liên hệ của bạn là gì') {
         return `Bạn có thể liên hệ với chúng tôi qua số điện thoại: 0916 267 402 hoặc qua email: duynm.23it@vku.udn.vn. Địa chỉ của chúng tôi là: 470, Trần Đại Nghĩa, Hòa Vang, Ngũ Hành Sơn, Đà Nẵng.`
       }
@@ -270,10 +261,9 @@ export default {
 
       const apiUrl =
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent'
-      const apiKey = 'AIzaSyDlUcwhu795awo9PB49kFbhznnMHDea9oI' // Thay bằng API key của bạn
+      const apiKey = 'AIzaSyDlUcwhu795awo9PB49kFbhznnMHDea9oI'
 
       try {
-        // Gửi yêu cầu đến API của Gemini
         const response = await axios.post(
           `${apiUrl}?key=${apiKey}`,
           {
@@ -290,7 +280,6 @@ export default {
           },
         )
 
-        // Kiểm tra và lấy nội dung phản hồi từ API Gemini
         const responseText =
           response.data.candidates &&
           response.data.candidates[0] &&
@@ -308,10 +297,10 @@ export default {
     formatBotResponse(responseText: string): string {
       // Thêm HTML cho phản hồi
       const formattedText: string = responseText
-        .replace(/\*([^*]+)\*/g, '<b>$1</b>') // In đậm các từ trong dấu *
-        .replace(/\n/g, '<br>') // Thêm ngắt dòng
-        .replace(/^\s*\*\s+/gm, '<ul><li>') // Thêm danh sách
-        .replace(/\*+$/, '</li></ul>') // Đóng thẻ ul
+        .replace(/\*([^*]+)\*/g, '<b>$1</b>')
+        .replace(/\n/g, '<br>')
+        .replace(/^\s*\*\s+/gm, '<ul><li>')
+        .replace(/\*+$/, '</li></ul>')
 
       return formattedText
     },
@@ -324,17 +313,16 @@ export default {
   width: 24rem;
 }
 .tooltip {
-  font-size: 1rem; /* Kích thước chữ lớn hơn */
-  filter: blur(0px); /* Đảm bảo chữ rõ ràng */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Đổ bóng cho tooltip */
-  transform: translateY(10px); /* Hiệu ứng vị trí */
-  transition: all 0.3s ease; /* Hiệu ứng mượt khi hover */
+  font-size: 1rem;
+  filter: blur(0px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(10px);
+  transition: all 0.3s ease;
 }
 
-/* Hiệu ứng cho tooltip khi hover vào button */
 .group:hover .tooltip {
   opacity: 1;
-  transform: translateY(0); /* Tooltip di chuyển về vị trí bình thường */
+  transform: translateY(0);
 }
 
 @media (max-width: 640px) {

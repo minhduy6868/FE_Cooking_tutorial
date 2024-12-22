@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Danh sách bài viết hiện có -->
     <h2 class="text-3xl font-bold mt-3">Danh sách tất cả bài viết:</h2>
     <div v-if="loading">
       <p>Đang tải...</p>
@@ -11,7 +10,6 @@
     <div v-else>
       <p><strong>Tổng số bài viết:</strong> {{ allPosts.length }}</p>
 
-      <!-- Tìm kiếm bài viết theo tiêu đề -->
       <input
         v-model="searchQuery"
         type="text"
@@ -25,7 +23,6 @@
         Tìm kiếm
       </button>
 
-      <!-- Tìm kiếm bài viết với dislike nhiều nhất -->
       <input
         v-model="topDislikeCount"
         type="number"
@@ -78,7 +75,7 @@
             <th
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
-             Trạng thái
+              Trạng thái
             </th>
             <th
               class="px-6 py-3 ml-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -118,7 +115,7 @@
                 class="text-red-600 hover:text-red-800"
                 @click="handleDelete(post.id)"
               >
-               Xóa bài
+                Xóa bài
               </button>
               <button>
                 <router-link
@@ -140,17 +137,17 @@
 import { ref, onMounted } from 'vue'
 import { getAllPost } from '@/services/admin'
 import { searchPosts, getTopDislikePost, acceptPost, deletePostByAdmin } from '@/services/post'
+import { showToast } from '@/utils/toast'
 
 export default {
   name: 'PostList',
   setup() {
-    const allPosts = ref<any[]>([]) // Danh sách tất cả bài viết
+    const allPosts = ref<any[]>([])
     const loading = ref<boolean>(false)
     const error = ref<boolean>(false)
-    const searchQuery = ref<string>('') // Query tìm kiếm bài viết theo tiêu đề
-    const topDislikeCount = ref<number>() // Số lượng bài viết có lượt không thích cao nhất
+    const searchQuery = ref<string>('')
+    const topDislikeCount = ref<number>()
 
-    // Lấy tất cả bài viết
     const fetchAllPosts = async () => {
       loading.value = true
       try {
@@ -168,14 +165,12 @@ export default {
       }
     }
 
-    // Tìm kiếm bài viết theo tiêu đề
     const searchPostsByTitle = async () => {
       loading.value = true
       try {
         const response = await searchPosts(searchQuery.value)
         if (response.status === 200) {
           if (response.data.length === 0) {
-            // Nếu không tìm thấy bài viết, lấy lại tất cả bài viết
             await fetchAllPosts()
             error.value = false
           } else {
@@ -192,7 +187,6 @@ export default {
       }
     }
 
-    // Hàm lấy bài viết có lượt không thích cao nhất
     const fetchTopDislikePosts = async () => {
       loading.value = true
       try {
@@ -206,7 +200,12 @@ export default {
 
         if (response?.status === 200) {
           if (response.data.length === 0) {
-            console.log('No posts found with high dislikes.')
+            showToast({
+              title: 'Thông báo!',
+              description: 'Không có bài viết nào có lượng không thích cao.',
+              variant: 'default',
+              duration: 5000,
+            })
             allPosts.value = []
             error.value = false
           } else {
@@ -230,43 +229,72 @@ export default {
       }
     }
 
-    // Hàm duyệt bài
     const handleAcceptPost = async (postId: string) => {
       try {
         const response = await acceptPost(postId)
         if (response.status === 200) {
           fetchAllPosts()
-          //const post = allPosts.value.find((p) => p.id === postId)
+          const post = allPosts.value.find((p) => p.id === postId)
           if (post) {
             post.isApproved = true
+            showToast({
+              title: 'Duyệt bài thành công!',
+              description: 'Bài đã được duyệt thành công.',
+              variant: 'default',
+              duration: 5000,
+            })
           }
         } else {
-          console.error('Failed to accept post:', response.message)
+          showToast({
+            title: 'Duyệt bài thất bại!',
+            description: 'Bài đã được duyệt thất bại.',
+            variant: 'default',
+            duration: 5000,
+          })
         }
       } catch (err) {
+        showToast({
+          title: 'Đã xảy ra lỗi khi duyệt bài!',
+          description: 'Đã xảy ra lỗi. Vui lòng kiểm tra lại.',
+          variant: 'default',
+          duration: 5000,
+        })
         console.error('Error accepting post:', err)
       }
     }
 
-    // Hàm xóa bài viết
     const handleDelete = async (postId: string) => {
       try {
-        // Call the deletePost service to delete the post
         const response = await deletePostByAdmin(postId)
 
         if (response.status === 200) {
-          // If delete was successful, remove the post from the allPosts array
           allPosts.value = allPosts.value.filter((post) => post.id !== postId)
-          console.log('Post deleted successfully')
+          showToast({
+            title: 'Xóa bài thành công!',
+            description: 'Bài đã được xóa thành công.',
+            variant: 'default',
+            duration: 5000,
+          })
         } else {
           console.error('Failed to delete post:', response.message)
+          showToast({
+            title: 'Xóa bài thất bại!',
+            description: 'Xóa bài thất bại. Vui lòng kiểm tra lại.',
+            variant: 'default',
+            duration: 5000,
+          })
         }
       } catch (err) {
+        showToast({
+          title: 'Đã xảy ra lỗi khi xóa bài!',
+          description: 'Đã xảy ra lỗi. Vui lòng kiểm tra lại.',
+          variant: 'default',
+          duration: 5000,
+        })
         console.error('Error deleting post:', err)
       }
     }
 
-    // Fetch dữ liệu khi component được mount
     onMounted(() => {
       fetchAllPosts()
     })
@@ -286,6 +314,4 @@ export default {
 }
 </script>
 
-<style scoped>
-/* Style tùy chỉnh */
-</style>
+<style scoped></style>

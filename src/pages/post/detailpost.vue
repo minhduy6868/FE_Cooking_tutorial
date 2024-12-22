@@ -1,7 +1,6 @@
 <template>
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <article class="bg-white rounded-2xl shadow-xl overflow-hidden">
-      <!-- Post Image and Title -->
       <div class="relative h-96 rounded-xl">
         <img
           :src="post?.pictures?.[0]?.link || 'https://via.placeholder.com/500'"
@@ -19,7 +18,6 @@
       </div>
 
       <div class="p-8">
-        <!-- Post Video Section -->
         <div class="aspect-w-16 aspect-h-9 mb-8 rounded-xl overflow-hidden shadow-lg bg-gray-100">
           <video
             v-if="post?.linkVideo"
@@ -41,7 +39,6 @@
           </p>
         </div>
 
-        <!-- Post Metadata Section -->
         <div class="grid lg:grid-cols-2 gap-8 mb-12">
           <div class="bg-gray-100 p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold mb-4">Thông tin</h2>
@@ -71,7 +68,6 @@
             </ul>
           </div>
 
-          <!-- Thành phần Section -->
           <div class="bg-gray-100 p-6 rounded-lg shadow-md">
             <h2 class="text-2xl font-bold mb-4">Thành phần</h2>
             <table class="min-w-full table-auto text-left text-gray-700">
@@ -94,7 +90,6 @@
           </div>
         </div>
 
-        <!-- Hướng dẫn Section -->
         <div class="bg-gray-100 p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold mb-4">Hướng dẫn</h2>
           <div class="text-gray-700 whitespace-pre-line">
@@ -102,7 +97,6 @@
           </div>
         </div>
 
-        <!-- Like and Dislike Buttons -->
         <div class="flex items-center space-x-4 mt-8">
           <button
             class="flex items-center px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300"
@@ -118,7 +112,6 @@
           </button>
         </div>
 
-        <!-- Process Gallery -->
         <div class="mt-12">
           <h2 class="text-2xl font-bold mb-6">Hình ảnh quá trình</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -132,7 +125,6 @@
           </div>
         </div>
 
-        <!-- Comments Section -->
         <section class="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
           <div class="max-w-2xl mx-auto">
             <div class="flex justify-between items-center mb-6">
@@ -227,8 +219,7 @@ export default defineComponent({
     const post = ref<Post | null>(null)
     const newComment = ref('')
     const error = ref<string | null>(null)
-      const postId2 = route.params.id as string
-    // Fetch post data
+    const postId2 = route.params.id as string
     const fetchPost = async () => {
       const postId = route.params.id as string
       console.log(postId)
@@ -248,12 +239,12 @@ export default defineComponent({
     const addComment = async () => {
       if (!post.value || !newComment.value.trim()) return
       try {
-        console.log("in ra postId2 " + postId2 + "và" + newComment.value)
+        console.log('in ra postId2 ' + postId2 + 'và' + newComment.value)
         const response = await addCommentApi(postId2, newComment.value)
 
         if (response.status === 200 || response.status == 201) {
           post.value.commentPosts.push(response.data)
-          newComment.value = '' 
+          newComment.value = ''
         } else {
           console.error('Failed to add comment:', response.message)
         }
@@ -262,7 +253,6 @@ export default defineComponent({
       }
     }
 
-    // Like post handler
     const handleLike = async () => {
       if (!post.value) return
       try {
@@ -275,7 +265,6 @@ export default defineComponent({
       }
     }
 
-    // Dislike post handler
     const handleDislike = async () => {
       if (!post.value) return
       try {
@@ -288,7 +277,6 @@ export default defineComponent({
       }
     }
 
-    // Fetch post when component mounts
     onMounted(() => {
       fetchPost()
     })
@@ -305,6 +293,4 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-/* Add any additional styles here */
-</style>
+<style scoped></style>

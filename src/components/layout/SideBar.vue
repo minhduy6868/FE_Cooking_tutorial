@@ -1,7 +1,10 @@
 <template>
   <nav class="bg-orange-400 border-gray-200 py-2.5 dark:bg-gray-900 sticky z-50">
     <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
-      <a href="#" class="flex items-center">
+      <a
+        href="#"
+        class="flex items-center"
+      >
         <img
           src="/public/assets/images/logo.png"
           class="h-6 mr-3 sm:h-9"
@@ -14,16 +17,22 @@
           <span></span>
         </div>
 
-        <!-- Điều kiện hiển thị nút Đăng nhập/Đăng xuất -->
-        <button v-if="!isAuthenticated" @click="goToLogin" class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
+        <button
+          v-if="!isAuthenticated"
+          @click="goToLogin"
+          class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+        >
           Đăng nhập
         </button>
 
-        <button v-if="isAuthenticated" @click="logout" class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
+        <button
+          v-if="isAuthenticated"
+          @click="logout"
+          class="text-orange-700 bg-white hover:bg-gray-400 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
+        >
           Đăng xuất
         </button>
 
-        <!-- Mobile Menu Toggle Button -->
         <button
           type="button"
           class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -31,8 +40,6 @@
           @click="toggleMenu"
         >
           <span class="sr-only">Open main menu</span>
-
-          <!-- Hamburger Icon (Visible when menu is closed) -->
           <svg
             v-if="!isMenuOpen"
             class="w-6 h-6"
@@ -47,7 +54,6 @@
             ></path>
           </svg>
 
-          <!-- Close Icon (Visible when menu is open) -->
           <svg
             v-if="isMenuOpen"
             class="w-6 h-6"
@@ -64,7 +70,6 @@
         </button>
       </div>
 
-      <!-- Menu Items -->
       <div
         :class="{ block: isMenuOpen, hidden: !isMenuOpen }"
         class="items-center justify-between w-full lg:flex lg:w-auto lg:order-1"
@@ -74,41 +79,46 @@
             <router-link to="/">
               <a
                 href="#"
-                 class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white text-lg hover:text-blue-800 transition duration-300"
-                  aria-current="page"
-                >Trang chủ</a>
+                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                aria-current="page"
+                >Trang chủ</a
+              >
             </router-link>
           </li>
           <li>
             <router-link to="/postcooking">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white  text-lg hover:text-blue-800 transition duration-300"
-                >Công thức món ăn</a>
-              </router-link>
+                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                >Công thức món ăn</a
+              >
+            </router-link>
           </li>
           <li v-if="isAuthenticated">
             <router-link to="/post">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white  dark:text-white  text-lg hover:text-blue-800 transition duration-300"
-                >Đăng bài</a>
+                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                >Đăng bài</a
+              >
             </router-link>
           </li>
-          <li v-if="isAuthenticated" >
+          <li v-if="isAuthenticated">
             <router-link to="/profile">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white text-lg hover:text-blue-800 transition duration-300"
-                 >Trang cá nhân</a>
+                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                >Trang cá nhân</a
+              >
             </router-link>
           </li>
           <li>
             <router-link to="/about">
               <a
                 href="#"
-                class="block py-2 pl-3 pr-4 px-5  text-white rounded lg:text-white  dark:text-white text-lg hover:text-blue-800 transition duration-300"
-                 >Giới thiệu</a>
+                class="block py-2 pl-3 pr-4 px-5 text-white rounded lg:text-white dark:text-white text-lg hover:text-blue-800 transition duration-300"
+                >Giới thiệu</a
+              >
             </router-link>
           </li>
         </ul>
@@ -125,33 +135,25 @@ export default {
   name: 'Navbar',
   setup() {
     const router = useRouter()
-    
-    // Reactive state to toggle mobile menu visibility
+
     const isMenuOpen = ref(false)
 
-    // Check if user is authenticated (token exists)
     const isAuthenticated = ref(false)
 
-    // Toggle the mobile menu state
     const toggleMenu = () => {
       isMenuOpen.value = !isMenuOpen.value
     }
 
-    // Check if token exists when component is mounted
     onMounted(() => {
       const token = localStorage.getItem('access_token')
       isAuthenticated.value = !!token
     })
 
-    // Handle logout
     const logout = () => {
-      // Remove token from localStorage
       localStorage.removeItem('access_token')
-      // Redirect to login page
       router.push('/login')
     }
 
-    // Handle login redirect
     const goToLogin = () => {
       router.push('/login')
     }
@@ -167,6 +169,4 @@ export default {
 }
 </script>
 
-<style scoped>
-/* Optional: add custom styles if needed */
-</style>
+<style scoped></style>

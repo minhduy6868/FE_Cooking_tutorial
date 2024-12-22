@@ -41,16 +41,20 @@ const onSubmit = handleSubmit(async (values) => {
 <template>
   <div class="h-full flex p-8">
     <div class="flex-1 flex justify-center items-center">
-      <form class="form-shadow p-6 rounded-xl" @submit="onSubmit">
+      <form
+        class="form-shadow p-6 rounded-xl"
+        @submit="onSubmit"
+      >
         <div class="flex items-center gap-0.5 mb-4">
           <h1 class="text-[344054] text-lg font-semibold">Đăng ký tài khoản</h1>
         </div>
         <div>
-          <h2 class="mt-1 text-[#667085]">Hôm nay là một ngày mới. Đây là ngày của bạn. Bạn là người tạo nên điều đó.</h2>
+          <h2 class="mt-1 text-[#667085]">
+            Hôm nay là một ngày mới. Đây là ngày của bạn. Bạn là người tạo nên điều đó.
+          </h2>
           <h2 class="mt-1 text-[#667085]">Đăng nhập để bắt đầu quản lý dự án của bạn</h2>
         </div>
         <div class="mt-6">
-          <!-- Tên -->
           <div class="form-data">
             <Label for="fullName">Tên</Label>
             <Input
@@ -64,7 +68,6 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.fullName" />
           </div>
 
-          <!-- Email -->
           <div class="form-data">
             <Label for="email">Email</Label>
             <Input
@@ -78,7 +81,6 @@ const onSubmit = handleSubmit(async (values) => {
             <ErrorMessage :error="errors.email" />
           </div>
 
-          <!-- Password -->
           <div class="form-data">
             <Label for="password">Mật khẩu</Label>
             <Input
@@ -93,10 +95,8 @@ const onSubmit = handleSubmit(async (values) => {
           </div>
         </div>
 
-        <!-- Đăng ký -->
         <Button class="mt-6 w-full h-10 bg-orange-600">Đăng Ký</Button>
 
-        <!-- Hoặc Đăng nhập bằng Google -->
         <div class="flex items-center gap-2 w-full mt-8">
           <span class="h-px bg-slate-200 w-full"></span>
           <p class="text-base">Hoặc</p>
@@ -114,7 +114,6 @@ const onSubmit = handleSubmit(async (values) => {
           Đăng nhập với Google
         </Button>
 
-        <!-- Chuyển hướng đăng nhập -->
         <div class="flex justify-center mt-6">
           <p>Bạn đã có tài khoản?</p>
           <RouterLink
@@ -127,7 +126,6 @@ const onSubmit = handleSubmit(async (values) => {
       </form>
     </div>
 
-    <!-- Hình nền -->
     <div class="flex-1 relative max-md:hidden">
       <img
         class="absolute top-0 left-0 w-full h-full object-cover rounded-3xl"

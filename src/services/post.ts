@@ -2,20 +2,20 @@ import api from '@/api/api_client'
 import type { BaseResponse } from '@/types/baseapi'
 import type { Post } from '@/types/post'
 import type { Comment } from '@/types/comment'
+import Swal from 'sweetalert2'
 
 export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
   try {
     const response = await api.get<BaseResponse<Post[]>>('/post/getAllPost', {
-      timeout: 5000, // 5 giây timeout
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy danh sách người dùng.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong loginApi
     console.error('Error fetching users:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy danh sách người dùng.'
@@ -44,16 +44,15 @@ export const getAllPost = async (): Promise<BaseResponse<Post[]>> => {
 export const getAllAcceptPost = async (): Promise<BaseResponse<Post[]>> => {
   try {
     const response = await api.get<BaseResponse<Post[]>>('/post/getAllPostWasApproved', {
-      timeout: 5000, // 5 giây timeout
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy danh sách người dùng.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong loginApi
     console.error('Error fetching users:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy danh sách người dùng.'
@@ -82,16 +81,15 @@ export const getAllAcceptPost = async (): Promise<BaseResponse<Post[]>> => {
 export const getPostById = async (id: string): Promise<BaseResponse<Post>> => {
   try {
     const response = await api.get<BaseResponse<Post>>(`/post/${id}`, {
-      timeout: 10000, // Timeout 5 giây
+      timeout: 10000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy thông tin chi tiết bài viết.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong getAllPost
     console.error('Error fetching post details:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy thông tin chi tiết bài viết.'
@@ -112,7 +110,7 @@ export const getPostById = async (id: string): Promise<BaseResponse<Post>> => {
     return {
       status: 500,
       message: errorMessage,
-      data: null, // Trả về dữ liệu rỗng nếu có lỗi
+      data: null,
     }
   }
 }
@@ -120,17 +118,16 @@ export const getPostById = async (id: string): Promise<BaseResponse<Post>> => {
 export const searchPosts = async (title: string): Promise<BaseResponse<Post[]>> => {
   try {
     const response = await api.get<BaseResponse<Post[]>>('/post/search', {
-      params: { title }, // Truyền tham số title vào trong query string
-      timeout: 5000, // Timeout 5 giây
+      params: { title },
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu đúng cấu trúc { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể tìm thấy bài viết.')
     }
   } catch (error: any) {
-    // Xử lý lỗi tương tự như trong các hàm trước
     console.error('Error searching posts:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi tìm kiếm bài viết.'
@@ -151,7 +148,7 @@ export const searchPosts = async (title: string): Promise<BaseResponse<Post[]>> 
     return {
       status: 500,
       message: errorMessage,
-      data: [], // Trả về mảng rỗng nếu có lỗi
+      data: [],
     }
   }
 }
@@ -168,21 +165,35 @@ export const createPost = async (formData: FormData): Promise<BaseResponse<Post>
   }
 }
 
-// API like bài viết
 export const likePost = async (id: string): Promise<BaseResponse<Post>> => {
   try {
     const response = await api.post<BaseResponse<Post>>(`/post/like/${id}`, null, {
-      timeout: 5000, // Timeout 5 giây
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu bài viết sau khi like
+      return response.data
     } else {
       throw new Error('Không thể like bài viết.')
     }
   } catch (error: any) {
     console.error('Error liking post:', error)
-
+    const result = await Swal.fire({
+      title: 'Bạn cần phải đăng nhập!',
+      text: 'Bạn cần phải đăng nhập trước khi thích bài viết.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Hủy',
+      reverseButtons: true,
+      customClass: {
+        popup: 'bg-white shadow-lg rounded-xl',
+        title: 'text-xl font-semibold text-gray-800',
+        content: 'text-gray-600 text-sm',
+        confirmButton: 'bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600',
+        cancelButton: 'bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400',
+      },
+    })
     let errorMessage = 'Có lỗi xảy ra khi like bài viết.'
     if (error.response) {
       errorMessage = error.response.data.message || errorMessage
@@ -203,20 +214,36 @@ export const likePost = async (id: string): Promise<BaseResponse<Post>> => {
   }
 }
 
-// API dislike bài viết
 export const dislikePost = async (id: string): Promise<BaseResponse<Post>> => {
   try {
     const response = await api.post<BaseResponse<Post>>(`/post/dislike/${id}`, null, {
-      timeout: 5000, // Timeout 5 giây
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu bài viết sau khi dislike
+      return response.data
     } else {
       throw new Error('Không thể dislike bài viết.')
     }
   } catch (error: any) {
     console.error('Error disliking post:', error)
+
+    const result = await Swal.fire({
+      title: 'Bạn cần phải đăng nhập!',
+      text: 'Bạn cần phải đăng nhập trước khi không thích bài viết.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Hủy',
+      reverseButtons: true,
+      customClass: {
+        popup: 'bg-white shadow-lg rounded-xl',
+        title: 'text-xl font-semibold text-gray-800',
+        content: 'text-gray-600 text-sm',
+        confirmButton: 'bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600',
+        cancelButton: 'bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400',
+      },
+    })
 
     let errorMessage = 'Có lỗi xảy ra khi dislike bài viết.'
     if (error.response) {
@@ -241,17 +268,32 @@ export const dislikePost = async (id: string): Promise<BaseResponse<Post>> => {
 export const addComment = async (idpost: string, text: string): Promise<BaseResponse<Comment>> => {
   try {
     const response = await api.post<BaseResponse<Comment>>(`/post/comment/${idpost}`, text, {
-      timeout: 5000, // Timeout 5 giây
+      timeout: 5000,
     })
 
     if (response.status === 200 || response.status === 201) {
-      return response.data // Trả về dữ liệu bài viết sau khi thêm bình luận
+      return response.data
     } else {
       throw new Error('Không thể thêm bình luận vào bài viết.')
     }
   } catch (error: any) {
     console.error('Error adding comment:', error)
-
+    const result = await Swal.fire({
+      title: 'Bạn cần phải đăng nhập!',
+      text: 'Bạn cần phải đăng nhập trước khi bình luận bài viết.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Hủy',
+      reverseButtons: true,
+      customClass: {
+        popup: 'bg-white shadow-lg rounded-xl',
+        title: 'text-xl font-semibold text-gray-800',
+        content: 'text-gray-600 text-sm',
+        confirmButton: 'bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600',
+        cancelButton: 'bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400',
+      },
+    })
     let errorMessage = 'Có lỗi xảy ra khi thêm bình luận vào bài viết.'
     if (error.response) {
       errorMessage = error.response.data.message || errorMessage
@@ -275,17 +317,16 @@ export const addComment = async (idpost: string, text: string): Promise<BaseResp
 export const getTopDislikePost = async (limit: number): Promise<BaseResponse<Post[]>> => {
   try {
     const response = await api.get<BaseResponse<Post[]>>('/post/topDislikePost', {
-      params: { limit }, // Pass the limit as a query parameter
-      timeout: 5000, // Timeout of 5 seconds
+      params: { limit },
+      timeout: 5000,
     })
 
     if (response.status === 200 || response.status === 201) {
-      return response.data // Return data in the correct format: { status, message, data }
+      return response.data
     } else {
       throw new Error('Không thể lấy bài viết với lượt không thích cao nhất.')
     }
   } catch (error: any) {
-    // Handle errors like other API functions
     console.error('Error fetching top dislike posts:', error)
 
     let errorMessage = 'Có lỗi xảy ra khi lấy bài viết với lượt không thích cao nhất.'
@@ -314,11 +355,11 @@ export const getTopDislikePost = async (limit: number): Promise<BaseResponse<Pos
 export const acceptPost = async (id: string): Promise<BaseResponse<Post>> => {
   try {
     const response = await api.put<BaseResponse<Post>>(`/post/status/${id}`, {
-      timeout: 5000, // Timeout 5 giây
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu bài viết sau khi cập nhật trạng thái
+      return response.data
     } else {
       throw new Error('Không thể cập nhật trạng thái bài viết.')
     }
@@ -347,11 +388,11 @@ export const acceptPost = async (id: string): Promise<BaseResponse<Post>> => {
 export const deletePostByAdmin = async (id: string): Promise<BaseResponse<Post>> => {
   try {
     const response = await api.delete<BaseResponse<Post>>(`/post/deletePost/${id}`, {
-      timeout: 5000, // Timeout 5 giây
+      timeout: 5000,
     })
 
     if (response.status === 200) {
-      return response.data // Trả về dữ liệu sau khi xóa bài viết
+      return response.data
     } else {
       throw new Error('Không thể xóa bài viết.')
     }
