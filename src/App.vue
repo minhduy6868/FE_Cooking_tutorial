@@ -1,11 +1,36 @@
+<template>
+  <ConfirmModal />
+  <Toaster />
+
+  <!-- Hiển thị Loading Spinner nếu đang tải -->
+  <div
+    v-if="loadingStore.getLoading"
+    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] loading-overlay"
+  >
+    <Icon
+      icon="svg-spinners:90-ring-with-bg"
+      class="w-10 h-10"
+    />
+  </div>
+
+  <!-- Hiển thị Poll ngay khi vào app -->
+  <FoodPollForm v-if="showPoll" @close="closePoll" />
+
+  <!-- Dynamic Layout -->
+  <component :is="layout">
+    <RouterView />
+  </component>
+</template>
+
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import ConfirmModal from './components/base/ConfirmDialog.vue'
 import { useLoadingStore } from './stores/loading'
 import { showToast } from './utils/toast'
 import { useConfirmDialog } from './stores/modal'
+import FoodPollForm from './components/ui/form/FoodPollForm.vue' 
 
 // Lấy thông tin từ route
 const route = useRoute()
@@ -25,7 +50,6 @@ if (accessToken) {
 } else {
   console.log('Chưa có token trong localStorage')
 }
-
 
 // Toast chào mừng
 onMounted(() => {
@@ -50,29 +74,15 @@ const openConfirm = async () => {
     console.log('Action canceled')
   }
 }
+
+// // Poll form state   // đừng xóa ni
+// const showPoll = ref(true)
+
+// // Hàm đóng Poll
+// const closePoll = () => {
+//   showPoll.value = false
+// }
 </script>
-
-<template>
-  <ConfirmModal />
-
-  <Toaster />
-  
-  <!-- Hiển thị Loading Spinner nếu đang tải -->
-  <div
-    v-if="loadingStore.getLoading"
-    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] loading-overlay"
-  >
-    <Icon
-      icon="svg-spinners:90-ring-with-bg"
-      class="w-10 h-10"
-    />
-  </div>
-
-  <!-- Dynamic Layout -->
-  <component :is="layout">
-    <RouterView />
-  </component>
-</template>
 
 <style scoped>
 /* Style cho loading overlay */
