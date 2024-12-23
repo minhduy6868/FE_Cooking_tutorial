@@ -91,8 +91,8 @@
 </template>
 
 <script>
-import slideImage1 from '@/assets/img/img1.png'
-import slideImage2 from '@/assets/img/img2.jpg'
+import slideImage1 from '@/assets/img/2.png'
+import slideImage2 from '@/assets/img/3.png'
 import slideImage3 from '@/assets/img/img3.png'
 
 export default {
@@ -104,7 +104,7 @@ export default {
         {
           img: slideImage1,
           alt: 'Slide 1',
-          text: 'First Slide',
+          text: '',
         },
         {
           img: slideImage2,

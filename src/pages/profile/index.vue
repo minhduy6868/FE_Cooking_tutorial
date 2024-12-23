@@ -360,7 +360,7 @@ const updateUserInfo = async () => {
           :key="post.id"
           class="post-card"
         >
-          <router-link :to="`/post/detail/${post.id}`">
+          <router-link :to="`/post/detail/${post.id}p`">
             <CardCooking
               :title="post.title"
               :description="post.description"

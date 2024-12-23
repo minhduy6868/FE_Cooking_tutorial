@@ -69,7 +69,7 @@
           </div>
 
           <div class="bg-gray-100 p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold mb-4">Thành phần</h2>
+            <h2 class="text-2xl font-bold mb-4">Nguyên liệu</h2>
             <table class="min-w-full table-auto text-left text-gray-700">
               <thead>
                 <tr>

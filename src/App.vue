@@ -12,8 +12,6 @@
       class="w-10 h-10"
     />
   </div>
-
-  Hiển thị Poll ngay khi vào app
   <!--<FoodPollForm v-if="showPoll" @close="closePoll" />-->
   <!-- Dynamic Layout -->
   <component :is="layout">

@@ -3,6 +3,54 @@
     <Carousel />
 
     <div class="wrapper ml-5 mr-5 mt-5">
+      <!-- Danh mục Món ăn hot -->
+      <h2
+        class="ml-4 mr-4 mx-auto bg-gradient-to-r from-red-400 to-pink-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
+      >
+        Món ăn hot
+      </h2>
+
+      <div v-if="hotPosts.length > 0">
+        <div class="card-grid">
+          <div
+            v-for="(post, index) in hotPosts.slice(0, displayedHotPosts)"
+            :key="post.id"
+            class="post-card"
+          >
+            <router-link :to="`/post/detail/${post.id}`">
+              <CardCooking
+                :title="post.title"
+                :description="post.description"
+                :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
+                :link="post.linkVideo"
+                :isApproved="post.approved"
+                :typePost="post.typePost || 'Chưa có thể loại'"
+                :time="post.commentPosts || 'Chưa rõ thời gian'"
+                :likeCount="post.likeCount"
+              />
+            </router-link>
+          </div>
+        </div>
+
+        <div
+          v-if="displayedHotPosts < totalHotPosts"
+          class="text-center mt-4"
+        >
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+            @click="loadMoreHotPosts"
+          >
+            Xem thêm
+          </button>
+        </div>
+      </div>
+
+      <div v-else>
+        <p v-if="loading">Đang tải dữ liệu...</p>
+        <p v-else>Không có món ăn nào.</p>
+      </div>
+
+      <!-- Danh mục Món ăn khác -->
       <h2
         class="ml-4 mr-4 mx-auto bg-gradient-to-r from-orange-400 to-yellow-300 text-white text-xl font-bold text-center p-4 rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105"
       >
@@ -53,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { getAllAcceptPost } from '@/services/post'
+import { getAllAcceptPost, getTopLikePost } from '@/services/post'
 import Carousel from '@/components/layout/Carousel.vue'
 import CardCooking from '@/components/ui/card/CardCooking.vue'
 import type { Post } from '@/types/post'
@@ -67,13 +115,17 @@ export default {
   data() {
     return {
       posts: [] as Post[],
+      hotPosts: [] as Post[], // Mảng chứa các món ăn hot
       loading: false,
       displayedPosts: 12,
       totalPosts: 0,
+      displayedHotPosts: 6, // Ban đầu hiển thị 6 món ăn hot
+      totalHotPosts: 0,
     }
   },
   mounted() {
     this.fetchPosts()
+    this.fetchHotPosts()
   },
   methods: {
     async fetchPosts() {
@@ -89,16 +141,27 @@ export default {
         }
       } catch (error) {
         console.error('Error fetching posts:', error)
-        if (error.response) {
-          console.error('API Error:', error.response.data)
-          alert(`API Error: ${error.response.data.message || 'Không xác định'}`)
-        } else if (error.request) {
-          console.error('No response received from API:', error.request)
-          alert('Không nhận được phản hồi từ API.')
+        alert('Lỗi khi tải bài viết.')
+      } finally {
+        this.loading = false
+      }
+    },
+
+    // Lấy các món ăn hot
+    async fetchHotPosts() {
+      this.loading = true
+      try {
+        const response = await getTopLikePost() // Gọi API lấy món ăn hot
+        if (response.status === 200) {
+          this.hotPosts = response.data
+          this.totalHotPosts = response.data.length
         } else {
-          console.error('Error', error.message)
-          alert(`Error: ${error.message}`)
+          console.error('Lỗi: Dữ liệu không hợp lệ hoặc không có món ăn hot.')
+          alert('Không thể tải món ăn hot.')
         }
+      } catch (error) {
+        console.error('Error fetching hot posts:', error)
+        alert('Lỗi khi tải món ăn hot.')
       } finally {
         this.loading = false
       }
@@ -107,6 +170,12 @@ export default {
     loadMorePosts() {
       if (this.displayedPosts < this.totalPosts) {
         this.displayedPosts += 12
+      }
+    },
+
+    loadMoreHotPosts() {
+      if (this.displayedHotPosts < this.totalHotPosts) {
+        this.displayedHotPosts += 6 // Tải thêm 6 món ăn hot
       }
     },
   },

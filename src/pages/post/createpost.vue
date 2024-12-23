@@ -84,11 +84,13 @@
               required
               class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             >
-              <option value="Món chính">Món chính</option>
-              <option value="Tráng miệng">Món tráng miệng</option>
-              <option value="Khai vị">Món khai vị</option>
-              <option value="Món Nướng">Món nướng</option>
-              <option value="Món lẩu">Món lẩu</option>
+              <option value="Món ăn chính">Món ăn chính</option>
+              <option value="Ăn kèm">Ăn kèm</option>
+              <option value="Tráng miệng">Tráng miệng</option>
+              <option value="Ăn nhẹ">Ăn nhẹ</option>
+              <option value="Đồ uống">Đồ uống</option>
+              <option value="Ăn vặt">Ăn vặt</option>
+              <option value="Khác">Khác</option>
             </select>
           </div>
 

@@ -69,7 +69,7 @@ export default defineComponent({
 </script>
 <template>
   <div>
-    <div class="fixed w-full z-40 mt-10 bg-white shadow-md p-3">
+    <div class="fixed w-full z-40 mt-20 bg-white shadow-md p-3">
       <input
         v-model="searchQuery"
         type="text"
