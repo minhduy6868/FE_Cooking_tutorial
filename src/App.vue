@@ -13,9 +13,8 @@
     />
   </div>
 
-  <!-- Hiển thị Poll ngay khi vào app -->
-  <FoodPollForm v-if="showPoll" @close="closePoll" />
-
+  Hiển thị Poll ngay khi vào app
+  <!--<FoodPollForm v-if="showPoll" @close="closePoll" />-->
   <!-- Dynamic Layout -->
   <component :is="layout">
     <RouterView />
@@ -48,10 +47,6 @@ if (accessToken) {
   console.log('Chưa có token trong localStorage')
 }
 
-<<<<<<< HEAD
-=======
-// Toast chào mừng
->>>>>>> e2b2ecde3e3ed11680674e7f2c48b5f1ac56d3f5
 onMounted(() => {
   showToast({
     title: 'Chào mừng đến với Cooking Dev',
@@ -83,29 +78,6 @@ const openConfirm = async () => {
 // }
 </script>
 
-<<<<<<< HEAD
-<template>
-  <ConfirmModal />
-
-  <Toaster />
-
-  <div
-    v-if="loadingStore.getLoading"
-    class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[999] loading-overlay"
-  >
-    <Icon
-      icon="svg-spinners:90-ring-with-bg"
-      class="w-10 h-10"
-    />
-  </div>
-
-  <component :is="layout">
-    <RouterView />
-  </component>
-</template>
-
-=======
->>>>>>> e2b2ecde3e3ed11680674e7f2c48b5f1ac56d3f5
 <style scoped>
 .loading-overlay {
   background-color: rgba(76, 76, 76, 0.38);

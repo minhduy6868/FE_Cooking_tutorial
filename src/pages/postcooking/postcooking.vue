@@ -69,7 +69,7 @@ export default defineComponent({
 </script>
 <template>
   <div>
-    <div class="fixed w-full z-40 mt-16 bg-white shadow-md p-3">
+    <div class="fixed w-full z-40 mt-10 bg-white shadow-md p-3">
       <input
         v-model="searchQuery"
         type="text"
@@ -101,7 +101,7 @@ export default defineComponent({
 
       <div
         v-if="posts.length > 0"
-        class="card-grid"
+        class="card-grid mt-20"
       >
         <div
           v-for="post in posts"
