@@ -26,6 +26,8 @@
               placeholder="Nhập tiêu đề công thức"
             />
           </div>
+
+          <!-- Phần mô tả là text bình thường -->
           <div>
             <label
               for="description"
@@ -38,14 +40,15 @@
               required
               rows="4"
               class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              placeholder="Mô tả công thức của bạn"
+              placeholder="Nhập mô tả công thức"
             ></textarea>
           </div>
+
           <div>
             <label
               for="ingredient"
               class="text-sm font-medium text-orange-700 block mb-2"
-              >Công thức</label
+              >Công thức( "Thành phần" - "Khối lượng" )</label
             >
             <textarea
               id="ingredient"
@@ -57,21 +60,19 @@
             ></textarea>
           </div>
 
+          <!-- Quill Editor cho các bước thực hiện -->
           <div>
             <label
               for="tutorial"
               class="text-sm font-medium text-orange-700 block mb-2"
               >Các bước thực hiện</label
             >
-            <textarea
-              id="tutorial"
-              v-model="post.tutorial"
-              required
-              rows="4"
-              class="w-full px-4 py-3 rounded-lg border border-orange-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              placeholder="Mô tả các bước thực hiện"
-            ></textarea>
+            <div
+              ref="tutorialEditor"
+              class="quill-editor"
+            ></div>
           </div>
+
           <div>
             <label
               for="typePost"
@@ -113,12 +114,12 @@
               >
                 <div>
                   <span class="mb-2 block text-lg font-semibold text-orange-700"
-                    >Drop files here</span
+                    >Bỏ file vào đây</span
                   >
-                  <span class="mb-2 block text-base font-medium text-gray-500">Or</span>
+                  <span class="mb-2 block text-base font-medium text-gray-500">Hoặc</span>
                   <span
                     class="inline-flex rounded border border-orange-300 py-2 px-7 text-base font-medium text-orange-700"
-                    >Browse</span
+                    >Chọn file</span
                   >
                 </div>
               </label>
@@ -184,11 +185,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { createPost } from '@/services/post'
 import { showToast } from '@/utils/toast'
+import Quill from 'quill'
 
+// Các trạng thái và biến dữ liệu của form
 const post = ref({
   title: '',
   description: '',
@@ -200,27 +203,36 @@ const post = ref({
 })
 
 const imagePreviews = ref<string[]>([])
-
 const isLoading = ref(false)
-
 const router = useRouter()
 
-const handleFileUpload = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  if (input.files) {
-    post.value.images.push(...Array.from(input.files))
+// Các references để tương tác với editor
+const tutorialEditor = ref(null)
 
-    imagePreviews.value.push(...Array.from(input.files).map((file) => URL.createObjectURL(file)))
-  }
-}
+// Cấu hình Quill cho các bước thực hiện
+onMounted(() => {
+  const tutorialQuill = new Quill(tutorialEditor.value, {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ header: '1' }, { header: '2' }],
+        [{ font: [] }],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ align: [] }],
+        ['bold', 'italic', 'underline'],
+        ['link'],
+        ['blockquote'],
+      ],
+    },
+  })
 
-const handleVideoUpload = (event: Event) => {
-  const input = event.target as HTMLInputElement
-  if (input.files && input.files[0]) {
-    post.value.video = input.files[0]
-  }
-}
+  // Lưu nội dung vào data của form khi có thay đổi
+  tutorialQuill.on('text-change', () => {
+    post.value.tutorial = tutorialQuill.root.innerHTML
+  })
+})
 
+// Hàm xử lý khi submit form
 const submitForm = async () => {
   try {
     isLoading.value = true
@@ -281,4 +293,30 @@ const submitForm = async () => {
     isLoading.value = false
   }
 }
+
+// Các hàm xử lý upload hình ảnh và video
+const handleFileUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  if (input.files) {
+    post.value.images.push(...Array.from(input.files))
+    imagePreviews.value.push(...Array.from(input.files).map((file) => URL.createObjectURL(file)))
+  }
+}
+
+const handleVideoUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  if (input.files && input.files[0]) {
+    post.value.video = input.files[0]
+  }
+}
 </script>
+
+<style scoped>
+.quill-editor {
+  min-height: 200px;
+  border: 1px solid #E6A67B; 
+  border-radius: 8px; 
+  padding: 10px;
+  box-sizing: border-box; 
+}
+</style>

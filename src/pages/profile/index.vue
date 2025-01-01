@@ -196,7 +196,7 @@ const updateUserInfo = async () => {
         class="xl:w-[80%] lg:w-[90%] md:w-[90%] sm:w-[92%] xs:w-[90%] mx-auto flex flex-col gap-6 items-center my-6 mt-24"
       >
         <p class="text-center w-fit text-gray-700 dark:text-gray-400 text-md">
-          {{ userInfo?.description || 'Lorem ipsum dolor sit amet consectetur adipisicing elit.' }}
+          {{ userInfo?.description || 'Chưa có mô tả nào được cập nhật.' }}
         </p>
 
         <div class="flex gap-4">
@@ -295,7 +295,7 @@ const updateUserInfo = async () => {
                 <div class="flex flex-col py-3">
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Số điện thoại</dt>
                   <dd class="text-lg font-semibold">
-                    {{ userInfo?.phoneNumber || 'Not Provided' }}
+                    {{ userInfo?.phoneNumber || 'Chưa cập nhật' }}
                   </dd>
                 </div>
               </dl>
@@ -306,12 +306,12 @@ const updateUserInfo = async () => {
               >
                 <div class="flex flex-col pb-3">
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Email</dt>
-                  <dd class="text-lg font-semibold">{{ userInfo?.email || 'Not Provided' }}</dd>
+                  <dd class="text-lg font-semibold">{{ userInfo?.email || 'Chưa cập nhật' }}</dd>
                 </div>
 
                 <div class="flex flex-col py-3">
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Địa chỉ</dt>
-                  <dd class="text-lg font-semibold">{{ userInfo?.address || 'Not Provided' }}</dd>
+                  <dd class="text-lg font-semibold">{{ userInfo?.address || 'Chưa cập nhật' }}</dd>
                 </div>
               </dl>
             </div>
@@ -342,6 +342,7 @@ const updateUserInfo = async () => {
               :typePost="post.typePost || 'Chưa có thể loại'"
               :time="post.commentPosts || 'Chưa rõ thời gian'"
               :like-count="post.likeCount"
+              :forMe="true"
             />
           </router-link>
         </div>
@@ -366,7 +367,7 @@ const updateUserInfo = async () => {
               :description="post.description"
               :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
               :link="post.linkVideo"
-              :isApproved="post.approved"
+              :isApproved="true"
               :typePost="post.typePost || 'Chưa có thể loại'"
               :time="post.commentPosts || 'Chưa rõ thời gian'"
               :like-count="post.likeCount"

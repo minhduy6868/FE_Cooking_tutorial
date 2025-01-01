@@ -419,41 +419,111 @@ export const deletePostByAdmin = async (id: string): Promise<BaseResponse<Post>>
   }
 }
 
-
 export const getTopLikePost = async (limit: number = 6): Promise<BaseResponse<Post[]>> => {
   try {
     const response = await api.get<BaseResponse<Post[]>>('/post/topLikePost', {
       params: { limit },
       timeout: 5000,
-    });
+    })
 
     if (response.status === 200 || response.status === 201) {
-      return response.data;
+      return response.data
     } else {
-      throw new Error('Không thể lấy bài viết với lượt thích cao nhất.');
+      throw new Error('Không thể lấy bài viết với lượt thích cao nhất.')
     }
   } catch (error: any) {
-    console.error('Error fetching top like posts:', error);
+    console.error('Error fetching top like posts:', error)
 
-    let errorMessage = 'Có lỗi xảy ra khi lấy bài viết với lượt thích cao nhất.';
+    let errorMessage = 'Có lỗi xảy ra khi lấy bài viết với lượt thích cao nhất.'
     if (error.response) {
-      const status = error.response.status;
-      errorMessage = error.response.data.message || errorMessage;
-      console.error('Lỗi từ API:', error.response.data);
-      console.error('Mã lỗi HTTP:', status);
+      const status = error.response.status
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+      console.error('Mã lỗi HTTP:', status)
     } else if (error.code === 'ECONNABORTED') {
-      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.';
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
     } else if (error.request) {
-      console.error('Không nhận được phản hồi từ server:', error.request);
-      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.';
+      console.error('Không nhận được phản hồi từ server:', error.request)
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
     } else {
-      errorMessage = error.message;
+      errorMessage = error.message
     }
 
     return {
       status: 500,
       message: errorMessage,
       data: [],
-    };
+    }
   }
-};
+}
+
+export const deletePostMe = async (id: string): Promise<BaseResponse<Post>> => {
+  try {
+    const response = await api.delete<BaseResponse<Post>>(`/post/deletePostMe/${id}`, {
+      timeout: 5000,
+    })
+
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Không thể xóa bài viết của bạn.')
+    }
+  } catch (error: any) {
+    console.error('Error deleting post by user:', error)
+
+    let errorMessage = 'Có lỗi xảy ra khi xóa bài viết của bạn.'
+    if (error.response) {
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
+    } else if (error.request) {
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
+    } else {
+      errorMessage = error.message
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: null,
+    }
+  }
+}
+
+export const searchByType = async (typePost: string): Promise<BaseResponse<Post[]>> => {
+  try {
+    const response = await api.get<BaseResponse<Post[]>>(`/post/getPostByTypePost/${typePost}`, {
+      timeout: 5000,
+    })
+
+    if (response.status === 200) {
+      return response.data
+    } else {
+      throw new Error('Không thể lấy bài viết theo loại.')
+    }
+  } catch (error: any) {
+    console.error('Error searching posts by type:', error)
+
+    let errorMessage = 'Có lỗi xảy ra khi tìm kiếm bài viết theo loại.'
+    if (error.response) {
+      const status = error.response.status
+      errorMessage = error.response.data.message || errorMessage
+      console.error('Lỗi từ API:', error.response.data)
+      console.error('Mã lỗi HTTP:', status)
+    } else if (error.code === 'ECONNABORTED') {
+      errorMessage = 'Yêu cầu đã bị hủy do thời gian chờ lâu.'
+    } else if (error.request) {
+      console.error('Không nhận được phản hồi từ server:', error.request)
+      errorMessage = 'Không nhận được phản hồi từ server. Vui lòng thử lại sau.'
+    } else {
+      errorMessage = error.message
+    }
+
+    return {
+      status: 500,
+      message: errorMessage,
+      data: [],
+    }
+  }
+}

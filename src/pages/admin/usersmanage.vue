@@ -2,105 +2,63 @@
   <div class="ml-3">
     <h2 class="text-3xl font-bold">Danh sách người dùng</h2>
 
-    <div
-      v-if="!loading && !error"
-      class="mb-10"
-    >
+    <div v-if="!loading && !error" class="mb-10">
       <p><strong>Tổng số người dùng:</strong> {{ totalUsers }}</p>
     </div>
 
-    <div
-      v-if="loading"
-      class="mb-4"
-    >
-      Loading...
-    </div>
-    <div
-      v-if="error"
-      class="mb-4 text-red-500 font-bold"
-    >
-      {{ error }}
-    </div>
+    <div v-if="loading" class="mb-4">Loading...</div>
+    <div v-if="error" class="mb-4 text-red-500 font-bold">{{ error }}</div>
 
-    <table
-      v-if="!loading && !error"
-      class="min-w-full divide-y divide-gray-200 overflow-x-auto"
-    >
+    <table v-if="!loading && !error" class="min-w-full divide-y divide-gray-200 overflow-x-auto">
       <thead class="bg-gray-50">
         <tr>
-          <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Avatar
-          </th>
-          <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Full Name
-          </th>
-          <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Email
-          </th>
-          <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Phone Number
-          </th>
-          <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Tổng số công thức
-          </th>
-          <th
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-          >
-            Action
-          </th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hình đại diện</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng số công thức</th>
+          <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr
-          v-for="user in users"
-          :key="user.id"
-        >
+        <tr v-for="user in users" :key="user.id">
           <td class="px-6 py-4 whitespace-nowrap">
             <img
-              :src="
-                user.avatar ||
-                'https://img.lovepik.com/free-png/20211130/lovepik-cartoon-avatar-png-image_401205251_wh1200.png'
-              "
+              :src="user.avatar || 'https://img.lovepik.com/free-png/20211130/lovepik-cartoon-avatar-png-image_401205251_wh1200.png'"
               alt="User Avatar"
               class="h-10 w-10 rounded-full"
             />
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-            {{ user.fullName }}
-          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ user.fullName }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.email }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.phoneNumber }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.post.length }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex justify-center gap-4">
+            <!-- Show only delete icon if user is not admin@gmail.com -->
             <button
-              v-if="!deletingUserId"
-              class="text-red-600 hover:text-red-800"
+              v-if="!deletingUserId && user.email !== 'admin@gmail.com'"
+              class="w-10 h-10 flex items-center justify-center rounded bg-gray-200 hover:bg-red-700 focus:outline-none"
               @click="handleDelete(user.id)"
             >
-              Delete
+              <i class="fas fa-trash-alt text-red-500 text-xl"></i>
             </button>
-            <span
-              v-else-if="deletingUserId === user.id"
-              class="text-sm text-gray-500"
-              >Deleting...</span
+
+            <span v-else-if="deletingUserId === user.id" class="text-sm text-gray-500">Deleting...</span>
+
+            <!-- Show update icon for all users or only for admin@gmail.com -->
+            <button
+              v-if="!deletingUserId"
+              class="w-10 h-10 flex items-center justify-center rounded bg-gray-200 hover:bg-yellow-600 focus:outline-none"
+              @click="handleUpdate(user.id)"
             >
+              <i class="fas fa-pencil-alt text-yellow-500 text-xl"></i>
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
-
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import { getAllUser, deleteUser } from '@/services/admin'
@@ -200,21 +158,27 @@ export default defineComponent({
   },
 })
 </script>
-
 <style scoped>
-.error {
-  color: red;
-  font-weight: bold;
+/* Add the base styles for both icons */
+button {
+  transition: background-color 0.3s ease;
 }
 
-button {
-  background-color: transparent;
-  border: none;
-  color: #e53e3e;
-  cursor: pointer;
+/* Hover effect for the delete icon */
+button:hover .fas.fa-trash-alt {
+  color: white; /* Change the icon color to white when hovering */
 }
 
 button:hover {
-  text-decoration: underline;
+  background-color: #e53e3e; /* Dark red background for delete icon on hover */
+}
+
+/* Hover effect for the update icon */
+button:hover .fas.fa-pencil-alt {
+  color: white; /* Change the icon color to white when hovering */
+}
+
+button:hover {
+  background-color: #d69e2e; /* Dark yellow background for update icon on hover */
 }
 </style>

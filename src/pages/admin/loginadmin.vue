@@ -1,6 +1,16 @@
 <template>
-  <div class="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
+  <div class="min-h-screen py-6 flex flex-col justify-center sm:py-12">
+    <!-- Background Video with Blur Effect -->
+    <div class="absolute inset-0 overflow-hidden">
+      <video autoplay loop muted class="w-full h-full object-cover blur-effect">
+        <source src="../././../assets/img/bgr.mp4" type="video/mp4" />
+      </video>
+      <!-- Overlay to darken the video -->
+      <div class="absolute inset-0 bg-black opacity-40"></div>
+    </div>
+
+    <!-- Form Content -->
+    <div class="relative py-3 sm:max-w-xl sm:mx-auto z-10">
       <div
         class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-700 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"
       ></div>
@@ -112,4 +122,21 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Styling for the background video */
+video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: blur(8px); /* Apply the blur effect */
+}
+
+/* Darken the overlay to enhance visibility of the content */
+div.bg-black {
+  opacity: 0.4; /* Adjust this value to make the overlay more or less opaque */
+}
+</style>

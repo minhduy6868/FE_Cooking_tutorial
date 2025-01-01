@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="bg-teal-600">
+    <div class="bg-orange-400">
       <div class="mx-auto max-w-7xl py-3 px-3 sm:px-6 lg:px-8">
         <div class="flex flex-col items-center justify-between lg:flex-row lg:justify-center">
           <div class="flex flex-1 items-center lg:mr-3 lg:flex-none">
@@ -41,7 +41,7 @@
           Tông số bài viết
         </h6>
         <span class="text-xl font-semibold">{{ userPostCount?.post || '0' }}</span>
-        <span class="inline-block px-2 py-px ml-2 text-xs text-green-500 bg-green-100 rounded-md">
+        <span class="inline-block px-2 py-px ml-2 text-xs text-or-500 bg-green-100 rounded-md">
           +{{ userPostCount?.postChange || '0' }}%
         </span>
       </div>
@@ -235,7 +235,15 @@ export default defineComponent({
           new Chart(ctx2, {
             type: 'bar',
             data: {
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+              labels: ['Tháng 1',
+                'Tháng 2',
+                'Tháng 3',
+                'Tháng 4',
+                'Tháng 5',
+                'Tháng 6',
+                'Tháng 7',
+                'Tháng 8',
+                'Tháng 9'],
               datasets: [
                 {
                   label: 'Công thức nấu ăn ',

@@ -1,7 +1,8 @@
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { searchPosts, getAllAcceptPost } from '@/services/post'
+import { searchPosts, getAllAcceptPost, searchByType } from '@/services/post'
 import CardCooking from '@/components/ui/card/CardCooking.vue'
+import { showToast } from '@/utils/toast'
 
 export default defineComponent({
   name: 'SearchPosts',
@@ -10,32 +11,80 @@ export default defineComponent({
   },
   setup() {
     const searchQuery = ref('')
+    const searchByTypeValue = ref('') // This will hold the selected type
     const posts = ref([])
     const loading = ref(false)
     const error = ref(null)
 
+    // Function to perform search with title and type filtering
     const searchPostsFunc = async () => {
-      if (searchQuery.value.trim() === '') {
-        posts.value = []
-        return
-      }
-
       loading.value = true
       error.value = null
       try {
-        const response = await searchPosts(searchQuery.value)
-        if (response.status === 200) {
-          posts.value = response.data
+        let response;
+        
+        if (searchByTypeValue.value) {
+          // If a type is selected, use the searchByType function
+          response = await searchByType(searchByTypeValue.value)
+          if (response.status === 200) {
+            posts.value = response.data
+            if (posts.value.length === 0) {
+              showToast({
+                title: 'Chưa tìm thấy món ăn',
+                description: 'Không có bài viết nào phù hợp với loại bạn chọn. Đang lấy tất cả bài viết.',
+                variant: 'default',
+                duration: 5000,
+              })
+              // If no posts are found, fetch all posts
+              fetchAllPosts()
+            }
+          } else {
+            error.value = 'Không tìm thấy bài viết theo loại.'
+            showToast({
+              title: 'Không tìm thấy bài viết theo loại',
+              description: 'Không có bài viết nào với tiêu chí tìm kiếm này.',
+              variant: 'default',
+              duration: 5000,
+            })
+          }
         } else {
-          error.value = 'Không tìm thấy bài viết.'
+          // If no type is selected, search by title only
+          response = await searchPosts(searchQuery.value) // Pass the search query directly as the title
+          if (response.status === 200) {
+            posts.value = response.data
+            if (posts.value.length === 0) {
+              showToast({
+                title: 'Chưa tìm thấy món ăn',
+                description: 'Không có bài viết nào phù hợp với tiêu đề bạn tìm. Đang lấy tất cả bài viết.',
+                variant: 'default',
+                duration: 5000,
+              })
+              // If no posts are found, fetch all posts
+              fetchAllPosts()
+            }
+          } else {
+            showToast({
+              title: 'Đã có lỗi xảy ra khi lấy bài viết',
+              description: 'Vui lòng thao tác lại hoặc đợi...',
+              variant: 'default',
+              duration: 5000,
+            })
+          }
         }
       } catch (err) {
         error.value = 'Có lỗi xảy ra khi tìm kiếm bài viết.'
+        showToast({
+          title: 'Không tìm thấy công thức nào',
+          description: 'Vui lòng thử lại sau.',
+          variant: 'default',
+          duration: 5000,
+        })
       } finally {
         loading.value = false
       }
     }
 
+    // Function to fetch all posts (without filtering)
     const fetchAllPosts = async () => {
       loading.value = true
       error.value = null
@@ -45,20 +94,34 @@ export default defineComponent({
           posts.value = response.data
         } else {
           error.value = 'Không thể tải tất cả bài viết.'
+          showToast({
+            title: 'Lỗi tải bài viết',
+            description: 'Không thể tải bài viết từ hệ thống.',
+            variant: 'default',
+            duration: 5000,
+          })
         }
       } catch (err) {
         error.value = 'Có lỗi xảy ra khi tải bài viết.'
+        showToast({
+          title: 'Lỗi tải bài viết',
+          description: 'Vui lòng thử lại sau.',
+          variant: 'default',
+          duration: 5000,
+        })
       } finally {
         loading.value = false
       }
     }
 
+    // Fetch all posts on component mount
     onMounted(() => {
       fetchAllPosts()
     })
 
     return {
       searchQuery,
+      searchByTypeValue,
       posts,
       loading,
       error,
@@ -67,38 +130,37 @@ export default defineComponent({
   },
 })
 </script>
+
 <template>
   <div>
-    <div class="fixed w-full z-40 mt-20 bg-white shadow-md p-3">
+    <!-- Search bar and Search By Type dropdown, aligned horizontally -->
+    <div class="fixed w-full z-40 mt-20 bg-white shadow-md p-3 flex items-center space-x-4">
       <input
         v-model="searchQuery"
         type="text"
         placeholder="Tìm kiếm bài viết theo tiêu đề..."
-        class="w-full p-2 border rounded-lg shadow-sm"
+        class="w-full md:w-2/3 p-2 border rounded-lg shadow-sm"
         @keyup.enter="searchPostsFunc"
       />
+      <select
+        v-model="searchByTypeValue"
+        class="w-full md:w-1/3 p-2 border rounded-lg shadow-sm"
+        @change="searchPostsFunc"
+      >
+        <option value="">Chọn loại món ăn</option>
+        <option value="Món ăn chính">Món ăn chính</option>
+        <option value="Ăn kèm">Ăn kèm</option>
+        <option value="Tráng miệng">Tráng miệng</option>
+        <option value="Ăn nhẹ">Ăn nhẹ</option>
+        <option value="Đồ uống">Đồ uống</option>
+        <option value="Ăn vặt">Ăn vặt</option>
+        <option value="Khác">Khác</option>
+      </select>
     </div>
 
+    <!-- Posts Display Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div
-        v-if="loading"
-        class="text-center text-lg"
-      >
-        Đang tải...
-      </div>
-      <div
-        v-if="error"
-        class="text-center text-red-500"
-      >
-        {{ error }}
-      </div>
-      <div
-        v-if="posts.length === 0"
-        class="text-center"
-      >
-        Không có bài viết nào.
-      </div>
-
+      <!-- Posts List -->
       <div
         v-if="posts.length > 0"
         class="card-grid mt-20"
@@ -114,10 +176,11 @@ export default defineComponent({
               :description="post.description"
               :image="post?.pictures?.[0]?.link || 'https://via.placeholder.com/130'"
               :link="post.linkVideo"
-              :isApproved="post.approved"
-              :typePost="post.typePost || 'Chưa có thể loại'"
+              :is-approved="post.approved"
+              :type-post="post.typePost || 'Chưa có thể loại'"
               :time="post.time || 'Chưa rõ thời gian'"
               :like-count="post.likeCount"
+              :dislike-count="post.dislikeCount"
             />
           </router-link>
         </div>
@@ -125,6 +188,7 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
 <style scoped>
 .sticky {
   position: sticky;

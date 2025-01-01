@@ -1,16 +1,16 @@
 <template>
   <div class="rounded overflow-hidden shadow-lg flex flex-col relative">
-    <div class="absolute top-2 right-2 flex flex-col gap-2">
+    <div class="absolute top-2 right-2 flex flex-col gap-2 z-30">
       <span
-        v-if="isApproved === false" 
+        v-if="isApproved === false"
         class="bg-gray-500 text-white text-xs font-semibold py-1 px-2 rounded z-20"
       >
         Đang chờ duyệt
       </span>
 
       <span
-        v-if="typePost && typePost.trim() !== ''" 
-        class="bg-orange-500 text-white text-xs font-semibold py-1 px-2 rounded"
+        v-if="typePost && typePost.trim() !== ''"
+        class="bg-orange-500 text-white text-xs font-semibold py-1 px-2 rounded z-30"
       >
         {{ typePost }}
       </span>
@@ -31,6 +31,48 @@
         <div
           class="hover:bg-transparent transition duration-300 absolute bottom-0 top-0 right-0 left-0 bg-gray-900 opacity-25"
         ></div>
+
+        <!-- Edit and Delete buttons in the top-left corner with background -->
+        <div v-if="forMe" class="absolute top-2 left-2 flex flex-col space-y-2 z-40 bg-gray-900 bg-opacity-50 p-1 rounded-lg">
+          <button
+            @click="editPost"
+            class="text-blue-500 hover:text-blue-700 p-1 rounded-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M16.864 3.232a2.25 2.25 0 0 1 3.182 3.182l-9.795 9.796-2.107.35a1 1 0 0 0-1.133-1.132l-.35-2.107 9.795-9.795z"
+              />
+            </svg>
+          </button>
+          <button
+            @click="deletePost"
+            class="text-red-500 hover:text-red-700 p-1 rounded-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 6l12 12M6 18L18 6"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
     </a>
 
@@ -87,21 +129,49 @@
 </template>
 
 <script>
+import { deletePostMe } from '@/services/post'
+
 export default {
   props: {
     title: String,
     description: String,
-    image: String, // URL cho ảnh
+    image: String,
     link: String,
     category: String,
     time: String,
-    likeCount: Number, // Số lượt thích
-    dislikeCount: Number, // Số lượt không thích
+    likeCount: Number,
+    dislikeCount: Number,
     isApproved: {
       type: Boolean,
-      default: false, // Gán giá trị mặc định là false
-    }, // Trạng thái phê duyệt
-    typePost: String, // Loại bài viết
+      default: false,
+    },
+    typePost: String,
+    forMe: {
+      type: Boolean,
+      default: false,
+    },
+    postId: String, // ID bài viết
+  },
+  methods: {
+    async deletePost() {
+      try {
+        if (this.postId) {
+          const response = await deletePostMe(this.postId);
+          if (response.success) {
+            alert('Bài viết đã được xóa');
+          } else {
+            alert('Không thể xóa bài viết');
+          }
+        }
+      } catch (error) {
+        console.error('Lỗi khi xóa bài viết:', error);
+        alert('Có lỗi xảy ra');
+      }
+    },
+    editPost() {
+      // Redirect or open the edit page
+      alert("Sửa bài");
+    },
   },
 }
 </script>

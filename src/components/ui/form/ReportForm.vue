@@ -1,5 +1,5 @@
 <template>
-  <div class="hero from-amber-100 via-rose-300 to-red-500 bg-gradient-to-br py-10">
+  <div class="hero from-amber-100 via-rose-300 to-red-500 bg-gradient-to-br py-10 z-99999999">
     <div class="heading mx-auto text-center">
       <h1 class="mx-auto my-5 text-center sm:text-4xl text-3xl font-bold">Báo cáo</h1>
     </div>

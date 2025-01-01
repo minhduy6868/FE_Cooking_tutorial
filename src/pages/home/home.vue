@@ -27,6 +27,7 @@
                 :typePost="post.typePost || 'Chưa có thể loại'"
                 :time="post.commentPosts || 'Chưa rõ thời gian'"
                 :likeCount="post.likeCount"
+                :dislike-count="post.dislikeCount"
               />
             </router-link>
           </div>
@@ -74,6 +75,7 @@
                 :typePost="post.typePost || 'Chưa có thể loại'"
                 :time="post.commentPosts || 'Chưa rõ thời gian'"
                 :likeCount="post.likeCount"
+                :dislike-count="post.dislikeCount"
               />
             </router-link>
           </div>

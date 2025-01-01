@@ -10,12 +10,12 @@
       </button>
 
       <!-- Title -->
-      <h2 class="text-xl font-bold mb-4">What's your favorite type of food?</h2>
+      <h2 class="text-xl font-bold mb-4">Kiểu món ăn mà bạn yêu thích là gì?</h2>
       <form
         class="space-y-4"
         @submit.prevent="handleVote"
       >
-        <h3 class="text-lg font-semibold">Please select your favorite type of food:</h3>
+        <h3 class="text-lg font-semibold">Chọn một trong các loại sau:</h3>
 
         <!-- Options -->
         <label

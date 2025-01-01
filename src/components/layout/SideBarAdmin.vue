@@ -19,7 +19,7 @@ const logout = async () => {
       popup: 'bg-white shadow-lg rounded-xl',
       title: 'text-xl font-semibold text-gray-800',
       content: 'text-gray-600 text-sm',
-      confirmButton: 'bg-red-500 text-white font-bold py-2 px-4 rounded hover:bg-red-600',
+      confirmButton: 'bg-gradient-to-r from-orange-400 to-orange-600 text-white font-bold py-2 px-4 rounded hover:from-orange-500 hover:to-orange-700',
       cancelButton: 'bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400',
     },
   })
@@ -50,5 +50,22 @@ const logout = async () => {
 .router-link-exact-active {
   background-color: #f7f7f7;
   color: #344054;
+}
+
+.bg-gradient-orange {
+  background: linear-gradient(to right, #ff7e5f, #dc5f00); /* Orange gradient */
+}
+
+.text-orange {
+  color: #d74c29; /* Orange text */
+}
+
+button {
+  background: linear-gradient(to right, #ff7e5f, #ed6700); /* Adding gradient to button */
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right, #ff6a3d, #ff751f); /* Darker gradient on hover */
 }
 </style>

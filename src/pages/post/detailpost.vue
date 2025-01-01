@@ -92,9 +92,10 @@
 
         <div class="bg-gray-100 p-6 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold mb-4">Hướng dẫn</h2>
-          <div class="text-gray-700 whitespace-pre-line">
-            {{ post?.tutorial || 'Chưa có hướng dẫn' }}
-          </div>
+          <div
+            class="text-gray-700"
+            v-html="post?.tutorial || 'Chưa có hướng dẫn'"
+          ></div>
         </div>
 
         <div class="flex items-center space-x-4 mt-8">

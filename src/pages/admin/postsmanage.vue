@@ -10,32 +10,56 @@
     <div v-else>
       <p><strong>Tổng số bài viết:</strong> {{ allPosts.length }}</p>
 
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="Tìm kiếm bài viết theo tiêu đề"
-        class="border p-2 pr-10"
-      />
-      <button
-        class="bg-blue-500 text-white p-2"
-        @click="searchPostsByTitle"
-      >
-        Tìm kiếm
-      </button>
+      <!-- Label và Input cho tìm kiếm bài viết theo tiêu đề -->
+      <div class="mt-3 flex items-center space-x-2">
+        <label
+          for="searchQuery"
+          class="block text-sm font-medium text-gray-700 w-1/4"
+        >
+          Tìm kiếm bài viết theo tiêu đề:
+        </label>
+        <div class="flex w-3/4 space-x-2">
+          <input
+            id="searchQuery"
+            v-model="searchQuery"
+            type="text"
+            placeholder="Tìm kiếm bài viết..."
+            class="border p-2 pr-10 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <button
+            class="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white p-2 w-32 rounded-lg transform active:scale-95 transition-transform duration-150"
+            @click="searchPostsByTitle"
+          >
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
 
-      <input
-        v-model="topDislikeCount"
-        type="number"
-        placeholder="Nhập số lượng bài viết có lượt không thích cao nhất"
-        class="border p-2 mt-3 ml-4"
-        min="1"
-      />
-      <button
-        class="bg-blue-500 text-white p-2 mt-3"
-        @click="fetchTopDislikePosts"
-      >
-        Tìm kiếm
-      </button>
+      <!-- Label và Input cho số lượng bài viết có lượt không thích cao -->
+      <div class="mt-3 flex items-center space-x-2">
+        <label
+          for="topDislikeCount"
+          class="block text-sm font-medium text-gray-700 w-1/4"
+        >
+          Tìm số bài viết có lượt không thích cao:
+        </label>
+        <div class="flex w-3/4 space-x-2">
+          <input
+            id="topDislikeCount"
+            v-model="topDislikeCount"
+            type="number"
+            placeholder="Nhập số lượng bài viết"
+            class="border p-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            min="1"
+          />
+          <button
+            class="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white p-2 w-32 rounded-lg transform active:scale-95 transition-transform duration-150"
+            @click="fetchTopDislikePosts"
+          >
+            Tìm kiếm
+          </button>
+        </div>
+      </div>
 
       <div v-if="allPosts.length === 0 && !searchQuery">
         <p>Tiêu đề bài viết không tồn tại.</p>
@@ -77,10 +101,8 @@
             >
               Trạng thái
             </th>
-            <th
-              class="px-6 py-3 ml-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
-              Action
+            <th class="px-6 py-3 ml-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Hành động
             </th>
           </tr>
         </thead>
