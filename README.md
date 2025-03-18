@@ -1,9 +1,9 @@
 # CookDev
 
-## Giới thiệu
-CookDev là một nền tảng hỗ trợ nấu ăn thông minh, giúp người dùng khám phá công thức nấu ăn, quản lý nguyên liệu và trải nghiệm nấu ăn với AI.
+## Introduction
+CookDev is a smart cooking platform that helps users explore recipes, manage ingredients, and enhance their cooking experience with AI.
 
-## Công nghệ sử dụng
+## Technologies Used
 
 ### Frontend
 - **Vue.js** (Composition API)
@@ -13,17 +13,17 @@ CookDev là một nền tảng hỗ trợ nấu ăn thông minh, giúp người 
 ### Backend
 - **Spring Boot**
 - **REST API**
-- **Cloud Storage** (Lưu trữ dữ liệu hiệu quả trên Cloud)
+- **Cloud Storage** (Efficient cloud data storage)
 
-## Cài đặt
+## Installation
 
-### Yêu cầu hệ thống
+### System Requirements
 - **Node.js** (>= 16)
-- **npm** hoặc **yarn**
+- **npm** or **yarn**
 - **Java** (>= 17)
-- **Maven** hoặc **Gradle**
+- **Maven** or **Gradle**
 
-### Hướng dẫn chạy dự án
+### How to Run the Project
 
 #### Frontend
 ```sh
@@ -31,11 +31,11 @@ CookDev là một nền tảng hỗ trợ nấu ăn thông minh, giúp người 
 git clone https://github.com/minhduy6868/FE_Cooking_tutorial.git
 cd FE_Cooking_tutorial
 
-# Cài đặt dependencies
-npm install  # hoặc yarn install
+# Install dependencies
+npm install  # or yarn install
 
-# Chạy dự án
-npm run dev  # hoặc yarn dev
+# Run the project
+npm run dev  # or yarn dev
 ```
 
 #### Backend
@@ -44,23 +44,22 @@ npm run dev  # hoặc yarn dev
 git clone https://github.com/minhduy6868/BE_CookingTutorial_Web.git
 cd BE_CookingTutorial_Web
 
-# Build và chạy server
-./mvnw spring-boot:run  # hoặc ./gradlew bootRun
+# Build and run the server
+./mvnw spring-boot:run  # or ./gradlew bootRun
 ```
 
-## Ảnh màn hình
+## Screenshots
 
-| Màn hình | Ảnh |
-|----------|------|
-| Quản trị | ![Admin](public/admin.png) ([Xem ảnh](public/admin.png)) |
-| Đăng nhập | ![Login](public/login.png) ([Xem ảnh](public/login.png)) |
-| Video | ![Video](public/video.png) ([Xem ảnh](public/video.png)) |
-| AI hỗ trợ | ![AI](public/ai.png) ([Xem ảnh](public/ai.png)) |
-| Duyệt nội dung | ![Duyệt](public/duyet.png) ([Xem ảnh](public/duyet.png)) |
+| Screen | Image |
+|--------|------|
+| Admin Panel | ![Admin](public/admin.png) ([View Image](public/admin.png)) |
+| Login | ![Login](public/login.png) ([View Image](public/login.png)) |
+| Video | ![Video](public/video.png) ([View Image](public/video.png)) |
+| AI Support | ![AI](public/ai.png) ([View Image](public/ai.png)) |
+| Content Approval | ![Approval](public/duyet.png) ([View Image](public/duyet.png)) |
 
-## Đóng góp
-Mọi đóng góp đều được hoan nghênh! Vui lòng tạo Pull Request hoặc mở Issue để báo lỗi và đề xuất cải tiến.
+## Contribution
+All contributions are welcome! Please create a Pull Request or open an Issue to report bugs and suggest improvements.
 
-## Liên hệ
-Website hỗ trợ: [minhduyy.id.vn](https://minhduyy.id.vn)
-
+## Contact
+Support website: [minhduyy.id.vn](https://minhduyy.id.vn)
