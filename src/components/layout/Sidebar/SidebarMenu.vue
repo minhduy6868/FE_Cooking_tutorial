@@ -26,7 +26,7 @@ const menus = ref([
       {
         class: 'i-solar-money-bag-broken group-hover:i-solar-money-bag-bold-duotone',
         title: 'Về Website',
-        link: '/inforadmin',
+        link: '/inforadmin', 
       },
     ],
   },
